@@ -1,2 +1,2 @@
 # mutation_library_analysis
-aligns multiple sequences of a mutant library, for each mutant, counts the amount of mutations, identify the location of the mutations 
+Aligns multiple Fasta sequences of a gene library, for each varinat, identifies the type, the amount, and the location of the mutations. Additionally, the script also identifies the corresponding amino acid residue exchanges. 
