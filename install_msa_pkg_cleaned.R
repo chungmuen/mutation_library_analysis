@@ -2,17 +2,6 @@
 ##Install required packages by running following code
 ##-----------------------------------------------------
 
-if (!requireNamespace("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
-
-BiocManager::install("msa")
-
-##----------------------------------------------------------------------------------------------------------------------
-##if you encounter the error: "Installation path not writable, unable to update packages: codetools, KernSmooth, nlme",
-##then locate the folders where all R packages are installed using the command: .libPaths()
-##and then manually install the missing packages to targeted path using following script:
-##----------------------------------------------------------------------------------------------------------------------
-
 install.packages(c("codetools", "KernSmooth", "nlme"), Lib = "here enter path for packages")
 
 ##---------------------------------------

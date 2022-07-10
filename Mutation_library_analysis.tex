@@ -1,0 +1,3142 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Mutation\_library\_analysis},
+  pdfauthor={Mu-En Chung},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{Mutation\_library\_analysis}
+\author{Mu-En Chung}
+\date{07/07/2022}
+
+\begin{document}
+\maketitle
+
+{[}Introduction{]}\\
+This tool aligns a set of sample DNA sequences to a reference
+sequence,\\
+finds the mutations in each sample sequences, and then export a csv file
+with each row being each sample sequence and their amino acid
+substitutions.\\
+Author: Dr.~Mu-En Chung Email:
+\href{mailto:chungmuen@gmail.com}{\nolinkurl{chungmuen@gmail.com}}
+
+enter the path to the folder containing the sequencing results and the
+name of your WT sequence below:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{seq\_file\_path }\OtherTok{=} \StringTok{"./"}                                                            
+\NormalTok{ref\_seq\_name }\OtherTok{=} \StringTok{"ClyF"}
+\end{Highlighting}
+\end{Shaded}
+
+install\_and\_import\_packages:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{requireNamespace}\NormalTok{(}\StringTok{"BiocManager"}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{))\{}
+   \FunctionTok{install.packages}\NormalTok{(}\StringTok{"BiocManager"}\NormalTok{)}
+\NormalTok{\}}
+\ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{requireNamespace}\NormalTok{(}\StringTok{"msa"}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{))\{}
+\NormalTok{   BiocManager}\SpecialCharTok{::}\FunctionTok{install}\NormalTok{(}\StringTok{"msa"}\NormalTok{)}
+\NormalTok{\}}
+
+\DocumentationTok{\#\#import package msa}
+\FunctionTok{library}\NormalTok{(msa)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: Biostrings
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: BiocGenerics
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'BiocGenerics'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     IQR, mad, sd, var, xtabs
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     anyDuplicated, append, as.data.frame, basename, cbind, colnames,
+##     dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+##     grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,
+##     order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+##     rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,
+##     union, unique, unsplit, which.max, which.min
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: S4Vectors
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: stats4
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'S4Vectors'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     expand.grid, I, unname
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: IRanges
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: XVector
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: GenomeInfoDb
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'Biostrings'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:base':
+## 
+##     strsplit
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\#\#run example provided by msa package}
+\NormalTok{mySequenceFile }\OtherTok{\textless{}{-}} \FunctionTok{system.file}\NormalTok{(}\StringTok{"examples"}\NormalTok{, }\StringTok{"exampleAA.fasta"}\NormalTok{, }\AttributeTok{package=}\StringTok{"msa"}\NormalTok{)}
+\NormalTok{mySequences }\OtherTok{\textless{}{-}} \FunctionTok{readAAStringSet}\NormalTok{(mySequenceFile)}
+\FunctionTok{print}\NormalTok{(}\StringTok{"example AA seq"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "example AA seq"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mySequences}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## AAStringSet object of length 9:
+##     width seq                                               names               
+## [1]   452 MSTAVLENPGLGRKLSDFGQETS...LKILADSINSEIGILCSALQKIK PH4H_Homo_sapiens
+## [2]   453 MAAVVLENGVLSRKLSDFGQETS...KILADSINSEVGILCNALQKIKS PH4H_Rattus_norve...
+## [3]   453 MAAVVLENGVLSRKLSDFGQETS...KILADSINSEVGILCHALQKIKS PH4H_Mus_musculus
+## [4]   297 MNDRADFVVPDITTRKNVGLSHD...DVAPDDLVLNAGDRQGWADTEDV PH4H_Chromobacter...
+## [5]   262 MKTTQYVARQPDDNGFIHYPETE...MALVHEAMRLGLHAPLFPPKQAA PH4H_Pseudomonas_...
+## [6]   451 MSALVLESRALGRKLSDFGQETS...LKILADSISSEVEILCSALQKLK PH4H_Bos_taurus
+## [7]   313 MAIATPTSAAPTPAPAGFTGTLT...DVVDGDAVLNAGTREGWADTADI PH4H_Ralstonia_so...
+## [8]   294 MSGDGLSNGPPPGARPDWTIDQG...AVLTRGTQAYATAGGRLAGAAAG PH4H_Caulobacter_...
+## [9]   275 MSVAEYARDCAAQGLRGDYSVCR...QTADFEAIVARRKDQKALDPATV PH4H_Rhizobium_loti
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{myFirstAlignment }\OtherTok{\textless{}{-}} \FunctionTok{msa}\NormalTok{(mySequences)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## use default substitution matrix
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\StringTok{"example AA alignment"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "example AA alignment"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{myFirstAlignment}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## CLUSTAL 2.1  
+## 
+## Call:
+##    msa(mySequences)
+## 
+## MsaAAMultipleAlignment with 9 rows and 456 columns
+##     aln                                                    names
+## [1] MAAVVLENGVLSRKLSDFGQETSYIE...QLKILADSINSEVGILCNALQKIKS PH4H_Rattus_norve...
+## [2] MAAVVLENGVLSRKLSDFGQETSYIE...QLKILADSINSEVGILCHALQKIKS PH4H_Mus_musculus
+## [3] MSTAVLENPGLGRKLSDFGQETSYIE...QLKILADSINSEIGILCSALQKIK- PH4H_Homo_sapiens
+## [4] MSALVLESRALGRKLSDFGQETSYIE...QLKILADSISSEVEILCSALQKLK- PH4H_Bos_taurus
+## [5] --------------------------...LNAGDRQGWADTEDV---------- PH4H_Chromobacter...
+## [6] --------------------------...LNAGTREGWADTADI---------- PH4H_Ralstonia_so...
+## [7] --------------------------...LTRGT-QAYATAGGRLAGAAAG--- PH4H_Caulobacter_...
+## [8] --------------------------...------------------------- PH4H_Pseudomonas_...
+## [9] --------------------------...------------------------- PH4H_Rhizobium_loti
+## Con --------------------------...??????????????IL??A???--- Consensus
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\#run example DNA alignment}
+\NormalTok{myDNAFile }\OtherTok{\textless{}{-}} \FunctionTok{system.file}\NormalTok{(}\StringTok{"examples"}\NormalTok{, }\StringTok{"exampleDNA.fasta"}\NormalTok{, }\AttributeTok{package=}\StringTok{"msa"}\NormalTok{)}
+\NormalTok{mySequencesDNA }\OtherTok{\textless{}{-}} \FunctionTok{readDNAStringSet}\NormalTok{(myDNAFile)}
+\FunctionTok{print}\NormalTok{(}\StringTok{"example DNA seq"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "example DNA seq"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mySequencesDNA}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## DNAStringSet object of length 3:
+##     width seq                                               names               
+## [1]  2680 CAGCTGGGGGTAAGGGGGGCGGA...AGTAATAAAACATTAGTAGTTTA PAH_Homo_sapiens
+## [2]  2152 AGTCCAGGACTGGAGTTGGGTAT...CATTATATAAAACAAAAAAAAAA PAH_Mus_musculus
+## [3]  2040 CAAGTTAAAACCATCAGCCCTCC...AAAAAAAAAAAAAAAAAAAAAAA PAH_Rattus_norveg...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{exDNA\_Alignment }\OtherTok{\textless{}{-}} \FunctionTok{msa}\NormalTok{(mySequencesDNA)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## use default substitution matrix
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\StringTok{"example DNA alignment"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "example DNA alignment"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{exDNA\_Alignment}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## CLUSTAL 2.1  
+## 
+## Call:
+##    msa(mySequencesDNA)
+## 
+## MsaDNAMultipleAlignment with 3 rows and 2716 columns
+##     aln                                                    names
+## [1] --------------------------...------------------------- PAH_Mus_musculus
+## [2] --------------------------...------------------------- PAH_Rattus_norveg...
+## [3] CAGCTGGGGGTAAGGGGGGCGGATTA...TTAGTAATAAAACATTAGTAGTTTA PAH_Homo_sapiens
+## Con --------------------------...------------------------- Consensus
+\end{verbatim}
+
+run your alignment
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\#run my alignment}
+\NormalTok{file\_path }\OtherTok{\textless{}{-}} \FunctionTok{list.files}\NormalTok{(}\AttributeTok{path =}\NormalTok{ seq\_file\_path,}\AttributeTok{pattern =} \StringTok{\textquotesingle{}fasta\textquotesingle{}}\NormalTok{)}
+\NormalTok{seq\_result }\OtherTok{\textless{}{-}} \FunctionTok{readDNAStringSet}\NormalTok{(file\_path)}
+\NormalTok{myDNA\_Alignment }\OtherTok{\textless{}{-}} \FunctionTok{msa}\NormalTok{(seq\_result)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## use default substitution matrix
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#The print() function provided by the msa package provides some ways for customizing the output, such as, showing the entire alignment split over multiple blocks of sub{-}sequences}
+\FunctionTok{print}\NormalTok{(}\StringTok{"my alignment"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "my alignment"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(myDNA\_Alignment, }\AttributeTok{show=}\StringTok{"complete"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## MsaDNAMultipleAlignment with 28 rows and 1296 columns
+##      aln (1..53)                                           names
+##  [1] ------------------------------------------------AAAAT 31_T7 Biotec_CGN
+##  [2] -------------------------------------------------GGAT 33_T7 Biotec_CGN
+##  [3] ------------------------------------------------GAAGT 43_T7 Biotec_CGN
+##  [4] -----------------------------------------------GGAAAA 21_T7 Biotec_CGN
+##  [5] ------------------------------------------------GAAAT 51_T7 Biotec_CGN
+##  [6] ------------------------------------------------AGGTT 14_T7 Biotec_CGN
+##  [7] -AAGGGGAAATTCCTCTAGAAATAAATTTTTGTTAACTTTAAGAAGGAGATAT 55_T7 Biotec_CGN
+##  [8] --GGGGGAAATTCCTCTAGAAATAAATTTTTGTTA-CTTTAAGAAGGAGATAT 56_T7 Biotec_CGN
+##  [9] --GGGGGAAATTCCTCTAGAAATAA-TTTTTGTTA-CTTTAAGAAGGAGATAT 13_T7 Biotec_CGN 
+##  ... ...
+## [21] -CGGGGGAAATTTCTCTAGAAATAA-TTTTTGTTA-CTTTAAGAAGGAGATAT 23_T7 Biotec_CGN
+## [22] ---GGGGAAATTTCTCTAGAAATAA-TTTTTGTTA-CTTTAAGAAGGAGATAT 24_T7 Biotec_CGN
+## [23] --AGGGGAAATTCCTCTAGAAATAA-TTTTTGTTA-CTTTAAGAAGGAGATAT 25_T7 Biotec_CGN
+## [24] CAAGGGGAAATTCCTCTAGAAATAATTTTT-GTTTACTTTAAGAAGGAGATAT 32_T7 Biotec_CGN
+## [25] -------------------AAATAATTTTTTGTTTACTTTAAGAAGGAGATAT 34_T7 Biotec_CGN
+## [26] --AGGGGAAATTCCTCTAGAAATAA-TTTTTGTTA-CTTTAAGAAGGAGATAT 35_T7 Biotec_CGN
+## [27] ----------------------------------------------------- ClyF
+## [28] ----------------------------------------------GAAGT-T 45_T7 Biotec_CGN
+##  Con --?GGGGAAATTCCTCTAGAAATAA-TTTTTGTTA-CTTTAAGAAGGAGATAT Consensus 
+## 
+##      aln (54..106)                                         names
+##  [1] TCCATGCATCACCATCATCACCACGCCCTTCCGAAAACGGGGAAACCTACAGC 31_T7 Biotec_CGN
+##  [2] TACATGCATCACCATCACCACCACGCCCTTCCGAAAACGGGGAAACCTACAGC 33_T7 Biotec_CGN
+##  [3] TACATGCATCACCATCATCACCACGCCCTTCCGAAAACGGGGAAACCTACAGC 43_T7 Biotec_CGN
+##  [4] TACATGCATCACCATCATCACCACGCCCTTCCGAAAACGGGGAAACCTACAGC 21_T7 Biotec_CGN
+##  [5] TCCATGCATCACCATCATCACCACGCCCTTCCGAAAACGGGGAAACCTACAGC 51_T7 Biotec_CGN
+##  [6] ACCATGCATCACCATCATCACCACGCCCTTCCGAAAACGGGGAAACCTACAGC 14_T7 Biotec_CGN
+##  [7] ACCATGCATCACCATCATCACCACGCCCTTCCGAAAACGGGGAAACCTACAGC 55_T7 Biotec_CGN
+##  [8] ACCATGCATCACCATCATCACCACGCCCTTCCGAAAACGGGGAAACCTACAGC 56_T7 Biotec_CGN
+##  [9] ACCATGCATCACCATCATCACCACGCCCTTCCGAAAACGGGGAAACCTACAGC 13_T7 Biotec_CGN 
+##  ... ...
+## [21] ACCATGCATCACCATCATCACCACGCCCTTCCGAAAACGGGGAAACCTACAGC 23_T7 Biotec_CGN
+## [22] ACCATGCATCACCATCATCACCACGCCCTTCCGAAAACGGGGAAACCTACAGC 24_T7 Biotec_CGN
+## [23] ACCATGCATCACCATCATCACCACGCCCTTCCGAAAACGGGGAAACCTACAGC 25_T7 Biotec_CGN
+## [24] ACCATGCATCACCATCATCACCACGCCCTTCCGAAAACGGGGAAACCTACAGC 32_T7 Biotec_CGN
+## [25] ACCATGCATCACCATCATCACCACGCCCTTCCGAAAACGGGGAAACCTACAGC 34_T7 Biotec_CGN
+## [26] ACCATGCATCACCATCATCACCACGCCCTTCCGAAAACGGGGAAACCTACAGC 35_T7 Biotec_CGN
+## [27] ---ATGCATCACCATCATCACCACGCCCTTCCGAAAACGGGGAAACCTACAGC ClyF
+## [28] ACCATGCATCACCATCATCACCACGCCCTTCCGAAAACGGGGAAACCTACAGC 45_T7 Biotec_CGN
+##  Con ACCATGCATCACCATCATCACCACGCCCTTCCGAAAACGGGGAAACCTACAGC Consensus 
+## 
+##      aln (107..159)                                        names
+##  [1] AAAGCAAGTGGTGGACTGGGCAATCAACTTGATCGGCTCCGGTGTTGACGTTG 31_T7 Biotec_CGN
+##  [2] AAAGCAAGTGGTGGACTGGGCAATCAACTTGATCGGCTCCGGTGTTGACGTTG 33_T7 Biotec_CGN
+##  [3] AAAGCAAGTGGTGGACTGGGCAATCAACTTGATCGGCTCCGGTGTTGACGTTG 43_T7 Biotec_CGN
+##  [4] AAAGCAAGTGGTGGACTGGGCAATCAACTTGATCGGCTCCGGTGTTGACGTTG 21_T7 Biotec_CGN
+##  [5] AAAGCAAGTGGTGGACTGGGCAATCAACTTGATCGGCTCCGGTGTTGACGTTG 51_T7 Biotec_CGN
+##  [6] AAAGCAAGTGGTGGACTGGGCAATCAACTTGATCGGCTCCGGTGTTGACGTTG 14_T7 Biotec_CGN
+##  [7] AAAGCAAGTGGTGGACTGGGCAATCAACTTGATCGGCTCCGGTGTTGACGTTG 55_T7 Biotec_CGN
+##  [8] AAAGCAAGTGGTGGACTGGGCAATCAACTTGATCGGCTCCGGTGTTGACGTTG 56_T7 Biotec_CGN
+##  [9] AAAGCAAGTGGTGGACTGGGCAATCAACTTGATCGGCTCCGGTGTTGACGTTG 13_T7 Biotec_CGN 
+##  ... ...
+## [21] AAAGCAAGTGGTGGACTGGGCAATCAACTTGATCGGCTCCGGTGTTGACGTTG 23_T7 Biotec_CGN
+## [22] AAAGCAAGTGGTGGACTGGGCAATCAACTTGATCGGCTCCGGTGTTGACGTTG 24_T7 Biotec_CGN
+## [23] AAAGCAAGTGGTGGACTGGGCAATCAACTTGATCGGCTCCGGTGTTGACGTTG 25_T7 Biotec_CGN
+## [24] AAAGCAAGTGGTGGACTGGGCAATCAACTTGATCGGCTCCGGTGTTGACGTTG 32_T7 Biotec_CGN
+## [25] AAAGCAAGTGGTGGACTGGGCAATCAACTTGATCGGCTCCGGTGTTGACGTTG 34_T7 Biotec_CGN
+## [26] AAAGCAAGTGGTGGACTGGGCAATCAACTTGATCGGCTCCGGTGTTGACGTTG 35_T7 Biotec_CGN
+## [27] AAAGCAAGTGGTGGACTGGGCAATCAACTTGATCGGCTCCGGTGTTGACGTTG ClyF
+## [28] AAGGCAAGTGGTGGACTGGGCAATCAACTTGATCGGCTCCGGTGTTGACGTTG 45_T7 Biotec_CGN
+##  Con AAAGCAAGTGGTGGACTGGGCAATCAACTTGATCGGCTCCGGTGTTGACGTTG Consensus 
+## 
+##      aln (160..212)                                        names
+##  [1] GCGGATATTACGGTCGTCAATGTTGGGACTTGCCAAACTATATCTTTAACCGT 31_T7 Biotec_CGN
+##  [2] ACGGATATTACGGTCGTCAATGTTGGGACTTGCCAAACTATATCTTTAACCGT 33_T7 Biotec_CGN
+##  [3] ACGGGTATTACGGTCGTCAATGTTGGGACTTGCCAAACTATATCTTTAACCGT 43_T7 Biotec_CGN
+##  [4] ACGGATATTACGGTCGTCAATGTTGGGACTTGCCAAACTATATCTTTAACCGT 21_T7 Biotec_CGN
+##  [5] ACGGATATTACGGTCGTCAAAGTTGGGACTTGCCAAACTATATCTTTAACCGT 51_T7 Biotec_CGN
+##  [6] ACGGATATTACGGTCGTCAATGTTGGGACTTGCCAAACTATATCTTTAACCGT 14_T7 Biotec_CGN
+##  [7] ACGGATATTACGGTCGTCAATGTTGGGACTTGCCAAACTATATCTTTAACCGT 55_T7 Biotec_CGN
+##  [8] ACGGATATTACGGTCGTCAATGTTGGGACTTGCCAAACTATATCTTTAACCGT 56_T7 Biotec_CGN
+##  [9] ACGGATATTACGGTCGTCAATGTTGGGACTTGCCAAACTATATCTTTAACCGT 13_T7 Biotec_CGN 
+##  ... ...
+## [21] ACGGATATTACGGTCGTCAATGTTGGGACTTGCCAAACTATATCTTTAACCGT 23_T7 Biotec_CGN
+## [22] ACGGATATTACGGTCGTCAATGTTGGGACTTGCCAAACTATATCTTTAACCGT 24_T7 Biotec_CGN
+## [23] ACGGATATTACGGTCGTCAATGTTGGGACTTGCCAAACTATATCTTTAACCGT 25_T7 Biotec_CGN
+## [24] ACGGATATTACGGTCGTCAATGTTGGGACTTGCCAAACTATATCTTTAACCGT 32_T7 Biotec_CGN
+## [25] ACGGATATTACGGTCGTCAATGTTGGGACTTGCCAAACTATATCTTTAACCGT 34_T7 Biotec_CGN
+## [26] ACGGATATTACGGTCGTCAATGTTGGGACTTGCCAAACTATATCTCTAACCGT 35_T7 Biotec_CGN
+## [27] ACGGATATTACGGTCGTCAATGTTGGGACTTGCCAAACTATATCTTTAACCGT ClyF
+## [28] ACGGATATTACGGTCGTCAATGTTGGGACTTGCCAAACTATATCTTTAACCGT 45_T7 Biotec_CGN
+##  Con ACGGATATTACGGTCGTCAATGTTGGGACTTGCCAAACTATATCTTTAACCGT Consensus 
+## 
+##      aln (213..265)                                        names
+##  [1] TACTGGAATTTCAAGACCCCAGGAAATGCTCGCGACATGGCTTGGTATCGTTA 31_T7 Biotec_CGN
+##  [2] TACTGGAATTTCAAGACCCCAGGAAATGCTCGCGACATGGCTTGGTATCGTTA 33_T7 Biotec_CGN
+##  [3] TACTGGAATTTCAAGACCCCAGGAAATGCTCGCGACATGGCTTGGTATCGTTA 43_T7 Biotec_CGN
+##  [4] TACTGGAATTTCAAGACCCCAGGAAATGCTCGCGACATGGCTTGGTATCGTTA 21_T7 Biotec_CGN
+##  [5] TACTGGAATTTCAAGACCCCAGGAAATACTCGCGACATGGCTTGGTATCGTTA 51_T7 Biotec_CGN
+##  [6] TACTGGAATTTCAAGACCCCAGGAAATGCTCGCGACATGGCTTGGTATCGTTA 14_T7 Biotec_CGN
+##  [7] TACTGGAATTTCAAGACCCCAGGAAATGCTCGCGACATGGCTTGGTATCGTTA 55_T7 Biotec_CGN
+##  [8] TACTGGAATTTCAAGACCCCAGGAAATGCTCGCGACATGGCTTGGTATCGTTA 56_T7 Biotec_CGN
+##  [9] TACTGGAATTTCAAGACCCCAGGAAATGCTCGCGACATGGCTTGGTATCGTTA 13_T7 Biotec_CGN 
+##  ... ...
+## [21] TACTGGAATTTCAAGACCCCAGGAAATGCTCGCGACATGGCTTGGTATCGTTA 23_T7 Biotec_CGN
+## [22] TACTGGAATTTCAAGACCCCAGGAAATGCTCGCGACATGGCTTGGTATCGTTA 24_T7 Biotec_CGN
+## [23] TACTGGAATTTCAAGACCCCAGGAAATGCTCGCGACATGGCTTGGTATCGTTA 25_T7 Biotec_CGN
+## [24] TACTGGAATTTCGAGACCCCAGGAAATGCCCGCGACATGGCTTGGTATCGTTA 32_T7 Biotec_CGN
+## [25] TACTGGAATTTCAAGACCCCAGGAAATGCTCGCGACATGGCTTGGTATCGTTA 34_T7 Biotec_CGN
+## [26] TACTGGAATTTCAAGACCCCAGGAAATGCTCGCGACATGGCTTGGTATCGTTA 35_T7 Biotec_CGN
+## [27] TACTGGAATTTCAAGACCCCAGGAAATGCTCGCGACATGGCTTGGTATCGTTA ClyF
+## [28] TACTGGAATTTCAAGACCCCAGGAAATGCTCGCGACATGGCTTGGTATCGTTA 45_T7 Biotec_CGN
+##  Con TACTGGAATTTCAAGACCCCAGGAAATGCTCGCGACATGGCTTGGTATCGTTA Consensus 
+## 
+##      aln (266..318)                                        names
+##  [1] CCCAGAGGGTTTCAAAGTTTTCCGCAACACCAGCGATTTCGTACCAAAACCAG 31_T7 Biotec_CGN
+##  [2] CCCAGAGGGTTTCAAAGTTTTCCGCAACACCAGCGATTTCGTACCAAAACCAG 33_T7 Biotec_CGN
+##  [3] CCCAGAGGGTTTCAAAGTTTTCCGCAACACCAGCGATTTCGTACCAAAACCAG 43_T7 Biotec_CGN
+##  [4] CCCAGAGGGTTTCAAAGTTTTCCGCAACACCAGCGATTTCGTACCAAAACCAG 21_T7 Biotec_CGN
+##  [5] CCCAGAGGGTTTCAAAGTTTTCCGCAACACCGGCGATTTCGTACCAAAACCAG 51_T7 Biotec_CGN
+##  [6] CCCAGAGGGTTTCAAAGTTTTCCGCAACACCAGCGATTTCGTACCAAAACCAG 14_T7 Biotec_CGN
+##  [7] CCCAGAGGGTTTCAAAGTTCTCCGCAACACCAGCGATTTCGTACCAAAACCAG 55_T7 Biotec_CGN
+##  [8] CCCAGAGGGTTTCAAAGTTCTCCGCAACACCAGCGATTTCGTACCAAAACCAG 56_T7 Biotec_CGN
+##  [9] CCCAGAGGGTTTCAAAGTTTTCCGCAACACCAGCGATTTCGTACCAAAACCAG 13_T7 Biotec_CGN 
+##  ... ...
+## [21] CCCAGAGGGTTTCAAAGTTTTCCGCAACACCAGCGATTTCGTACCAAAACCAG 23_T7 Biotec_CGN
+## [22] CCCAGAGGGTTTCAAAGTTTTCCGCAACACCAGCGATTTCGTACCAAAACCAG 24_T7 Biotec_CGN
+## [23] CCCAGAGGGTTTCAAAGTTTTCCGCAACACCAGCGATTTCGTACCAAAACCAG 25_T7 Biotec_CGN
+## [24] CCCAGAGGGTTTCAAAGTTTTCCGCAACACCAGCGATTTCGTATCAAAACCAG 32_T7 Biotec_CGN
+## [25] CCCAGAGGGTTTCAAAGTTTTCCGCAACACCAGCGATTTCGTACCAAAACCAG 34_T7 Biotec_CGN
+## [26] CCCAGAGGGTTTCAAAGTTTTCCGCAACACCAGCGATTTCGTACCAAAACCAG 35_T7 Biotec_CGN
+## [27] CCCAGAGGGTTTCAAAGTTTTCCGCAACACCAGCGATTTCGTACCAAAACCAG ClyF
+## [28] CCCAGAGGGTTTCAAAGTTTTCCGCAACACCAGCGATTTCGTACCAAAACCAG 45_T7 Biotec_CGN
+##  Con CCCAGAGGGTTTCAAAGTTTTCCGCAACACCAGCGATTTCGTACCAAAACCAG Consensus 
+## 
+##      aln (319..371)                                        names
+##  [1] GCGACATCGCAGTGTGGACTGGGGGGAACTATAACTGGAATACATGGGGGCAC 31_T7 Biotec_CGN
+##  [2] GCGACATCGCAGTGTGGACTGGGGGGAACTATAACTGGAATACATGGGGGCAC 33_T7 Biotec_CGN
+##  [3] GCGACATCGCAGTGTGGACTGGGGGGAACTATAACTGGAATACATGGGGGCAC 43_T7 Biotec_CGN
+##  [4] GCGACATCGCAGTGTGGACTGGGGGGAACTATAACTGGAATACATGGGGGCAC 21_T7 Biotec_CGN
+##  [5] GCGACATCGCAGTGTGGACTGGGGGGAACTATAACTGGAATACATGGGGGCAC 51_T7 Biotec_CGN
+##  [6] GCGACATCGCAGTGTGGACTGGGGGGAACTATAACTGGAATACATGGGGGCAC 14_T7 Biotec_CGN
+##  [7] GCGACATCGCAGTGTGGACTGGGGGGAACTATAACTGGAATACATGGGGGCAC 55_T7 Biotec_CGN
+##  [8] GCGACATCGCAGTGTGGACTGGGGGGAACTATAACTGGAATACATGGGGGCAC 56_T7 Biotec_CGN
+##  [9] GCGACATCGCAGTGTGGACTGGGGGGAACTATAACTGGAATACATGGGGGCAC 13_T7 Biotec_CGN 
+##  ... ...
+## [21] GCGACATCGCGGTGTGGACTGGGGGGAACTATAACTGGAATACATGGGGGCAC 23_T7 Biotec_CGN
+## [22] GCGACATCGCAGTGTGGACTGGGGGGAACTATAACTGGAATACATGGGGGCAC 24_T7 Biotec_CGN
+## [23] GCGACATCGCAGTGTGGACTGGGGGGAACTATAACTGGAATACATGGGGGCAC 25_T7 Biotec_CGN
+## [24] GCGACATCGCAGTGTGGACTGGGGGGAACTATAACTGGAATACATGGGGGCAC 32_T7 Biotec_CGN
+## [25] GCGACATCGCAGTGTGGACTGGGGGGAACTATAACTGGAATACATGGGGGCAC 34_T7 Biotec_CGN
+## [26] GCGACATCGCAGTGTGGACTGGGGGGAACTATAACTGGAATACATGGGGGCAC 35_T7 Biotec_CGN
+## [27] GCGACATCGCAGTGTGGACTGGGGGGAACTATAACTGGAATACATGGGGGCAC ClyF
+## [28] GCGACATCGCAGTGTGGACTGGGGGGAACTATAACTGGAATACATGGAGGCAC 45_T7 Biotec_CGN
+##  Con GCGACATCGCAGTGTGGACTGGGGGGAACTATAACTGGAATACATGGGGGCAC Consensus 
+## 
+##      aln (372..424)                                        names
+##  [1] ACAGGAATCGTTGTTGGCCCAAGCACGAAGTCTTACTTCTATTCGGTTGACCA 31_T7 Biotec_CGN
+##  [2] ACAGGAATCGTTGTTGGCCCAAGCACGAAGTCTTACTTCTATTCGGTTGACCA 33_T7 Biotec_CGN
+##  [3] ACAGGAATCGTTGTTGGCCCAAGCACGAAGTCTTACTTCTATTCGGTTGACCA 43_T7 Biotec_CGN
+##  [4] ACAGGAATCGTTGTTGGCCCAAGCACGAAGTCTTACTTCTATTCGGTTGACCA 21_T7 Biotec_CGN
+##  [5] ACAGGA-TCGTTGTTGGCCCAAGCACGAAGTCTTACTTCTATTCGGTTGACCA 51_T7 Biotec_CGN
+##  [6] ACAGGAATCGTTGTTGGCCCAAGCACGAAGTCTTACTTCTATTCGGTTGACCA 14_T7 Biotec_CGN
+##  [7] ACAGGAATCGTCGTTGGCCCAAGCACGAAGTCTTACTTCTATTCGGTTGACCA 55_T7 Biotec_CGN
+##  [8] ACAGGAATCGTCGTTGGCCCAAGCACGAAGTCTTACTTCTATTCGGTTGACCA 56_T7 Biotec_CGN
+##  [9] ACAGGAATCGTTGTTGGCCCAAGCACGAAGTCTTACTTCTATTCGGTTGACCA 13_T7 Biotec_CGN 
+##  ... ...
+## [21] ACAGGAATCGTTGTTGGCCCAAGCACGAAGTCTTACTTCTATTCGGTTGACCA 23_T7 Biotec_CGN
+## [22] ACAGGAATCGTTGTTGGCCCAAGCACGAAGTCTTACTTCTATTCGGTTGACCA 24_T7 Biotec_CGN
+## [23] ACAGGAATCGTTGTTGGCCCAAGCACGAAGTCTTACTTCTATTCGGTTGACCA 25_T7 Biotec_CGN
+## [24] ACAGGAATCGTTGTTGGCCCAAGCACGAAGTCTTACTTCTATTCGGTTGGCCA 32_T7 Biotec_CGN
+## [25] ACAGGAATCGTTGTTGGCCCAAGCACGAAGTCTTACTTCTATTCGGTTGACCA 34_T7 Biotec_CGN
+## [26] ACAGGAATCGTTGTTGGCCCAAGCACGAAGTCTTACTTCTATTCGGTTGACCA 35_T7 Biotec_CGN
+## [27] ACAGGAATCGTTGTTGGCCCAAGCACGAAGTCTTACTTCTATTCGGTTGACCA ClyF
+## [28] ACAGGAATCGTTGTTGGCCCAAGCACGAAGTCTTACTTCTATTCGGTTGACCA 45_T7 Biotec_CGN
+##  Con ACAGGAATCGTTGTTGGCCCAAGCACGAAGTCTTACTTCTATTCGGTTGACCA Consensus 
+## 
+##      aln (425..477)                                        names
+##  [1] AAATTGGAACAACAGTAACAGTTATGTCGGCAGTCCTGCCGCCAAAATCAAGC 31_T7 Biotec_CGN
+##  [2] AAATTGGAACAACAGTAACAGTTATGTCGGCAGTCCTGCCGCCAAAATCAAGC 33_T7 Biotec_CGN
+##  [3] AAATTGGAACAACAGTAACAGTTATGTCGGCAGTCCTGCCGCCAAAATCAAGC 43_T7 Biotec_CGN
+##  [4] AAATTGGAACAACAGTAACAGTTATGTCGGCAGTCCTGCCGCCAAAATCAAGC 21_T7 Biotec_CGN
+##  [5] AAATTGGAACAACAGTAACAGTTATGTCGGCAGTCCTGCCGCCAAAATCAAGC 51_T7 Biotec_CGN
+##  [6] AAATTGGAACAACAGTAACAGTTATGTCGGCAGTCCTGCCGCCAAAATCAAGC 14_T7 Biotec_CGN
+##  [7] AAATTGGAACAACAGTAACAGTTATGTCGGCAGTCCTGCCGCCAAAATCAAGC 55_T7 Biotec_CGN
+##  [8] AAATTGGAACAACAGTAACAGTTATGTCGGCAGTCCTGCCGCCAAAATCAAGC 56_T7 Biotec_CGN
+##  [9] AAATTGGAACAACAGTAACAGTTATGTCGGCAGTCCTGCCGCCAAAATCAAGC 13_T7 Biotec_CGN 
+##  ... ...
+## [21] AAATTGGAACAACAGTAACAGTTATGTCGGCAGTCCTGCCGCCAAAATCAAGC 23_T7 Biotec_CGN
+## [22] AAATTGGAACAACAGTAACAGTTATGTCGGCAGTCCTGCCGCCAAAATCAAGC 24_T7 Biotec_CGN
+## [23] AAATTGGAACAACAGTAACAGTTATGTCGGCAGTCCTGCCGCCAAAATCAAGC 25_T7 Biotec_CGN
+## [24] AAATTGGAACAACAGTAACAGTTATGTCGGCAGTCCTGCCGCCAAAATCAAGC 32_T7 Biotec_CGN
+## [25] AAATTGGAACAACAGTAACAGTTATGTCGGCAGTCCTGCCGCCAAAATCAAGC 34_T7 Biotec_CGN
+## [26] AAATTGGAACAACAGTAACAGTTATGTCGGCAGTCCTGCCGCCAAAATCAAGC 35_T7 Biotec_CGN
+## [27] AAATTGGAACAACAGTAACAGTTATGTCGGCAGTCCTGCCGCCAAAATCAAGC ClyF
+## [28] AAATTGGAACAACAGTAACAGTTATGTCGGCAGTCCTGCCGCCAAAATCAAGC 45_T7 Biotec_CGN
+##  Con AAATTGGAACAACAGTAACAGTTATGTCGGCAGTCCTGCCGCCAAAATCAAGC Consensus 
+## 
+##      aln (478..530)                                        names
+##  [1] ACTCCTACTTTGGAGTGACCCATTTTGTGCGTCCCGCTTACAAAGCCGAACCG 31_T7 Biotec_CGN
+##  [2] ACTCCTACTTTGGAGTGACCCATTTTGTGCGTCCCGCTTACAAAGCCGAACCG 33_T7 Biotec_CGN
+##  [3] ACTCCTACTTTGGAGTGACCCATTTTGTGCGTCCCGCTTACAAAGCCGAACCG 43_T7 Biotec_CGN
+##  [4] ACTCCTACTTTGGAGTGACCCATTTTGTGCGTCCCGCTTACAAAGCCGAACCG 21_T7 Biotec_CGN
+##  [5] ACTCCTACTTTGGAGTGACCCATTTTGTGCGTCCCGCTTACAAAGCCGAACCG 51_T7 Biotec_CGN
+##  [6] ACTCCTACTTTGGAGTGACCCATTTTGTGCGTCCCGCTTACAAAGCCGAACCG 14_T7 Biotec_CGN
+##  [7] ACTCCTACTTTGGAGTGACCCATTTTGTGCGTCCCGCTTACAAAGCCGAACCG 55_T7 Biotec_CGN
+##  [8] ACTCCTACTTTGGAGTGACCCATTTTGTGCGTCCCGCTTACAAAGCCGAACCG 56_T7 Biotec_CGN
+##  [9] ACTCCTACTTTGGAGTGACCCATTTTGTGCGTCCCGCTTACAAAGCCGAACCG 13_T7 Biotec_CGN 
+##  ... ...
+## [21] ACTCCTACTTTGGAGTGACCCATTTTGTGCGTCCCGCTTACAAAGCCGAACCG 23_T7 Biotec_CGN
+## [22] ACTCCTACTTTGGAGTGACCCATTTTGTGCGTCCCGCTTACAAAGCCGAACCG 24_T7 Biotec_CGN
+## [23] ACTCCTACTTTGGAGTGACCCATTTTGTGCGTCCCGCTTACAAAGCCGAACCG 25_T7 Biotec_CGN
+## [24] ACTCCTACTTTGGAGTGACCCATTTTGTGCGTCCCGCTTACAAAGCCGAACCG 32_T7 Biotec_CGN
+## [25] ACTCCTACTTTGGAGTGACCCATTTTGTGCGTCCCGCTTACAAAGCCGAACCG 34_T7 Biotec_CGN
+## [26] ACTCCTACTTTGGAGTGACCCATTTTGTGCGTCCCGCTTACAAAGCCGAACCG 35_T7 Biotec_CGN
+## [27] ACTCCTACTTTGGAGTGACCCATTTTGTGCGTCCCGCTTACAAAGCCGAACCG ClyF
+## [28] ACTCCTACTTTGGAGTGACCCATTTTGTGCGTCCCGCTTACAAAGCCGAACCG 45_T7 Biotec_CGN
+##  Con ACTCCTACTTTGGAGTGACCCATTTTGTGCGTCCCGCTTACAAAGCCGAACCG Consensus 
+## 
+##      aln (531..583)                                        names
+##  [1] AAGCCTACTCCGCCATCTCGCAGTCGTTCATACCGCGAAACAGGAACGATGAC 31_T7 Biotec_CGN
+##  [2] AAGCCTACTCCGCCATCTCGCAGTCGTTCATACCGCGAAACAGGAACGATGAC 33_T7 Biotec_CGN
+##  [3] AAGCCTACTCCGCCATCTCGCAGTCGTTCATACCGCGAAACAGGAACGATGAC 43_T7 Biotec_CGN
+##  [4] AAGCCTACTCCGCCATCTCGCAGTCGTTCATACCGCGAAACAGGAACGATGAC 21_T7 Biotec_CGN
+##  [5] AAGCCTACTCCGCCATCTCGCAGTCGTTCATACCGCGAAACAGGAACGATGAC 51_T7 Biotec_CGN
+##  [6] AAGCCTACTCCGCCATCTCGCAGTCGTTCATACCGCGAAACAGGAACGATGAC 14_T7 Biotec_CGN
+##  [7] AAGCCTACTCCGCCATCTCGCAGTCGTTCATACCGCGAAACAGGAACGATGAC 55_T7 Biotec_CGN
+##  [8] AAGCCTACTCCGCCATCTCGCAGTCGTTCATACCGCGAAACAGGAACGATGAC 56_T7 Biotec_CGN
+##  [9] AAGCCTACTCCGCCATCTCGCAGTCGTTCATACCGCGAAACAGGAACGATGAC 13_T7 Biotec_CGN 
+##  ... ...
+## [21] AAGCCTACTCCGCCATCTCGCAGTCGTTCATACCGCGAAACAGGAACGATGAC 23_T7 Biotec_CGN
+## [22] AAGCCTACTCCGCCATCTCGCAGTCGTTCATACCGCGAAACAGGAACGATGAC 24_T7 Biotec_CGN
+## [23] AAGCCTACTCCGCCATCTCGCAGTCGTTCATACCGCGAAACAGGAACGATGAC 25_T7 Biotec_CGN
+## [24] AAGCCTACTCCGCCATCTCGCAGTCGTTCATACCGCGAAACAGGAACGATGAC 32_T7 Biotec_CGN
+## [25] AAGCCTACTCCGCCATCTCGCAGTCGTTCATACCGCGAAACAGGAACGATGAC 34_T7 Biotec_CGN
+## [26] AAGCCTACTCCGCCATCTCGCAGTCGTTCATACCGCGAAACAGGAACGATGAC 35_T7 Biotec_CGN
+## [27] AAGCCTACTCCGCCATCTCGCAGTCGTTCATACCGCGAAACAGGAACGATGAC ClyF
+## [28] AAGCCTACTCCGCCATCTCGCAGTCGTTCATACCGCGAAACAGGAACGATGAC 45_T7 Biotec_CGN
+##  Con AAGCCTACTCCGCCATCTCGCAGTCGTTCATACCGCGAAACAGGAACGATGAC Consensus 
+## 
+##      aln (584..636)                                        names
+##  [1] GGTCACGGTGGATGCGCTGAACGTACGTCGCGCTCCGAACACCTCGGGTGAAA 31_T7 Biotec_CGN
+##  [2] GGTCACGGTGGATGCGCTGAACGTACGTCGCGCTCCGAACACCTCGGGTGAAA 33_T7 Biotec_CGN
+##  [3] GGTCACGGTGGATGCGCTGAACGTACGTCGCGCTCCGAACACCTCGGGTGAAA 43_T7 Biotec_CGN
+##  [4] GGTCACGGTGGATGCGCTGAACGTACGTCGCGCTCCGAACACCTCGGGTGAAA 21_T7 Biotec_CGN
+##  [5] GGTCACGGTGGATGCGCTGAACGTACGTCGCGCTCCGAACACCTCGGGTGAAA 51_T7 Biotec_CGN
+##  [6] GGTCACGGTGGATGCGCTGAACGTACGTCGCGCTCCGAACACCTCGGGTGAAA 14_T7 Biotec_CGN
+##  [7] GGTCACGGTGGATGCGCTGAACGTACGTCGCGCTCCGAACACCTCGGGTGAAA 55_T7 Biotec_CGN
+##  [8] GGTCACGGTGGATGCGCTGAACGTACGTCGCGCTCCGAACACCTCGGGTGAAA 56_T7 Biotec_CGN
+##  [9] GGTCACGGTGGATGCGCTGAACGTACGTCGCGCTCCGAACACCTCGGGTGAAA 13_T7 Biotec_CGN 
+##  ... ...
+## [21] GGTCACGGTGGATGCGCTGAACGTACGTCGCGCTCCGAACACCTCGGGTGAAA 23_T7 Biotec_CGN
+## [22] GGTCACGGTGGATGCGCTGAACGTACGTCGCGCTCCGAACACCTCGGGTGAAA 24_T7 Biotec_CGN
+## [23] GGTCACGGTGGATGCGCTGAACGTACGTCGCGCTCCGAACACCTCGGGTGAAA 25_T7 Biotec_CGN
+## [24] GGTCACGGTGGATGCGCTGAACGTACGTCGCGCTCCGAACACCTCGGGTGAAA 32_T7 Biotec_CGN
+## [25] GGTCACGGTGGATGCGCTGAACGTACGTCGCGCTCCGAACACCTCGGGTGAAA 34_T7 Biotec_CGN
+## [26] GGTCACGGTGGATGCGCTGAACGTACGTCGCGCTCCGAACACCTCGGGTGAAA 35_T7 Biotec_CGN
+## [27] GGTCACGGTGGATGCGCTGAACGTACGTCGCGCTCCGAACACCTCGGGTGAAA ClyF
+## [28] GGTCACGGTGGATGCGCTGAACGTACGTCGCGCTCCGAACACCTCGGGTGAAA 45_T7 Biotec_CGN
+##  Con GGTCACGGTGGATGCGCTGAACGTACGTCGCGCTCCGAACACCTCGGGTGAAA Consensus 
+## 
+##      aln (637..689)                                        names
+##  [1] TTGTGGCTGTGTATAAACGCGGTGAGAGCTTCGACTATGATACGGTCGTCATC 31_T7 Biotec_CGN
+##  [2] TTGTGGCTGTGTATAAACGCGGTGAGAGCTTCGACTATGATACGGTCATCATC 33_T7 Biotec_CGN
+##  [3] TTGTGGCTGTGTATAAACGCGGTGAGAGCTTCGACTATGATACGGTCATCATC 43_T7 Biotec_CGN
+##  [4] TTGTGGCTGTGTATAAACGCGGTGAGAGCTTCGACTATGATACGGTCATCATC 21_T7 Biotec_CGN
+##  [5] TTGTGGCTGTGTACAAACGCGGTGAGAGCTTCGACTATGATACGGTCATCATC 51_T7 Biotec_CGN
+##  [6] TTGTGGCTGTGTATAAACGCGGTGAGAGCTTCGACTATGATACGGTCATCATC 14_T7 Biotec_CGN
+##  [7] TTGTGGCTGTGTATAAACGCGGTGAGAGCTTCGACTATGATACGGTCATCATC 55_T7 Biotec_CGN
+##  [8] TTGTGGCTGTGTATAAACGCGGTGAGAGCTTCGACTATGATACGGTCATCATC 56_T7 Biotec_CGN
+##  [9] TTGTGGCTGTGTATAAACGCGGTGAGAGCTTCGACTATGATACGGTCATCATC 13_T7 Biotec_CGN 
+##  ... ...
+## [21] TTGTGGCTGTGTATAAACGCGGTGAGAGCTTCGACTATGATACGGTCATCATC 23_T7 Biotec_CGN
+## [22] TTGTGGCTGTGTATAAACGCGGTGAGAGCTTCGACTATGATACGGTCATCATC 24_T7 Biotec_CGN
+## [23] TTGTGGCTGTGTTTAAACGCGGTGAGAGCTTCGACTATGATACGGTCATCATC 25_T7 Biotec_CGN
+## [24] TTGTGGCTGTGTATAAACGCGGTGAGAGCTTCGACTATGATACGGTCATCATC 32_T7 Biotec_CGN
+## [25] TTGTGGCTGTGTATAAACGCGGTGAGAGCTTCGACTATGATACGGTCATCATC 34_T7 Biotec_CGN
+## [26] TTGTGGCTGTGTATAAACGCGGTGAGAGCTTCGACTATGATACGGTCATCATC 35_T7 Biotec_CGN
+## [27] TTGTGGCTGTGTATAAACGCGGTGAGAGCTTCGACTATGATACGGTCATCATC ClyF
+## [28] TTGTGGCTGTGTATAAACGCGGTGAGAGCTTCGACTATGATACGGTCATCATC 45_T7 Biotec_CGN
+##  Con TTGTGGCTGTGTATAAACGCGGTGAGAGCTTCGACTATGATACGGTCATCATC Consensus 
+## 
+##      aln (690..742)                                        names
+##  [1] GACGTGAATGGTTACGTCTGGGTGTCTTACATTGGCGGGTCCGGGAAGCGCAA 31_T7 Biotec_CGN
+##  [2] GACGTGAATGGTTACGTCTGGGTGTCTTACATTGGCGGGTCCGGGAAGCGCAA 33_T7 Biotec_CGN
+##  [3] GACGTGAATGGTTACGTCTGGGTGTCTTACATTGGCGGGTCCGGGAAGCGCAA 43_T7 Biotec_CGN
+##  [4] GACGTGAATGGTTACGTCTGGGTGTCTTACATTGGCGGGTCCGGGAAGCGCAA 21_T7 Biotec_CGN
+##  [5] GACGTGAATGGTTACGTCTGGGTGTCTTACATTGGCGGGTCCGGGGAGCGCAA 51_T7 Biotec_CGN
+##  [6] GACGTGAATGGTTACGTCTGGGTGTCTTACATTGGCGGGTCCGGGAAGCGCAA 14_T7 Biotec_CGN
+##  [7] GACGTGAATGGTTACGTCTGGGTGTCTTACATTGGCGGGTCCGGGAAGCGCAA 55_T7 Biotec_CGN
+##  [8] GACGTGAATGGTTACGTCTGGGTGTCTTACATTGGCGGGTCCGGGAAGCGCAA 56_T7 Biotec_CGN
+##  [9] GACGTGAATGGTTACGTCTGGGTGTCTTACATTGGCGGGTCCGGGAAGCGCAA 13_T7 Biotec_CGN 
+##  ... ...
+## [21] GACGTGAATGGTTACGTCTGGGTGTCTTACATTGGCGGGTCCGGGAAGCGCAA 23_T7 Biotec_CGN
+## [22] GACGTGAATGGTTACGTCTGGGTGTCTTACATTGGCGGGTCCGGGAAGCGCAA 24_T7 Biotec_CGN
+## [23] GACGTGAATGGTTACGTCTGGGTGTCTTACATTGGCGGGTCCGGGAAGCGCAA 25_T7 Biotec_CGN
+## [24] GACGTGAATGGTTACGTCTGGGTGTCTTACATTGGCGGGTCCGGGAAGCGCAA 32_T7 Biotec_CGN
+## [25] GACGTGAATGGTTACGTCTGGGTGTCTTACATTGGCGGGTCCGGGAAGCGCAA 34_T7 Biotec_CGN
+## [26] GACGTGAATGGTTACGTCTGGGTGTCTTACATTGGCGGGTCCGGGAAGCGCAA 35_T7 Biotec_CGN
+## [27] GACGTGAATGGTTACGTCTGGGTGTCTTACATTGGCGGGTCCGGGAAGCGCAA ClyF
+## [28] GACGTGAATGGTTACGTCTGGGTGTCTTACATTGGCGGGTCCGGGAAGCGCAA 45_T7 Biotec_CGN
+##  Con GACGTGAATGGTTACGTCTGGGTGTCTTACATTGGCGGGTCCGGGAAGCGCAA Consensus 
+## 
+##      aln (743..795)                                        names
+##  [1] CTACGTTGCAACAGGGGCAACGAAGGACGGCAAGCGTTTTGGAAATGCATGGG 31_T7 Biotec_CGN
+##  [2] CTACGTTGCAACAGGGGCAACGAAGGACGGCAAGCGTTTTGGAAATGCATGGG 33_T7 Biotec_CGN
+##  [3] CTACGTTGCAACAGGGGCAACGAAGGACGGCAAGCGTTTTGGAAATGCATGGG 43_T7 Biotec_CGN
+##  [4] CTACGTTGCAACAGGGGCAACGAAGGACGGCAAGCGTTTTGGAAATGCATGGG 21_T7 Biotec_CGN
+##  [5] CTACGTTGCAACAGGGGCAACGAAGGACGGCAAGCGTTTTGGAAATGCATGGG 51_T7 Biotec_CGN
+##  [6] CTACGTTGCAACAGGGGCAACGAAGGACGGCAAGCGTTTTGGAAATGCATGGG 14_T7 Biotec_CGN
+##  [7] CTACGTTGCAACAGGGGCAACGAAGGACGGCAAGCGTTTTGGAAATGCATGGG 55_T7 Biotec_CGN
+##  [8] CTACGTTGCAACAGGGGCAACGAAGGACGGCAAGCGTTTTGGAAATGCATGGG 56_T7 Biotec_CGN
+##  [9] CTACGTTGCAACAGGGGCAACGAAGGACGGCAAGCGTTTTGGAAATGCATGGG 13_T7 Biotec_CGN 
+##  ... ...
+## [21] CTACGTTGCAACAGGGGCAACGAAGGACGGCAAGCGTTTTGGAAATGCATGGG 23_T7 Biotec_CGN
+## [22] CTACGTTGCAACAGGGGCAACGAAGGACGGCAAGCGTTTTGGAAATGCATGGG 24_T7 Biotec_CGN
+## [23] CTACGTTGCAACAGGGGCAACGAAGGACGGCAAGCGTTTTGGAAATGCATGGG 25_T7 Biotec_CGN
+## [24] CTACGTTGCAACAGGGGCAACGAAGGACGGCAAGCGTTTTGGAAATGCATGGG 32_T7 Biotec_CGN
+## [25] CTACGTTGCAACAGGGGCAACGAAGGACGGCAAGCGTTTTGGAAATGCATGGG 34_T7 Biotec_CGN
+## [26] CTACGTTGCAACAGGGGCAACGAAGGACGGCAAGCGTTTTGGAAATGCATGGG 35_T7 Biotec_CGN
+## [27] CTACGTTGCAACAGGGGCAACGAAGGACGGCAAGCGTTTTGGAAATGCATGGG ClyF
+## [28] CTACGTTGCAACAGGGGCAACGAAGGACGGCAAGCGTTTTGGAAATGCATGGG 45_T7 Biotec_CGN
+##  Con CTACGTTGCAACAGGGGCAACGAAGGACGGCAAGCGTTTTGGAAATGCATGGG Consensus 
+## 
+##      aln (796..848)                                        names
+##  [1] G-TACTTTTAAGTAATAAGAA-------------------------------- 31_T7 Biotec_CGN
+##  [2] G-TACTTTTAAGTAATAAGAA-------------------------------- 33_T7 Biotec_CGN
+##  [3] G-TACTTTTAAGTAATAAGAA-------------------------------- 43_T7 Biotec_CGN
+##  [4] G-TACTTTTAAGTAATAAGAA-------------------------------- 21_T7 Biotec_CGN
+##  [5] G-TACTTTTAAGTAATAAGAA-------------------------------- 51_T7 Biotec_CGN
+##  [6] G-TACTTTTAAGTAATAAGAA-------------------------------- 14_T7 Biotec_CGN
+##  [7] G-TACTTTTAAGTAATAAGAA-------------------------------- 55_T7 Biotec_CGN
+##  [8] G-TACTTTTAAGTAATAAGAA-------------------------------- 56_T7 Biotec_CGN
+##  [9] G-TACTTTTAAGTAATAAGAA-------------------------------- 13_T7 Biotec_CGN 
+##  ... ...
+## [21] G-TACTTTTAAGTAATAAGAA-------------------------------- 23_T7 Biotec_CGN
+## [22] G-TACTTTTAAGTAATAAGAA-------------------------------- 24_T7 Biotec_CGN
+## [23] G-TACTTTTAAGTAATAAGAA-------------------------------- 25_T7 Biotec_CGN
+## [24] G-TACTTTTAAGTAATAAGAA-------------------------------- 32_T7 Biotec_CGN
+## [25] G-TACTTTTAAGTAATAAGAA-------------------------------- 34_T7 Biotec_CGN
+## [26] G-TACTTTTAAGTAATAAGAA-------------------------------- 35_T7 Biotec_CGN
+## [27] G-TACTTTTAAGTAA-------------------------------------- ClyF
+## [28] G-TACTTTTAAGTAATAAGAATTCGAGCTCCGTCGACAAGCTTGCGGGCCGCA 45_T7 Biotec_CGN
+##  Con G-TACTTTTAAGTAATAAGAA-------------------------------- Consensus 
+## 
+##      aln (849..901)                                        names
+##  [1] TTCGAGCTCCGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACC-ACCAC 31_T7 Biotec_CGN
+##  [2] TTCGAGCTCCGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACC-ACCAC 33_T7 Biotec_CGN
+##  [3] TTCGAGCTCCGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACC-ACCAC 43_T7 Biotec_CGN
+##  [4] TTCGAGCTCCGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACC-ACCAC 21_T7 Biotec_CGN
+##  [5] TTCGAGCTCCGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACC-ACCAC 51_T7 Biotec_CGN
+##  [6] TTCGAGCTCCGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACC-ACCAC 14_T7 Biotec_CGN
+##  [7] TTCGAGCTCCGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACC-ACCAC 55_T7 Biotec_CGN
+##  [8] TTCGAGCTCCGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACC-ACCAC 56_T7 Biotec_CGN
+##  [9] TTCGAGCTCCGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACC-ACCAC 13_T7 Biotec_CGN 
+##  ... ...
+## [21] TTCGAGCTCCGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACC-ACCAC 23_T7 Biotec_CGN
+## [22] TTCGAGCTCCGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACC-ACCAC 24_T7 Biotec_CGN
+## [23] TTCGAGCTCCGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACC-ACCAC 25_T7 Biotec_CGN
+## [24] TTCGAGCTCCGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACC-ACCAC 32_T7 Biotec_CGN
+## [25] TTCGAGCTCCGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACC-ACCAC 34_T7 Biotec_CGN
+## [26] TTCGAGCTCCGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACC-ACCAC 35_T7 Biotec_CGN
+## [27] ----------------------------------------------------- ClyF
+## [28] CTCGAGCTCCGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACC-ACCAC 45_T7 Biotec_CGN
+##  Con TTCGAGCTCCGTCGACAAGCTTGCGGCCGCACTCGAGCACCACCACC-ACCAC Consensus 
+## 
+##      aln (902..954)                                        names
+##  [1] CACTGA-GATCCGG-CTGCTAACAAAGCCC---GAAAGGAAGCTGAGTTGGCT 31_T7 Biotec_CGN
+##  [2] CACTGA-GATCCGG-CTGCTAACAAAGCCC---GAAAGGAAGCTGAGTTGGCT 33_T7 Biotec_CGN
+##  [3] CACTGA-GATCCGG-CTGCTAACAAAGCCC---GAAAGGAAGCTGAGTTGGCT 43_T7 Biotec_CGN
+##  [4] CACTGA-GATCCGG-CTGCTAACAAAGCCC---GAAAGGAAGCTGAGTTGGCT 21_T7 Biotec_CGN
+##  [5] CACTGA-GATCCGG-CTGCTAACAAAGCCC---GAAAGGAAGCTGAGTTGGCT 51_T7 Biotec_CGN
+##  [6] CACTGA-GATCCGG-CTGCTAACAAAGCCC---GAAAGGAAGCTGAGTTGGCT 14_T7 Biotec_CGN
+##  [7] CACTGA-GATCCGG-CTGCTAACAAAGCCC---GAAAGGAAGCTGAGTTGGCT 55_T7 Biotec_CGN
+##  [8] CACTGA-GATCCGG-CTGCTAACAAAGCCC---GAAAGGAAGCTGAGTTGGCT 56_T7 Biotec_CGN
+##  [9] CACTGA-GATCCGG-CTGCTAACAAAGCCC---GAAAGGAAGCTGAGTTGGCT 13_T7 Biotec_CGN 
+##  ... ...
+## [21] CACTGA-GATCCGG-CTGCTAACAAAGCCC---GAAAGGAAGCTGAGTTGGCT 23_T7 Biotec_CGN
+## [22] CACTGA-GATCCGG-CTGCTAACAAAGCCC---GAAAGGAAGCTGAGTTGGCT 24_T7 Biotec_CGN
+## [23] CACTGA-GATCCGG-CTGCTAACAAAGCCC---GAAAGGAAGCTGAGTTGGCT 25_T7 Biotec_CGN
+## [24] CACTGA-GATCCGG-CTGCTAACAAAGCCC---GAAAGGAAGCTGAGTTGGCT 32_T7 Biotec_CGN
+## [25] CACTGA-GATCCGG-CTGCTAACAAAGCCC---GAAAGGAAGCTGAGTTGGCT 34_T7 Biotec_CGN
+## [26] CACTGA-GATCCGG-CTGCTAACAAAGCCC---GAAAGGAAGCTGAGTTGGCT 35_T7 Biotec_CGN
+## [27] ----------------------------------------------------- ClyF
+## [28] CACTGA-GATCCGG-CTGCTAACAAAGCCC---GAAAGGAAGCTGAGTTGGCT 45_T7 Biotec_CGN
+##  Con CACTGA-GATCCGG-CTGCTAACAAAGCCC---GAAAGGAAGCTGAGTTGGCT Consensus 
+## 
+##      aln (955..1007)                                       names
+##  [1] GCTGCCACC-GCTGAGCAATAACT--AGCATAACCCCTT--GGGGCCTCTAAA 31_T7 Biotec_CGN
+##  [2] GCTGCCACC-GCTGAGCAATAACT--AGCATAACCCCTT--GGGGCCTCTAAA 33_T7 Biotec_CGN
+##  [3] GCTGCCACC-GCTGAGCAATAACT--AGCATAACCCCTT--GGGGCCTCTAAA 43_T7 Biotec_CGN
+##  [4] GCTGCCACC-GCTGAGCAATAACT--AGCATAACCCCTT--GGGGCCTCTAAA 21_T7 Biotec_CGN
+##  [5] GCTGCCACC-GCTGAGCAATAACT--AGCATAACCCCTT--GGGGCCTCTAAA 51_T7 Biotec_CGN
+##  [6] GCTGCCACC-GCTGAGCAATAACT--AGCATAACCCCTT--GGGGCCTCTAAA 14_T7 Biotec_CGN
+##  [7] GCTGCCACC-GCTGAGCAATAACT--AGCATAACCCCTT--GGGGCCTCTAAA 55_T7 Biotec_CGN
+##  [8] GCTGCCACC-GCTGAGCAATAACT--AGCATAACCCCTT--GGGGCCTCTAAA 56_T7 Biotec_CGN
+##  [9] GCTGCCACC-GCTGAGCAATAACT--AGCATAACCCCTT--GGGGCCTCTAAA 13_T7 Biotec_CGN 
+##  ... ...
+## [21] GCTGCCACC-GCTGAGCAATAACT--AGCATAACCCCTT--GGGGCCTCTAAA 23_T7 Biotec_CGN
+## [22] GCTGCCACC-GCTGAGCAATAACT--AGCATAACCCCTT--GGGGCCTCTAAA 24_T7 Biotec_CGN
+## [23] GCTGCCACC-GCTGAGCAATAACT--AGCATAACCCCTT--GGGGCCTCTAAA 25_T7 Biotec_CGN
+## [24] GCTGCCACC-GCTGAGCAATAACT--AGCATAACCCCTT--GGGGCCTCTAAA 32_T7 Biotec_CGN
+## [25] GCTGCCACC-GCTGAGCAATAACT--AGCATAACCCCTT--GGGGCCTCTAAA 34_T7 Biotec_CGN
+## [26] GCTGCCACC-GCTGAGCAATAACT--AGCATAACCCCTT--GGGGCCTCTAAA 35_T7 Biotec_CGN
+## [27] ----------------------------------------------------- ClyF
+## [28] GCTGCCACC-GCTGAGCAATAACT--AGCATAACCCCTT--GGGGCCTCTAAA 45_T7 Biotec_CGN
+##  Con GCTGCCACC-GCTGAGCAATAACT--AGCATAACCCCTT--GGGGCCTCTAAA Consensus 
+## 
+##      aln (1008..1060)                                      names
+##  [1] C--GGGTCTTGAGGGG---TTTTTTGCTGAAA--GGAGGAACTATATCCGGAT 31_T7 Biotec_CGN
+##  [2] C--GGGTCTTGAGGGG---TTTTTTGCTGAAA--GGAGGAACTATATCCGGAT 33_T7 Biotec_CGN
+##  [3] C--GGGTCTTGAGGGG---TTTTTTGCTGAAA--GGAGGAACTATATCCGGAT 43_T7 Biotec_CGN
+##  [4] C--GGGTCTTGAGGGG---TTTTTTGCTGAAA--GGAGGAACTATATCCGGAT 21_T7 Biotec_CGN
+##  [5] C--GGGTCTTGAGGGG---TTTTTTGCTGAAA--GGAGGAACTATATCCGGAT 51_T7 Biotec_CGN
+##  [6] C--GGGTCTTGAGGGG---TTTTTTGCTGAAA--GGAGGAACTATATCCGGAT 14_T7 Biotec_CGN
+##  [7] C--GGGTCTTGAGGGG---TTTTTTGCTGAAA--GGAGGAACTATATCCGGAT 55_T7 Biotec_CGN
+##  [8] C--GGGTCTTGAGGGG---TTTTTTGCTGAAA--GGAGGAACTATATCCGGAT 56_T7 Biotec_CGN
+##  [9] C--GGGTCTTGAGGGG---TTTTTTGCTGAAA--GGAGGAACTATATCCGGAT 13_T7 Biotec_CGN 
+##  ... ...
+## [21] C--GGGTCTTGAGGGG---TTTTTTGCTGAAA--GGAGGAACTATATCCGGAT 23_T7 Biotec_CGN
+## [22] C--GGGTCTTGAGGGG---TTTTTTGCTGAAA--GGAGGAACTATATCCGGAT 24_T7 Biotec_CGN
+## [23] C--GGGTCTTGAGGGG---TTTTTTGCTGAAA--GGAGGAACTATATCCGGAT 25_T7 Biotec_CGN
+## [24] C--GGGTCTTGAGGGG---TTTTTTGCTGAAA--GGAGGAACTATATCCGGAT 32_T7 Biotec_CGN
+## [25] C--GGGTCTTGAGGGG---TTTTTTGCTGAAA--GGAGGAACTATATCCGGAT 34_T7 Biotec_CGN
+## [26] C--GGGTCTTGAGGGG---TTTTTTGCTGAAA--GGAGGAACTATATCCGGAT 35_T7 Biotec_CGN
+## [27] ----------------------------------------------------- ClyF
+## [28] C--GGGTCTTGAGGGG---TTTTTTGCTGAAA--GGAGGAACTATATCCGGAT 45_T7 Biotec_CGN
+##  Con C--GGGTCTTGAGGGG---TTTTTTGCTGAAA--GGAGGAACTATATCCGGAT Consensus 
+## 
+##      aln (1061..1113)                                      names
+##  [1] TGGCGAATGGGACGCGCCCTGTAGCGGCGCATTAAGCGCGGCGGGTGTGGTGG 31_T7 Biotec_CGN
+##  [2] TGGCGAATGGGACGCGCCCTGTAGCGGCGCATTAAGCGCGGCGGGTGTGGTGG 33_T7 Biotec_CGN
+##  [3] TGGCGAATGGGACGCGCCCTGTAGCGGCGCATTAAGCGCGGCGGGTGTGGTGG 43_T7 Biotec_CGN
+##  [4] TGGCGAATGGGACGCGCCCTGTAGCGGCGCATTAAGCGCGGCGGGTGTGGTGG 21_T7 Biotec_CGN
+##  [5] TGGCGAATGGGACGCGCCCTGTAGCGGCGCATTAAGCGCGGCGGGTGTGGTGG 51_T7 Biotec_CGN
+##  [6] TGGCGAATGGGACGCGCCCTGTAGCGGCGCATTAAGCGCGGCGGGTGTGGTGG 14_T7 Biotec_CGN
+##  [7] TGGCGAATGGGACGCGCCCTGTAGCGGCGCATTAAGCGCGGCGGGTGTGGTGG 55_T7 Biotec_CGN
+##  [8] TGGCGAATGGGACGCGCCCTGTAGCGGCGCATTAAGCGCGGCGGGTGTGGTGG 56_T7 Biotec_CGN
+##  [9] TGGCGAATGGGACGCGCCCTGTAGCGGCGCATTAAGCGCGGCGGGTGTGGTGG 13_T7 Biotec_CGN 
+##  ... ...
+## [21] TGGCGAATGGGACGCGCCCTGTAGCGGCGCATTAAGCGCGGCGGGTGTGGTGG 23_T7 Biotec_CGN
+## [22] TGGCGAATGGGACGCGCCCTGTAGCGGCGCATTAAGCGCGGCGGGTGTGGTGG 24_T7 Biotec_CGN
+## [23] TGGCGAATGGGACGCGCCCTGTAGCGGCGCATTAAGCGCGGCGGGTGTGGTGG 25_T7 Biotec_CGN
+## [24] TGGCGAATGGGACGCGCCCTGTAGCGGCGCATTAAGCGCGGCGGGTGTGGTGG 32_T7 Biotec_CGN
+## [25] TGGCGAATGGGACGCGCCCTGTAGCGGCGCATTAAGCGCGGCGGGTGTGGTGG 34_T7 Biotec_CGN
+## [26] TGGCGAATGGGACGCGCCCTGTAGCGGCGCATTAAGCGCGGCGGGTGTGGTGG 35_T7 Biotec_CGN
+## [27] ----------------------------------------------------- ClyF
+## [28] TGGCGAATGGGACGCGCCCTGTAGCGGCGCATTAAGCGCGGCGGGTGTGGTGG 45_T7 Biotec_CGN
+##  Con TGGCGAATGGGACGCGCCCTGTAGCGGCGCATTAAGCGCGGCGGGTGTGGTGG Consensus 
+## 
+##      aln (1114..1166)                                      names
+##  [1] TTACGCGCAGCGTGACCGCTACACTTGCCAGCGCCCTAGCGCCCGCTCCTTTC 31_T7 Biotec_CGN
+##  [2] TTACGCGCAGCGTGACCGCTACACTTGCCAGCGCCCTAGCGCCCGCTCCTTTC 33_T7 Biotec_CGN
+##  [3] TTACGCGCAGCGTGACCGCTACACTTGCCAGCGCCCTAGCGCCCGCTCCTTTC 43_T7 Biotec_CGN
+##  [4] TTACGCGCAGCGTGACCGCTACACTTGCCAGCGCCCTAGCGCCCGCTCCTTTC 21_T7 Biotec_CGN
+##  [5] TTACGCGCAGCGTGACCGCTACACTTGCCAGCGCCCTAGCGCCCGCTCCTTTC 51_T7 Biotec_CGN
+##  [6] TTACGCGCAGCGTGACCGCTACACTTGCCAGCGCCCTAGCGCCCGCTCCTTTC 14_T7 Biotec_CGN
+##  [7] TTACGCGCAGCGTGACCGCTACACTTGCCAGCGCCCTAGCGCCCGCTCCTTTC 55_T7 Biotec_CGN
+##  [8] TTACGCGCAGCGTGACCGCTACACTTGCCAGCGCCCTAGCGCCCGCTCCTTTC 56_T7 Biotec_CGN
+##  [9] TTACGCGCAGCGTGACCGCTACACTTGCCAGCGCCCTAGCGCCCGCTCCTTTC 13_T7 Biotec_CGN 
+##  ... ...
+## [21] TTACGCGCAGCGTGACCGCTACACTTGCCAGCGCCCTAGCGCCCGCTCCTTTC 23_T7 Biotec_CGN
+## [22] TTACGCGCAGCGTGACCGCTACACTTGCCAGCGCCCTAGCGCCCGCTCCTTTC 24_T7 Biotec_CGN
+## [23] TTACGCGCAGCGTGACCGCTACACTTGCCAGCGCCCTAGCGCCCGCTCCTTTC 25_T7 Biotec_CGN
+## [24] TTACGCGCAGCGTGACCGCTACACTTGCCAGCGCCCTAGCGCCCGCTCCTTTC 32_T7 Biotec_CGN
+## [25] TTACGCGCAGCGTGACCGCTACACTTGCCAGCGCCCTAGCGCCCGCTCCTTTC 34_T7 Biotec_CGN
+## [26] TTACGCGCAGCGTGACCGCTACACTTGCCAGCGCCCTAGCGCCCGCTCCTTTC 35_T7 Biotec_CGN
+## [27] ----------------------------------------------------- ClyF
+## [28] TTACGCGCAGCGTGACCGCTACACTTGCCAGCGCCCTAGCGCCCGCTCCTTTC 45_T7 Biotec_CGN
+##  Con TTACGCGCAGCGTGACCGCTACACTTGCCAGCGCCCTAGCGCCCGCTCCTTTC Consensus 
+## 
+##      aln (1167..1219)                                      names
+##  [1] GCTTTCTTCCCTTCCTTTCTCGCCACGTTCGCCGGCTTTCCCCGTCAAGCTCT 31_T7 Biotec_CGN
+##  [2] GCTTTCTTCCCTTCCTTTCTCGCCACGTTCGCCGGCTTTCCCCGTCAAGCTCT 33_T7 Biotec_CGN
+##  [3] GCTTTCTTCCCTTCCTTTCTCGCCACGTTCGCCGGCTTTCCCCGTCAAGCTCT 43_T7 Biotec_CGN
+##  [4] GCTTTCTTCCCTTCCTTTCTCGCCACGTTCGCCGGCTTTCCCCGTCAAGCTCT 21_T7 Biotec_CGN
+##  [5] GCTTTCTTCCCTTCCTTTCTCGCCACGTTCGCCGGCTTTCCCCGTCAAGCTCT 51_T7 Biotec_CGN
+##  [6] GCTTTCTTCCCTTCCTTTCTCGCCACGTTCGCCGGCTTTCCCCGTCAAGCTCT 14_T7 Biotec_CGN
+##  [7] GCTTTCTTCCCTTCCTTTCTCGCCACGTTCGCCGG-CTTTCCCCGTCAAGCTC 55_T7 Biotec_CGN
+##  [8] GCTTTCTTCCCTTCCTTTCTCGCCACGTTCGCCGGGTTTTCCCCGTCAAGCTC 56_T7 Biotec_CGN
+##  [9] GCTTTCTTCCCTTCCTTTCTCGCCACGTTCGCCGGCT---------------- 13_T7 Biotec_CGN 
+##  ... ...
+## [21] GCTTTCTTCCCTTCCTTTCTCGCCACGTTCGCCGGGTTTTCCCCGTCAAGCTC 23_T7 Biotec_CGN
+## [22] GCTTTCTTCCCTTCCTTTCTCGCCACGTTCGCCGGGTTTTCCCCGTCAAGCTC 24_T7 Biotec_CGN
+## [23] GCTTTCTTCCCTTCCTTTCTCGCCACGTTCGCCGGGTTTTCCCCGTCAAGCTC 25_T7 Biotec_CGN
+## [24] GCTTTCTTCCCTTCCTTTCTCGCCACGTTCGCCGGGTTTTCCCCGTCAAGCTC 32_T7 Biotec_CGN
+## [25] GCTTTCTTCCCTTCCTTTCTCGC------------------------------ 34_T7 Biotec_CGN
+## [26] GCTTTCTTCCCTTCCTTTCTCGCCACGTTCGCCGGCTTTCCCCGTCAAGCTCT 35_T7 Biotec_CGN
+## [27] ----------------------------------------------------- ClyF
+## [28] GCTTTCTTCCCTTCCTTTCTCGCCACGTTCGCCGGCTTTCCCCGTCAAGCTC- 45_T7 Biotec_CGN
+##  Con GCTTTCTTCCCTTCCTTTCTCGCCACGTTCGCCGG?TTT?CCC????A???C? Consensus 
+## 
+##      aln (1220..1272)                                      names
+##  [1] AAATCGGGGGCTCCCTTTAGGGTTCCGATTTAGTGCTTTACGGCACCTCGACC 31_T7 Biotec_CGN
+##  [2] AAATCGGGGGCTCCCTTTAGGGTTCCAATTTAGTGCTTTACGGCACCTCGACC 33_T7 Biotec_CGN
+##  [3] AAATCGGGGGCTCCCTTTAGGGTTCCAATTTATTGCTTTACGGCACCTC---- 43_T7 Biotec_CGN
+##  [4] AAATCGGGGGCTCCCTTTAGGGTTCCAATT-AGTGCTTTACGGCCC------- 21_T7 Biotec_CGN
+##  [5] AAATCGGGGGCTCCCTTTAGGGTTCCAATTTAATGCTTTACGGCACCTC---- 51_T7 Biotec_CGN
+##  [6] AAATCGGGGGCTCCCTTTAGGGTTCCAATTTA--------------------- 14_T7 Biotec_CGN
+##  [7] TAAATCGGGGGCTCC-------------------------------------- 55_T7 Biotec_CGN
+##  [8] TAAATCGGGGGCTCCCTTTAGGGTTCCCAATTTA------------------- 56_T7 Biotec_CGN
+##  [9] ----------------------------------------------------- 13_T7 Biotec_CGN 
+##  ... ...
+## [21] TAAATCGGGGGCTCCCTTTAGGGTTCCA------------------------- 23_T7 Biotec_CGN
+## [22] TAAATCGGGGGCTCCCTTTAGGGTTCC-------------------------- 24_T7 Biotec_CGN
+## [23] TAAATCGGGGGCTCCCTTTAGGGTTCCAATTTA-------------------- 25_T7 Biotec_CGN
+## [24] TAAATCGGGGGCTCCCTTTAGGGTTCCGAATTTAGG----------------- 32_T7 Biotec_CGN
+## [25] ----------------------------------------------------- 34_T7 Biotec_CGN
+## [26] AAATCGGGGGCTCCCTTTAGGGTTCCAA------------------------- 35_T7 Biotec_CGN
+## [27] ----------------------------------------------------- ClyF
+## [28] ----------------------------------------------------- 45_T7 Biotec_CGN
+##  Con ?AA???GGGG??-??-------------------------------------- Consensus 
+## 
+##      aln (1273..1296)         names
+##  [1] CCAAAAACTTGATTAGGGTGAGGG 31_T7 Biotec_CGN
+##  [2] CCAAAAACTTGATTAGGGT----- 33_T7 Biotec_CGN
+##  [3] ------------------------ 43_T7 Biotec_CGN
+##  [4] ------------------------ 21_T7 Biotec_CGN
+##  [5] ------------------------ 51_T7 Biotec_CGN
+##  [6] ------------------------ 14_T7 Biotec_CGN
+##  [7] ------------------------ 55_T7 Biotec_CGN
+##  [8] ------------------------ 56_T7 Biotec_CGN
+##  [9] ------------------------ 13_T7 Biotec_CGN 
+##  ... ...
+## [21] ------------------------ 23_T7 Biotec_CGN
+## [22] ------------------------ 24_T7 Biotec_CGN
+## [23] ------------------------ 25_T7 Biotec_CGN
+## [24] ------------------------ 32_T7 Biotec_CGN
+## [25] ------------------------ 34_T7 Biotec_CGN
+## [26] ------------------------ 35_T7 Biotec_CGN
+## [27] ------------------------ ClyF
+## [28] ------------------------ 45_T7 Biotec_CGN
+##  Con ------------------------ Consensus
+\end{verbatim}
+
+from alignment, calculate the mutation profile in DNA level and in Amino
+acid level
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#convert alignment to a list of vectors and matrix }
+\NormalTok{convert }\OtherTok{\textless{}{-}} \FunctionTok{msaConvert}\NormalTok{(myDNA\_Alignment,}\AttributeTok{type=} \StringTok{"bio3d::fasta"}\NormalTok{)}
+
+\NormalTok{alignment\_mat }\OtherTok{\textless{}{-}}\NormalTok{ convert}\SpecialCharTok{$}\NormalTok{ali}
+\NormalTok{alignment\_df }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(alignment\_mat)}
+
+\NormalTok{alignment\_df\_dREF }\OtherTok{\textless{}{-}}\NormalTok{ alignment\_df[}\SpecialCharTok{{-}}\FunctionTok{grep}\NormalTok{(ref\_seq\_name,}\FunctionTok{row.names}\NormalTok{(alignment\_df)),]}
+\NormalTok{alignment\_df\_dREF }\OtherTok{\textless{}{-}}\NormalTok{ alignment\_df\_dREF[}\FunctionTok{order}\NormalTok{(}\FunctionTok{row.names}\NormalTok{(alignment\_df\_dREF)),]}
+
+\NormalTok{alignment\_df\_reorder }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{rbind}\NormalTok{(alignment\_df[}\FunctionTok{grep}\NormalTok{(ref\_seq\_name,}\FunctionTok{row.names}\NormalTok{(alignment\_df)),],alignment\_df\_dREF))}
+
+\CommentTok{\#remove columns extruding the reference sequence}
+\NormalTok{keep\_columns }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{which}\NormalTok{(alignment\_df\_reorder[}\DecValTok{1}\NormalTok{,]}\SpecialCharTok{!=} \StringTok{"{-}"}\NormalTok{))}
+\NormalTok{trim\_before }\OtherTok{\textless{}{-}}\NormalTok{ keep\_columns[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{]}\SpecialCharTok{{-}}\DecValTok{1}
+\NormalTok{trim\_after }\OtherTok{\textless{}{-}}\NormalTok{ keep\_columns[}\FunctionTok{length}\NormalTok{(keep\_columns[,}\DecValTok{1}\NormalTok{]),}\DecValTok{1}\NormalTok{]}\SpecialCharTok{+}\DecValTok{1}
+\NormalTok{trim\_alignment }\OtherTok{\textless{}{-}}\NormalTok{ alignment\_df\_reorder[,}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{trim\_before,trim\_after}\SpecialCharTok{:}\FunctionTok{ncol}\NormalTok{(alignment\_df\_reorder))]}
+\CommentTok{\# trim\_alignment[1,]}
+
+\CommentTok{\#identify the position of "{-}" in the reference }
+\NormalTok{reference\_row }\OtherTok{\textless{}{-}}\NormalTok{ trim\_alignment[}\DecValTok{1}\NormalTok{,]}
+\FunctionTok{print}\NormalTok{(}\StringTok{"afer alignment, the positions of {-} in the reference sequence are:"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "afer alignment, the positions of - in the reference sequence are:"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{which}\NormalTok{(reference\_row }\SpecialCharTok{==} \StringTok{"{-}"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 741
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#identify the mutations and create a matrix of mutations (0=mutation, 1=no mutation)}
+\NormalTok{mutation\_count }\OtherTok{\textless{}{-}}\NormalTok{ trim\_alignment}
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(trim\_alignment)) }
+\NormalTok{\{}
+  \ControlFlowTok{for}\NormalTok{ (j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{ncol}\NormalTok{(trim\_alignment)) }
+\NormalTok{  \{}
+    \ControlFlowTok{if}\NormalTok{ (trim\_alignment[i, j] }\SpecialCharTok{==}\NormalTok{ trim\_alignment[}\DecValTok{1}\NormalTok{, j]) }
+\NormalTok{    \{}
+\NormalTok{      mutation\_count[i, j] }\OtherTok{\textless{}{-}} \DecValTok{1}
+\NormalTok{    \} }
+    \ControlFlowTok{else} 
+\NormalTok{    \{}
+\NormalTok{      mutation\_count[i, j] }\OtherTok{\textless{}{-}} \DecValTok{0}
+\NormalTok{    \}}
+\NormalTok{  \}}
+\NormalTok{\}}
+
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+
+\CommentTok{\#classfy the mutations and create a matrix of mutations}
+\NormalTok{mutation\_count\_TvTs }\OtherTok{\textless{}{-}}\NormalTok{ trim\_alignment}
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(trim\_alignment)) }
+\NormalTok{\{}
+  \ControlFlowTok{for}\NormalTok{ (j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{ncol}\NormalTok{(trim\_alignment)) }
+\NormalTok{  \{}
+    \ControlFlowTok{if}\NormalTok{ (trim\_alignment[i,j] }\SpecialCharTok{==}\NormalTok{ trim\_alignment[}\DecValTok{1}\NormalTok{,j]) }
+\NormalTok{    \{}
+\NormalTok{      mutation\_count\_TvTs[i,j] }\OtherTok{\textless{}{-}} \StringTok{"{-}"}
+\NormalTok{    \} }
+    \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (trim\_alignment[i,j] }\SpecialCharTok{==} \StringTok{"A"}\NormalTok{)}
+\NormalTok{    \{}
+      \ControlFlowTok{if}\NormalTok{ (trim\_alignment[}\DecValTok{1}\NormalTok{,j] }\SpecialCharTok{==} \StringTok{"T"}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        mutation\_count\_TvTs[i, j] }\OtherTok{\textless{}{-}} \StringTok{"TA"}
+\NormalTok{      \}}
+      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (trim\_alignment[}\DecValTok{1}\NormalTok{,j] }\SpecialCharTok{==} \StringTok{"C"}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        mutation\_count\_TvTs[i, j] }\OtherTok{\textless{}{-}} \StringTok{"CA"}
+\NormalTok{      \}}
+      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (trim\_alignment[}\DecValTok{1}\NormalTok{,j] }\SpecialCharTok{==} \StringTok{"G"}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        mutation\_count\_TvTs[i, j] }\OtherTok{\textless{}{-}} \StringTok{"GA"}
+\NormalTok{      \}}
+      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (trim\_alignment[}\DecValTok{1}\NormalTok{,j] }\SpecialCharTok{==} \StringTok{"{-}"}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        mutation\_count\_TvTs[i, j] }\OtherTok{\textless{}{-}} \StringTok{"Ins"}
+\NormalTok{      \}}
+\NormalTok{    \}}
+    \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (trim\_alignment[i,j] }\SpecialCharTok{==} \StringTok{"T"}\NormalTok{)}
+\NormalTok{    \{}
+      \ControlFlowTok{if}\NormalTok{ (trim\_alignment[}\DecValTok{1}\NormalTok{,j] }\SpecialCharTok{==} \StringTok{"A"}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        mutation\_count\_TvTs[i, j] }\OtherTok{\textless{}{-}} \StringTok{"AT"}
+\NormalTok{      \}}
+      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (trim\_alignment[}\DecValTok{1}\NormalTok{,j] }\SpecialCharTok{==} \StringTok{"C"}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        mutation\_count\_TvTs[i, j] }\OtherTok{\textless{}{-}} \StringTok{"CT"}
+\NormalTok{      \}}
+      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (trim\_alignment[}\DecValTok{1}\NormalTok{,j] }\SpecialCharTok{==} \StringTok{"G"}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        mutation\_count\_TvTs[i, j] }\OtherTok{\textless{}{-}} \StringTok{"GT"}
+\NormalTok{      \}}
+      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (trim\_alignment[}\DecValTok{1}\NormalTok{,j] }\SpecialCharTok{==} \StringTok{"{-}"}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        mutation\_count\_TvTs[i, j] }\OtherTok{\textless{}{-}} \StringTok{"Ins"}
+\NormalTok{      \}}
+\NormalTok{    \}}
+    \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (trim\_alignment[i,j] }\SpecialCharTok{==} \StringTok{"C"}\NormalTok{)}
+\NormalTok{    \{}
+      \ControlFlowTok{if}\NormalTok{ (trim\_alignment[}\DecValTok{1}\NormalTok{,j] }\SpecialCharTok{==} \StringTok{"A"}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        mutation\_count\_TvTs[i, j] }\OtherTok{\textless{}{-}} \StringTok{"AC"}
+\NormalTok{      \}}
+      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (trim\_alignment[}\DecValTok{1}\NormalTok{,j] }\SpecialCharTok{==} \StringTok{"T"}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        mutation\_count\_TvTs[i, j] }\OtherTok{\textless{}{-}} \StringTok{"TC"}
+\NormalTok{      \}}
+      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (trim\_alignment[}\DecValTok{1}\NormalTok{,j] }\SpecialCharTok{==} \StringTok{"G"}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        mutation\_count\_TvTs[i, j] }\OtherTok{\textless{}{-}} \StringTok{"GC"}
+\NormalTok{      \}}
+      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (trim\_alignment[}\DecValTok{1}\NormalTok{,j] }\SpecialCharTok{==} \StringTok{"{-}"}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        mutation\_count\_TvTs[i, j] }\OtherTok{\textless{}{-}} \StringTok{"Ins"}
+\NormalTok{      \}}
+\NormalTok{    \}}
+    \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (trim\_alignment[i,j] }\SpecialCharTok{==} \StringTok{"G"}\NormalTok{)}
+\NormalTok{    \{}
+      \ControlFlowTok{if}\NormalTok{ (trim\_alignment[}\DecValTok{1}\NormalTok{,j] }\SpecialCharTok{==} \StringTok{"A"}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        mutation\_count\_TvTs[i, j] }\OtherTok{\textless{}{-}} \StringTok{"AG"}
+\NormalTok{      \}}
+      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (trim\_alignment[}\DecValTok{1}\NormalTok{,j] }\SpecialCharTok{==} \StringTok{"T"}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        mutation\_count\_TvTs[i, j] }\OtherTok{\textless{}{-}} \StringTok{"TG"}
+\NormalTok{      \}}
+      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (trim\_alignment[}\DecValTok{1}\NormalTok{,j] }\SpecialCharTok{==} \StringTok{"C"}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        mutation\_count\_TvTs[i, j] }\OtherTok{\textless{}{-}} \StringTok{"CG"}
+\NormalTok{      \}}
+      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (trim\_alignment[}\DecValTok{1}\NormalTok{,j] }\SpecialCharTok{==} \StringTok{"{-}"}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        mutation\_count\_TvTs[i, j] }\OtherTok{\textless{}{-}} \StringTok{"Ins"}
+\NormalTok{      \}}
+\NormalTok{    \}}
+    \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (trim\_alignment[i,j] }\SpecialCharTok{==} \StringTok{"{-}"}\NormalTok{)}
+\NormalTok{    \{}
+\NormalTok{      mutation\_count\_TvTs[i, j] }\OtherTok{\textless{}{-}} \StringTok{"Del"}
+\NormalTok{    \}  }
+    \ControlFlowTok{else}
+\NormalTok{    \{}
+\NormalTok{      mutation\_count\_TvTs[i, j] }\OtherTok{\textless{}{-}} \StringTok{"?"}
+\NormalTok{    \}  }
+\NormalTok{  \}}
+\NormalTok{\}}
+
+\CommentTok{\#check if all the elements are assigned as "{-}", "S", "V", "Del", "Ins", "?"}
+\FunctionTok{print}\NormalTok{(}\StringTok{\textquotesingle{}the number of  "{-}", "S", "V", "Del", "Ins", "?":\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "the number of  \"-\", \"S\", \"V\", \"Del\", \"Ins\", \"?\":"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(mutation\_count\_TvTs))}
+\NormalTok{\{}
+\NormalTok{  a }\OtherTok{\textless{}{-}} \FunctionTok{table}\NormalTok{(}\FunctionTok{as.character}\NormalTok{(mutation\_count\_TvTs[i,]))}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{row.names}\NormalTok{(mutation\_count\_TvTs)[i])}
+  \FunctionTok{print}\NormalTok{(a)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "ClyF"
+## 
+##   - 
+## 754 
+## [1] "11_T7 Biotec_CGN"
+## 
+##   -  AG 
+## 753   1 
+## [1] "12_T7 Biotec_CGN"
+## 
+##   - 
+## 754 
+## [1] "13_T7 Biotec_CGN"
+## 
+##   - 
+## 754 
+## [1] "14_T7 Biotec_CGN"
+## 
+##   - 
+## 754 
+## [1] "15_T7 Biotec_CGN"
+## 
+##   - 
+## 754 
+## [1] "21_T7 Biotec_CGN"
+## 
+##   - 
+## 754 
+## [1] "22_T7 Biotec_CGN"
+## 
+##   - Ins 
+## 753   1 
+## [1] "23_T7 Biotec_CGN"
+## 
+##   -  AG 
+## 753   1 
+## [1] "24_T7 Biotec_CGN"
+## 
+##   - 
+## 754 
+## [1] "25_T7 Biotec_CGN"
+## 
+##   -  AT 
+## 753   1 
+## [1] "31_T7 Biotec_CGN"
+## 
+##   -  AG 
+## 752   2 
+## [1] "32_T7 Biotec_CGN"
+## 
+##   -  AG  CT  TC 
+## 750   2   1   1 
+## [1] "33_T7 Biotec_CGN"
+## 
+##   -  TC 
+## 753   1 
+## [1] "34_T7 Biotec_CGN"
+## 
+##   - 
+## 754 
+## [1] "35_T7 Biotec_CGN"
+## 
+##   -  TC 
+## 753   1 
+## [1] "41_T7 Biotec_CGN"
+## 
+##   -  CT 
+## 753   1 
+## [1] "42_T7 Biotec_CGN"
+## 
+##   -  CT  GA  TC 
+## 751   1   1   1 
+## [1] "43_T7 Biotec_CGN"
+## 
+##   -  AG 
+## 753   1 
+## [1] "44_T7 Biotec_CGN"
+## 
+##   -  TA  TC 
+## 751   1   2 
+## [1] "45_T7 Biotec_CGN"
+## 
+##   -  AG  GA 
+## 752   1   1 
+## [1] "46_T7 Biotec_CGN"
+## 
+##   -  AG  GA  TC 
+## 751   1   1   1 
+## [1] "51_T7 Biotec_CGN"
+## 
+##   -  AG Del  GA  TA  TC 
+## 748   2   1   1   1   1 
+## [1] "52_T7 Biotec_CGN"
+## 
+##   - 
+## 754 
+## [1] "53_T7 Biotec_CGN"
+## 
+##   -  AG  CT  TC 
+## 750   1   2   1 
+## [1] "54_T7 Biotec_CGN"
+## 
+##   -  AG  TC 
+## 751   1   2 
+## [1] "55_T7 Biotec_CGN"
+## 
+##   -  TC 
+## 752   2 
+## [1] "56_T7 Biotec_CGN"
+## 
+##   -  TC 
+## 752   2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#show row names}
+\NormalTok{rownames }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{row.names}\NormalTok{(mutation\_count))}
+
+\CommentTok{\#count the mutations in each sequence}
+\CommentTok{\#output: }
+\CommentTok{\#id {-} S V Ins Del ?}
+\NormalTok{mutation\_count\_row }\OtherTok{\textless{}{-}} \FunctionTok{t}\NormalTok{(}\FunctionTok{as.matrix}\NormalTok{(}\FunctionTok{table}\NormalTok{(}\FunctionTok{as.character}\NormalTok{(mutation\_count\_TvTs[}\DecValTok{1}\NormalTok{,]))))}
+\NormalTok{addition }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{), }\AttributeTok{nrow =} \DecValTok{1}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{15}\NormalTok{)}
+\NormalTok{mutation\_count\_row }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(mutation\_count\_row,addition))}
+\FunctionTok{colnames}\NormalTok{(mutation\_count\_row) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"{-}"}\NormalTok{,}\StringTok{"AG"}\NormalTok{, }\StringTok{"GA"}\NormalTok{, }\StringTok{"AT"}\NormalTok{, }\StringTok{"TA"}\NormalTok{, }\StringTok{"AC"}\NormalTok{, }\StringTok{"CA"}\NormalTok{, }\StringTok{"GC"}\NormalTok{, }\StringTok{"CG"}\NormalTok{, }\StringTok{"GT"}\NormalTok{, }\StringTok{"TG"}\NormalTok{, }\StringTok{"CT"}\NormalTok{, }\StringTok{"TC"}\NormalTok{, }\StringTok{"Del"}\NormalTok{, }\StringTok{"Ins"}\NormalTok{, }\StringTok{"?"}\NormalTok{)}
+
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{2}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(mutation\_count\_TvTs))}
+\NormalTok{\{}
+\NormalTok{  mutation\_count\_row2 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{t}\NormalTok{(}\FunctionTok{as.matrix}\NormalTok{(}\FunctionTok{table}\NormalTok{(}\FunctionTok{as.character}\NormalTok{(mutation\_count\_TvTs[i,])))))}
+  \ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\NormalTok{(}\StringTok{\textquotesingle{}AG\textquotesingle{}} \SpecialCharTok{\%in\%} \FunctionTok{names}\NormalTok{(mutation\_count\_row2)))}
+\NormalTok{  \{}
+\NormalTok{    addition }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\AttributeTok{nrow =} \DecValTok{1}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{1}\NormalTok{))}
+    \FunctionTok{colnames}\NormalTok{(addition) }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}AG\textquotesingle{}}
+\NormalTok{    mutation\_count\_row2 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(mutation\_count\_row2,addition))}
+\NormalTok{  \}}
+  \ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\NormalTok{(}\StringTok{\textquotesingle{}GA\textquotesingle{}} \SpecialCharTok{\%in\%} \FunctionTok{names}\NormalTok{(mutation\_count\_row2)))}
+\NormalTok{  \{}
+\NormalTok{    addition }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\AttributeTok{nrow =} \DecValTok{1}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{1}\NormalTok{))}
+    \FunctionTok{colnames}\NormalTok{(addition) }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}GA\textquotesingle{}}
+\NormalTok{    mutation\_count\_row2 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(mutation\_count\_row2,addition))}
+\NormalTok{  \}}
+  \ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\NormalTok{(}\StringTok{\textquotesingle{}AT\textquotesingle{}} \SpecialCharTok{\%in\%} \FunctionTok{names}\NormalTok{(mutation\_count\_row2)))}
+\NormalTok{  \{}
+\NormalTok{    addition }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\AttributeTok{nrow =} \DecValTok{1}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{1}\NormalTok{))}
+    \FunctionTok{colnames}\NormalTok{(addition) }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}AT\textquotesingle{}}
+\NormalTok{    mutation\_count\_row2 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(mutation\_count\_row2,addition))}
+\NormalTok{  \}}
+  \ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\NormalTok{(}\StringTok{\textquotesingle{}TA\textquotesingle{}} \SpecialCharTok{\%in\%} \FunctionTok{names}\NormalTok{(mutation\_count\_row2)))}
+\NormalTok{  \{}
+\NormalTok{    addition }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\AttributeTok{nrow =} \DecValTok{1}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{1}\NormalTok{))}
+    \FunctionTok{colnames}\NormalTok{(addition) }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}TA\textquotesingle{}}
+\NormalTok{    mutation\_count\_row2 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(mutation\_count\_row2,addition))}
+\NormalTok{  \}}
+  \ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\NormalTok{(}\StringTok{\textquotesingle{}AC\textquotesingle{}} \SpecialCharTok{\%in\%} \FunctionTok{names}\NormalTok{(mutation\_count\_row2)))}
+\NormalTok{  \{}
+\NormalTok{    addition }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\AttributeTok{nrow =} \DecValTok{1}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{1}\NormalTok{))}
+    \FunctionTok{colnames}\NormalTok{(addition) }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}AC\textquotesingle{}}
+\NormalTok{    mutation\_count\_row2 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(mutation\_count\_row2,addition))}
+\NormalTok{  \}}
+  \ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\NormalTok{(}\StringTok{\textquotesingle{}CA\textquotesingle{}} \SpecialCharTok{\%in\%} \FunctionTok{names}\NormalTok{(mutation\_count\_row2)))}
+\NormalTok{  \{}
+\NormalTok{    addition }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\AttributeTok{nrow =} \DecValTok{1}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{1}\NormalTok{))}
+    \FunctionTok{colnames}\NormalTok{(addition) }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}CA\textquotesingle{}}
+\NormalTok{    mutation\_count\_row2 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(mutation\_count\_row2,addition))}
+\NormalTok{  \}}
+  \ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\NormalTok{(}\StringTok{\textquotesingle{}GC\textquotesingle{}} \SpecialCharTok{\%in\%} \FunctionTok{names}\NormalTok{(mutation\_count\_row2)))}
+\NormalTok{  \{}
+\NormalTok{    addition }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\AttributeTok{nrow =} \DecValTok{1}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{1}\NormalTok{))}
+    \FunctionTok{colnames}\NormalTok{(addition) }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}GC\textquotesingle{}}
+\NormalTok{    mutation\_count\_row2 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(mutation\_count\_row2,addition))}
+\NormalTok{  \}}
+  \ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\NormalTok{(}\StringTok{\textquotesingle{}CG\textquotesingle{}} \SpecialCharTok{\%in\%} \FunctionTok{names}\NormalTok{(mutation\_count\_row2)))}
+\NormalTok{  \{}
+\NormalTok{    addition }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\AttributeTok{nrow =} \DecValTok{1}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{1}\NormalTok{))}
+    \FunctionTok{colnames}\NormalTok{(addition) }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}CG\textquotesingle{}}
+\NormalTok{    mutation\_count\_row2 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(mutation\_count\_row2,addition))}
+\NormalTok{  \}}
+  \ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\NormalTok{(}\StringTok{\textquotesingle{}GT\textquotesingle{}} \SpecialCharTok{\%in\%} \FunctionTok{names}\NormalTok{(mutation\_count\_row2)))}
+\NormalTok{  \{}
+\NormalTok{    addition }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\AttributeTok{nrow =} \DecValTok{1}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{1}\NormalTok{))}
+    \FunctionTok{colnames}\NormalTok{(addition) }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}GT\textquotesingle{}}
+\NormalTok{    mutation\_count\_row2 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(mutation\_count\_row2,addition))}
+\NormalTok{  \}}
+  \ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\NormalTok{(}\StringTok{\textquotesingle{}TG\textquotesingle{}} \SpecialCharTok{\%in\%} \FunctionTok{names}\NormalTok{(mutation\_count\_row2)))}
+\NormalTok{  \{}
+\NormalTok{    addition }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\AttributeTok{nrow =} \DecValTok{1}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{1}\NormalTok{))}
+    \FunctionTok{colnames}\NormalTok{(addition) }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}TG\textquotesingle{}}
+\NormalTok{    mutation\_count\_row2 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(mutation\_count\_row2,addition))}
+\NormalTok{  \}}
+  \ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\NormalTok{(}\StringTok{\textquotesingle{}CT\textquotesingle{}} \SpecialCharTok{\%in\%} \FunctionTok{names}\NormalTok{(mutation\_count\_row2)))}
+\NormalTok{  \{}
+\NormalTok{    addition }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\AttributeTok{nrow =} \DecValTok{1}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{1}\NormalTok{))}
+    \FunctionTok{colnames}\NormalTok{(addition) }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}CT\textquotesingle{}}
+\NormalTok{    mutation\_count\_row2 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(mutation\_count\_row2,addition))}
+\NormalTok{  \}}
+  \ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\NormalTok{(}\StringTok{\textquotesingle{}TC\textquotesingle{}} \SpecialCharTok{\%in\%} \FunctionTok{names}\NormalTok{(mutation\_count\_row2)))}
+\NormalTok{  \{}
+\NormalTok{    addition }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\AttributeTok{nrow =} \DecValTok{1}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{1}\NormalTok{))}
+    \FunctionTok{colnames}\NormalTok{(addition) }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}TC\textquotesingle{}}
+\NormalTok{    mutation\_count\_row2 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(mutation\_count\_row2,addition))}
+\NormalTok{  \}}
+  \ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\NormalTok{(}\StringTok{\textquotesingle{}Del\textquotesingle{}} \SpecialCharTok{\%in\%} \FunctionTok{names}\NormalTok{(mutation\_count\_row2)))}
+\NormalTok{  \{}
+\NormalTok{    addition }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\AttributeTok{nrow =} \DecValTok{1}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{1}\NormalTok{))}
+    \FunctionTok{colnames}\NormalTok{(addition) }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}Del\textquotesingle{}}
+\NormalTok{    mutation\_count\_row2 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(mutation\_count\_row2,addition))}
+\NormalTok{  \}}
+  \ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\NormalTok{(}\StringTok{\textquotesingle{}Ins\textquotesingle{}} \SpecialCharTok{\%in\%} \FunctionTok{names}\NormalTok{(mutation\_count\_row2)))}
+\NormalTok{  \{}
+\NormalTok{    addition }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\AttributeTok{nrow =} \DecValTok{1}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{1}\NormalTok{))}
+    \FunctionTok{colnames}\NormalTok{(addition) }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}Ins\textquotesingle{}}
+\NormalTok{    mutation\_count\_row2 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(mutation\_count\_row2,addition))}
+\NormalTok{  \}}
+  \ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\NormalTok{(}\StringTok{\textquotesingle{}?\textquotesingle{}} \SpecialCharTok{\%in\%} \FunctionTok{names}\NormalTok{(mutation\_count\_row2)))}
+\NormalTok{  \{}
+\NormalTok{    addition }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\AttributeTok{nrow =} \DecValTok{1}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{1}\NormalTok{))}
+    \FunctionTok{colnames}\NormalTok{(addition) }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}?\textquotesingle{}}
+\NormalTok{    mutation\_count\_row2 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(mutation\_count\_row2,addition))}
+\NormalTok{  \}}
+\NormalTok{  mutation\_count\_row2}
+  
+\NormalTok{  mutation\_count\_row }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(mutation\_count\_row,mutation\_count\_row2)}
+\NormalTok{\}}
+\FunctionTok{row.names}\NormalTok{(mutation\_count\_row) }\OtherTok{\textless{}{-}} \FunctionTok{row.names}\NormalTok{(mutation\_count\_TvTs)}
+
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\#identify the row with the most mutations}
+\NormalTok{n\_mut }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(mutation\_count[}\DecValTok{1}\NormalTok{,]}\SpecialCharTok{==}\DecValTok{0}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{2}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(mutation\_count))}
+\NormalTok{\{}
+\NormalTok{  n\_mut2 }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(mutation\_count[i,]}\SpecialCharTok{==}\DecValTok{0}\NormalTok{)}
+  \ControlFlowTok{if}\NormalTok{(n\_mut2 }\SpecialCharTok{\textgreater{}=}\NormalTok{ n\_mut)}
+\NormalTok{  \{}
+\NormalTok{    n\_mut }\OtherTok{\textless{}{-}}\NormalTok{ n\_mut2}
+\NormalTok{  \}}
+\NormalTok{\}}
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\#identify mutation locations}
+\NormalTok{mutation\_locations }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{,n\_mut)}
+
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{2}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(mutation\_count))}
+\NormalTok{\{}
+\NormalTok{  mutation\_locations2 }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{,n\_mut)}
+\NormalTok{  mutations }\OtherTok{\textless{}{-}} \FunctionTok{t}\NormalTok{(}\FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{which}\NormalTok{(mutation\_count[i,]}\SpecialCharTok{==}\DecValTok{0}\NormalTok{)))}
+  \ControlFlowTok{for}\NormalTok{ (j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{n\_mut)}
+\NormalTok{  \{}
+    \ControlFlowTok{if}\NormalTok{ (j }\SpecialCharTok{\textless{}=} \FunctionTok{ncol}\NormalTok{(mutations))}
+\NormalTok{    \{}
+\NormalTok{      mutation\_locations2 [j] }\OtherTok{\textless{}{-}}\NormalTok{ mutations[}\DecValTok{1}\NormalTok{,j]}
+\NormalTok{    \}}
+\NormalTok{  \}}
+\NormalTok{  mutation\_locations }\OtherTok{\textless{}{-}}  \FunctionTok{rbind}\NormalTok{(mutation\_locations, mutation\_locations2)}
+\NormalTok{\}}
+\FunctionTok{row.names}\NormalTok{(mutation\_locations) }\OtherTok{\textless{}{-}} \FunctionTok{row.names}\NormalTok{(mutation\_count)}
+
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}
+\CommentTok{\#identify the amino acid mutations}
+\ControlFlowTok{if}\NormalTok{(}\FunctionTok{sum}\NormalTok{(trim\_alignment[}\DecValTok{1}\NormalTok{,]}\SpecialCharTok{==}\StringTok{"{-}"}\NormalTok{)}\SpecialCharTok{!=} \DecValTok{0}\NormalTok{)}
+\NormalTok{\{}
+\NormalTok{  trim\_dash }\OtherTok{\textless{}{-}}\NormalTok{ trim\_alignment[,}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\FunctionTok{which}\NormalTok{(trim\_alignment[}\DecValTok{1}\NormalTok{,]}\SpecialCharTok{==}\StringTok{"{-}"}\NormalTok{))] }
+\NormalTok{\}}\ControlFlowTok{else}
+\NormalTok{\{}
+\NormalTok{  trim\_dash }\OtherTok{\textless{}{-}}\NormalTok{ trim\_alignment}
+\NormalTok{\}}
+
+\NormalTok{modulo\_mut\_loc\_df }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_locations }
+\NormalTok{AAmutations\_df }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_locations}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(mutation\_locations))}
+\NormalTok{\{}
+\NormalTok{  mutation\_location\_location }\OtherTok{\textless{}{-}} \FunctionTok{which}\NormalTok{(mutation\_locations[i,] }\SpecialCharTok{!=} \StringTok{"NA"}\NormalTok{)}
+  \ControlFlowTok{if}\NormalTok{(}\FunctionTok{length}\NormalTok{(mutation\_location\_location) }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{)}
+\NormalTok{  \{}
+    \ControlFlowTok{for}\NormalTok{(j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(mutation\_location\_location))}
+\NormalTok{    \{}
+      \FunctionTok{print}\NormalTok{(}\StringTok{"{-}{-}{-}{-}{-}start{-}{-}{-}{-}{-}{-}"}\NormalTok{)}
+      \FunctionTok{print}\NormalTok{(}\StringTok{"i="}\NormalTok{)}
+      \FunctionTok{print}\NormalTok{(i)}
+      \FunctionTok{print}\NormalTok{(}\StringTok{"j="}\NormalTok{)}
+      \FunctionTok{print}\NormalTok{(j)}
+      \FunctionTok{print}\NormalTok{(}\StringTok{"mutation\_locations[i,j]="}\NormalTok{)}
+      \FunctionTok{print}\NormalTok{(mutation\_locations[i,j])}
+\NormalTok{      mutation\_location\_x }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(mutation\_locations[i,j]) }
+      \FunctionTok{print}\NormalTok{(}\StringTok{"mutation\_location\_x="}\NormalTok{)}
+      \FunctionTok{print}\NormalTok{(mutation\_location\_x)}
+\NormalTok{      mutation\_location\_remove\_dash }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_x }\SpecialCharTok{{-}} \FunctionTok{sum}\NormalTok{(trim\_alignment[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\SpecialCharTok{:}\NormalTok{(mutation\_location\_x}\DecValTok{{-}1}\NormalTok{)] }\SpecialCharTok{==} \StringTok{"{-}"}\NormalTok{)}
+      \FunctionTok{print}\NormalTok{(}\StringTok{"mutation\_location\_remove\_dash="}\NormalTok{)}
+      \FunctionTok{print}\NormalTok{(mutation\_location\_remove\_dash)}
+\NormalTok{      modulo\_mut\_loc }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash }\SpecialCharTok{\%\%} \DecValTok{3}
+\NormalTok{      modulo\_mut\_loc\_df[i,j] }\OtherTok{\textless{}{-}}\NormalTok{ modulo\_mut\_loc}
+      
+      \ControlFlowTok{if}\NormalTok{(trim\_alignment[}\DecValTok{1}\NormalTok{,mutation\_location\_x] }\SpecialCharTok{==} \StringTok{"{-}"}\NormalTok{)}
+\NormalTok{      \{}
+        \CommentTok{\#print("plop")}
+\NormalTok{        AAmutations\_df[i,j] }\OtherTok{\textless{}{-}} \StringTok{"frame\_shift\_ins"}
+        \CommentTok{\#print(AAmutations\_df[i,j])}
+\NormalTok{      \}   }
+      
+      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (modulo\_mut\_loc }\SpecialCharTok{==} \DecValTok{0}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        codon\_start }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}\DecValTok{{-}2}
+\NormalTok{        codon\_end }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}
+\NormalTok{      \}}
+      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (modulo\_mut\_loc }\SpecialCharTok{==} \DecValTok{1}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        codon\_start }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}
+\NormalTok{        codon\_end }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}\SpecialCharTok{+}\DecValTok{2}
+\NormalTok{      \}}
+      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (modulo\_mut\_loc }\SpecialCharTok{==} \DecValTok{2}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        codon\_start }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}\DecValTok{{-}1}
+\NormalTok{        codon\_end }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}\SpecialCharTok{+}\DecValTok{1}
+\NormalTok{      \}}
+      
+\NormalTok{      aa\_position }\OtherTok{\textless{}{-}} \FunctionTok{ceiling}\NormalTok{(mutation\_location\_remove\_dash}\SpecialCharTok{/}\DecValTok{3}\NormalTok{)}
+      \FunctionTok{print}\NormalTok{(}\StringTok{"aaPosition"}\NormalTok{)}
+      \FunctionTok{print}\NormalTok{(aa\_position)}
+      
+\NormalTok{      WTcodon }\OtherTok{\textless{}{-}} \FunctionTok{paste}\NormalTok{(}\FunctionTok{c}\NormalTok{(trim\_dash[}\DecValTok{1}\NormalTok{,codon\_start}\SpecialCharTok{:}\NormalTok{codon\_end]), }\AttributeTok{collapse=}\StringTok{""}\NormalTok{)}
+\NormalTok{      WTcodon\_DNAstr }\OtherTok{\textless{}{-}} \FunctionTok{DNAString}\NormalTok{(WTcodon)}
+\NormalTok{      WTaa }\OtherTok{\textless{}{-}} \FunctionTok{translate}\NormalTok{(WTcodon\_DNAstr)}
+      \FunctionTok{print}\NormalTok{(}\StringTok{"WTcodon and aa"}\NormalTok{)}
+      \FunctionTok{print}\NormalTok{(WTcodon\_DNAstr)}
+      \FunctionTok{print}\NormalTok{(WTaa)}
+      
+\NormalTok{      MUTcodon }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(trim\_dash[i,codon\_start}\SpecialCharTok{:}\NormalTok{codon\_end])}
+      \FunctionTok{print}\NormalTok{(}\StringTok{"MUTcodon"}\NormalTok{)}
+      \FunctionTok{print}\NormalTok{(MUTcodon)}
+      
+      \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{sum}\NormalTok{(MUTcodon[]}\SpecialCharTok{==} \StringTok{"{-}"}\NormalTok{) }\SpecialCharTok{!=} \DecValTok{0}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        MUTaa }\OtherTok{\textless{}{-}} \StringTok{"frame\_shift\_del"}
+        \FunctionTok{print}\NormalTok{(}\StringTok{"frame\_shift\_del"}\NormalTok{)}
+\NormalTok{      \}}
+      
+      
+      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{sum}\NormalTok{(MUTcodon[] }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{,}\StringTok{"T"}\NormalTok{,}\StringTok{"C"}\NormalTok{,}\StringTok{"G"}\NormalTok{)) }\SpecialCharTok{==} \DecValTok{3}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        MUTcodon\_DNAstr }\OtherTok{\textless{}{-}} \FunctionTok{DNAString}\NormalTok{(}\FunctionTok{paste}\NormalTok{(MUTcodon, }\AttributeTok{collapse =} \StringTok{""}\NormalTok{))}
+        \FunctionTok{print}\NormalTok{(}\StringTok{"MUTcodon\_DNAstr"}\NormalTok{)}
+        \FunctionTok{print}\NormalTok{(MUTcodon\_DNAstr)}
+\NormalTok{        MUTaa }\OtherTok{\textless{}{-}} \FunctionTok{translate}\NormalTok{(MUTcodon\_DNAstr)}
+        \FunctionTok{print}\NormalTok{(}\StringTok{"translation!MUTaa"}\NormalTok{)}
+        \FunctionTok{print}\NormalTok{(MUTaa)}
+\NormalTok{      \}}
+      
+      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{sum}\NormalTok{(MUTcodon[] }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{,}\StringTok{"T"}\NormalTok{,}\StringTok{"C"}\NormalTok{,}\StringTok{"G"}\NormalTok{,}\StringTok{"{-}"}\NormalTok{)) }\SpecialCharTok{!=} \DecValTok{3}\NormalTok{)}
+\NormalTok{      \{}
+\NormalTok{        MUTaa }\OtherTok{\textless{}{-}} \StringTok{"unidentifiable base"}
+        \FunctionTok{print}\NormalTok{(}\StringTok{"unidentifiable base :("}\NormalTok{)}
+\NormalTok{      \}}
+      
+\NormalTok{      WTaa\_cha }\OtherTok{\textless{}{-}} \FunctionTok{as.character}\NormalTok{(WTaa)}
+\NormalTok{      MUTaa\_cha }\OtherTok{\textless{}{-}} \FunctionTok{as.character}\NormalTok{(MUTaa)}
+\NormalTok{      aa\_position\_cha }\OtherTok{\textless{}{-}} \FunctionTok{as.character}\NormalTok{(aa\_position)}
+\NormalTok{      AAmutations }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(WTaa\_cha,aa\_position\_cha,MUTaa\_cha)}
+\NormalTok{      AAmutations\_df[i,j] }\OtherTok{\textless{}{-}} \FunctionTok{paste}\NormalTok{(AAmutations, }\AttributeTok{collapse=}\StringTok{""}\NormalTok{)}
+      \FunctionTok{print}\NormalTok{(}\StringTok{"{-}{-}{-}{-}{-}END{-}{-}{-}{-}{-}"}\NormalTok{)}
+\NormalTok{    \}}
+\NormalTok{  \}}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "-----start------"
+## [1] "i="
+## [1] 2
+## [1] "j="
+## [1] 1
+## [1] "mutation_locations[i,j]="
+## 11_T7 Biotec_CGN 
+##              181 
+## [1] "mutation_location_x="
+## [1] 181
+## [1] "mutation_location_remove_dash="
+## [1] 181
+## [1] "aaPosition"
+## [1] 61
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: AAT
+## 1-letter AAString object
+## seq: N
+## [1] "MUTcodon"
+## $V237
+## [1] "G"
+## 
+## $V238
+## [1] "A"
+## 
+## $V239
+## [1] "T"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GAT
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: D
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 8
+## [1] "j="
+## [1] 1
+## [1] "mutation_locations[i,j]="
+## 22_T7 Biotec_CGN 
+##              741 
+## [1] "mutation_location_x="
+## [1] 741
+## [1] "mutation_location_remove_dash="
+## [1] 741
+## [1] "aaPosition"
+## [1] 247
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: AAT
+## 1-letter AAString object
+## seq: N
+## [1] "MUTcodon"
+## $V237
+## [1] "A"
+## 
+## $V238
+## [1] "A"
+## 
+## $V239
+## [1] "T"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: AAT
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: N
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 9
+## [1] "j="
+## [1] 1
+## [1] "mutation_locations[i,j]="
+## 23_T7 Biotec_CGN 
+##              273 
+## [1] "mutation_location_x="
+## [1] 273
+## [1] "mutation_location_remove_dash="
+## [1] 273
+## [1] "aaPosition"
+## [1] 91
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: GCA
+## 1-letter AAString object
+## seq: A
+## [1] "MUTcodon"
+## $V327
+## [1] "G"
+## 
+## $V328
+## [1] "C"
+## 
+## $V329
+## [1] "G"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GCG
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: A
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 11
+## [1] "j="
+## [1] 1
+## [1] "mutation_locations[i,j]="
+## 25_T7 Biotec_CGN 
+##              593 
+## [1] "mutation_location_x="
+## [1] 593
+## [1] "mutation_location_remove_dash="
+## [1] 593
+## [1] "aaPosition"
+## [1] 198
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: TAT
+## 1-letter AAString object
+## seq: Y
+## [1] "MUTcodon"
+## $V648
+## [1] "T"
+## 
+## $V649
+## [1] "T"
+## 
+## $V650
+## [1] "T"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: TTT
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: F
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 12
+## [1] "j="
+## [1] 1
+## [1] "mutation_locations[i,j]="
+## 31_T7 Biotec_CGN 
+##              104 
+## [1] "mutation_location_x="
+## [1] 104
+## [1] "mutation_location_remove_dash="
+## [1] 104
+## [1] "aaPosition"
+## [1] 35
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: GAC
+## 1-letter AAString object
+## seq: D
+## [1] "MUTcodon"
+## $V159
+## [1] "G"
+## 
+## $V160
+## [1] "G"
+## 
+## $V161
+## [1] "C"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GGC
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: G
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 12
+## [1] "j="
+## [1] 2
+## [1] "mutation_locations[i,j]="
+## 31_T7 Biotec_CGN 
+##              628 
+## [1] "mutation_location_x="
+## [1] 628
+## [1] "mutation_location_remove_dash="
+## [1] 628
+## [1] "aaPosition"
+## [1] 210
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: ATC
+## 1-letter AAString object
+## seq: I
+## [1] "MUTcodon"
+## $V684
+## [1] "G"
+## 
+## $V685
+## [1] "T"
+## 
+## $V686
+## [1] "C"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GTC
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: V
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 13
+## [1] "j="
+## [1] 1
+## [1] "mutation_locations[i,j]="
+## 32_T7 Biotec_CGN 
+##              169 
+## [1] "mutation_location_x="
+## [1] 169
+## [1] "mutation_location_remove_dash="
+## [1] 169
+## [1] "aaPosition"
+## [1] 57
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: AAG
+## 1-letter AAString object
+## seq: K
+## [1] "MUTcodon"
+## $V225
+## [1] "G"
+## 
+## $V226
+## [1] "A"
+## 
+## $V227
+## [1] "G"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GAG
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: E
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 13
+## [1] "j="
+## [1] 2
+## [1] "mutation_locations[i,j]="
+## 32_T7 Biotec_CGN 
+##              186 
+## [1] "mutation_location_x="
+## [1] 186
+## [1] "mutation_location_remove_dash="
+## [1] 186
+## [1] "aaPosition"
+## [1] 62
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: GCT
+## 1-letter AAString object
+## seq: A
+## [1] "MUTcodon"
+## $V240
+## [1] "G"
+## 
+## $V241
+## [1] "C"
+## 
+## $V242
+## [1] "C"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GCC
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: A
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 13
+## [1] "j="
+## [1] 3
+## [1] "mutation_locations[i,j]="
+## 32_T7 Biotec_CGN 
+##              253 
+## [1] "mutation_location_x="
+## [1] 253
+## [1] "mutation_location_remove_dash="
+## [1] 253
+## [1] "aaPosition"
+## [1] 85
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: CCA
+## 1-letter AAString object
+## seq: P
+## [1] "MUTcodon"
+## $V309
+## [1] "T"
+## 
+## $V310
+## [1] "C"
+## 
+## $V311
+## [1] "A"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: TCA
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: S
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 13
+## [1] "j="
+## [1] 4
+## [1] "mutation_locations[i,j]="
+## 32_T7 Biotec_CGN 
+##              365 
+## [1] "mutation_location_x="
+## [1] 365
+## [1] "mutation_location_remove_dash="
+## [1] 365
+## [1] "aaPosition"
+## [1] 122
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: GAC
+## 1-letter AAString object
+## seq: D
+## [1] "MUTcodon"
+## $V420
+## [1] "G"
+## 
+## $V421
+## [1] "G"
+## 
+## $V422
+## [1] "C"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GGC
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: G
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 14
+## [1] "j="
+## [1] 1
+## [1] "mutation_locations[i,j]="
+## 33_T7 Biotec_CGN 
+##               15 
+## [1] "mutation_location_x="
+## [1] 15
+## [1] "mutation_location_remove_dash="
+## [1] 15
+## [1] "aaPosition"
+## [1] 5
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: CAT
+## 1-letter AAString object
+## seq: H
+## [1] "MUTcodon"
+## $V69
+## [1] "C"
+## 
+## $V70
+## [1] "A"
+## 
+## $V71
+## [1] "C"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: CAC
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: H
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 16
+## [1] "j="
+## [1] 1
+## [1] "mutation_locations[i,j]="
+## 35_T7 Biotec_CGN 
+##              149 
+## [1] "mutation_location_x="
+## [1] 149
+## [1] "mutation_location_remove_dash="
+## [1] 149
+## [1] "aaPosition"
+## [1] 50
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: TTT
+## 1-letter AAString object
+## seq: F
+## [1] "MUTcodon"
+## $V204
+## [1] "T"
+## 
+## $V205
+## [1] "C"
+## 
+## $V206
+## [1] "T"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: TCT
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: S
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 17
+## [1] "j="
+## [1] 1
+## [1] "mutation_locations[i,j]="
+## 41_T7 Biotec_CGN 
+##               29 
+## [1] "mutation_location_x="
+## [1] 29
+## [1] "mutation_location_remove_dash="
+## [1] 29
+## [1] "aaPosition"
+## [1] 10
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: CCG
+## 1-letter AAString object
+## seq: P
+## [1] "MUTcodon"
+## $V84
+## [1] "C"
+## 
+## $V85
+## [1] "T"
+## 
+## $V86
+## [1] "G"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: CTG
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: M
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 18
+## [1] "j="
+## [1] 1
+## [1] "mutation_locations[i,j]="
+## 42_T7 Biotec_CGN 
+##               90 
+## [1] "mutation_location_x="
+## [1] 90
+## [1] "mutation_location_remove_dash="
+## [1] 90
+## [1] "aaPosition"
+## [1] 30
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: TCC
+## 1-letter AAString object
+## seq: S
+## [1] "MUTcodon"
+## $V144
+## [1] "T"
+## 
+## $V145
+## [1] "C"
+## 
+## $V146
+## [1] "T"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: TCT
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: S
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 18
+## [1] "j="
+## [1] 2
+## [1] "mutation_locations[i,j]="
+## 42_T7 Biotec_CGN 
+##              501 
+## [1] "mutation_location_x="
+## [1] 501
+## [1] "mutation_location_remove_dash="
+## [1] 501
+## [1] "aaPosition"
+## [1] 167
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: CGT
+## 1-letter AAString object
+## seq: R
+## [1] "MUTcodon"
+## $V555
+## [1] "C"
+## 
+## $V556
+## [1] "G"
+## 
+## $V557
+## [1] "C"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: CGC
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: R
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 18
+## [1] "j="
+## [1] 3
+## [1] "mutation_locations[i,j]="
+## 42_T7 Biotec_CGN 
+##              543 
+## [1] "mutation_location_x="
+## [1] 543
+## [1] "mutation_location_remove_dash="
+## [1] 543
+## [1] "aaPosition"
+## [1] 181
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: GCG
+## 1-letter AAString object
+## seq: A
+## [1] "MUTcodon"
+## $V597
+## [1] "G"
+## 
+## $V598
+## [1] "C"
+## 
+## $V599
+## [1] "A"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GCA
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: A
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 19
+## [1] "j="
+## [1] 1
+## [1] "mutation_locations[i,j]="
+## 43_T7 Biotec_CGN 
+##              108 
+## [1] "mutation_location_x="
+## [1] 108
+## [1] "mutation_location_remove_dash="
+## [1] 108
+## [1] "aaPosition"
+## [1] 36
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: GGA
+## 1-letter AAString object
+## seq: G
+## [1] "MUTcodon"
+## $V162
+## [1] "G"
+## 
+## $V163
+## [1] "G"
+## 
+## $V164
+## [1] "G"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GGG
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: G
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 20
+## [1] "j="
+## [1] 1
+## [1] "mutation_locations[i,j]="
+## 44_T7 Biotec_CGN 
+##              117 
+## [1] "mutation_location_x="
+## [1] 117
+## [1] "mutation_location_remove_dash="
+## [1] 117
+## [1] "aaPosition"
+## [1] 39
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: GGT
+## 1-letter AAString object
+## seq: G
+## [1] "MUTcodon"
+## $V171
+## [1] "G"
+## 
+## $V172
+## [1] "G"
+## 
+## $V173
+## [1] "C"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GGC
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: G
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 20
+## [1] "j="
+## [1] 2
+## [1] "mutation_locations[i,j]="
+## 44_T7 Biotec_CGN 
+##              126 
+## [1] "mutation_location_x="
+## [1] 126
+## [1] "mutation_location_remove_dash="
+## [1] 126
+## [1] "aaPosition"
+## [1] 42
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: TGT
+## 1-letter AAString object
+## seq: C
+## [1] "MUTcodon"
+## $V180
+## [1] "T"
+## 
+## $V181
+## [1] "G"
+## 
+## $V182
+## [1] "C"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: TGC
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: C
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 20
+## [1] "j="
+## [1] 3
+## [1] "mutation_locations[i,j]="
+## 44_T7 Biotec_CGN 
+##              251 
+## [1] "mutation_location_x="
+## [1] 251
+## [1] "mutation_location_remove_dash="
+## [1] 251
+## [1] "aaPosition"
+## [1] 84
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: GTA
+## 1-letter AAString object
+## seq: V
+## [1] "MUTcodon"
+## $V306
+## [1] "G"
+## 
+## $V307
+## [1] "A"
+## 
+## $V308
+## [1] "A"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GAA
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: E
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 21
+## [1] "j="
+## [1] 1
+## [1] "mutation_locations[i,j]="
+## 45_T7 Biotec_CGN 
+##               53 
+## [1] "mutation_location_x="
+## [1] 53
+## [1] "mutation_location_remove_dash="
+## [1] 53
+## [1] "aaPosition"
+## [1] 18
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: AAG
+## 1-letter AAString object
+## seq: K
+## [1] "MUTcodon"
+## $V108
+## [1] "A"
+## 
+## $V109
+## [1] "G"
+## 
+## $V110
+## [1] "G"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: AGG
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: R
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 21
+## [1] "j="
+## [1] 2
+## [1] "mutation_locations[i,j]="
+## 45_T7 Biotec_CGN 
+##              310 
+## [1] "mutation_location_x="
+## [1] 310
+## [1] "mutation_location_remove_dash="
+## [1] 310
+## [1] "aaPosition"
+## [1] 104
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: GGG
+## 1-letter AAString object
+## seq: G
+## [1] "MUTcodon"
+## $V366
+## [1] "A"
+## 
+## $V367
+## [1] "G"
+## 
+## $V368
+## [1] "G"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: AGG
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: R
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 22
+## [1] "j="
+## [1] 1
+## [1] "mutation_locations[i,j]="
+## 46_T7 Biotec_CGN 
+##              119 
+## [1] "mutation_location_x="
+## [1] 119
+## [1] "mutation_location_remove_dash="
+## [1] 119
+## [1] "aaPosition"
+## [1] 40
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: CGT
+## 1-letter AAString object
+## seq: R
+## [1] "MUTcodon"
+## $V174
+## [1] "C"
+## 
+## $V175
+## [1] "A"
+## 
+## $V176
+## [1] "T"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: CAT
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: H
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 22
+## [1] "j="
+## [1] 2
+## [1] "mutation_locations[i,j]="
+## 46_T7 Biotec_CGN 
+##              169 
+## [1] "mutation_location_x="
+## [1] 169
+## [1] "mutation_location_remove_dash="
+## [1] 169
+## [1] "aaPosition"
+## [1] 57
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: AAG
+## 1-letter AAString object
+## seq: K
+## [1] "MUTcodon"
+## $V225
+## [1] "G"
+## 
+## $V226
+## [1] "A"
+## 
+## $V227
+## [1] "G"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GAG
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: E
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 22
+## [1] "j="
+## [1] 3
+## [1] "mutation_locations[i,j]="
+## 46_T7 Biotec_CGN 
+##              384 
+## [1] "mutation_location_x="
+## [1] 384
+## [1] "mutation_location_remove_dash="
+## [1] 384
+## [1] "aaPosition"
+## [1] 128
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: AGT
+## 1-letter AAString object
+## seq: S
+## [1] "MUTcodon"
+## $V438
+## [1] "A"
+## 
+## $V439
+## [1] "G"
+## 
+## $V440
+## [1] "C"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: AGC
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: S
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 23
+## [1] "j="
+## [1] 1
+## [1] "mutation_locations[i,j]="
+## 51_T7 Biotec_CGN 
+##              124 
+## [1] "mutation_location_x="
+## [1] 124
+## [1] "mutation_location_remove_dash="
+## [1] 124
+## [1] "aaPosition"
+## [1] 42
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: TGT
+## 1-letter AAString object
+## seq: C
+## [1] "MUTcodon"
+## $V180
+## [1] "A"
+## 
+## $V181
+## [1] "G"
+## 
+## $V182
+## [1] "T"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: AGT
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: S
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 23
+## [1] "j="
+## [1] 2
+## [1] "mutation_locations[i,j]="
+## 51_T7 Biotec_CGN 
+##              184 
+## [1] "mutation_location_x="
+## [1] 184
+## [1] "mutation_location_remove_dash="
+## [1] 184
+## [1] "aaPosition"
+## [1] 62
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: GCT
+## 1-letter AAString object
+## seq: A
+## [1] "MUTcodon"
+## $V240
+## [1] "A"
+## 
+## $V241
+## [1] "C"
+## 
+## $V242
+## [1] "T"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: ACT
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: T
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 23
+## [1] "j="
+## [1] 3
+## [1] "mutation_locations[i,j]="
+## 51_T7 Biotec_CGN 
+##              241 
+## [1] "mutation_location_x="
+## [1] 241
+## [1] "mutation_location_remove_dash="
+## [1] 241
+## [1] "aaPosition"
+## [1] 81
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: AGC
+## 1-letter AAString object
+## seq: S
+## [1] "MUTcodon"
+## $V297
+## [1] "G"
+## 
+## $V298
+## [1] "G"
+## 
+## $V299
+## [1] "C"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GGC
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: G
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 23
+## [1] "j="
+## [1] 4
+## [1] "mutation_locations[i,j]="
+## 51_T7 Biotec_CGN 
+##              322 
+## [1] "mutation_location_x="
+## [1] 322
+## [1] "mutation_location_remove_dash="
+## [1] 322
+## [1] "aaPosition"
+## [1] 108
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: ATC
+## 1-letter AAString object
+## seq: I
+## [1] "MUTcodon"
+## $V378
+## [1] "-"
+## 
+## $V379
+## [1] "T"
+## 
+## $V380
+## [1] "C"
+## 
+## [1] "frame_shift_del"
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 23
+## [1] "j="
+## [1] 5
+## [1] "mutation_locations[i,j]="
+## 51_T7 Biotec_CGN 
+##              594 
+## [1] "mutation_location_x="
+## [1] 594
+## [1] "mutation_location_remove_dash="
+## [1] 594
+## [1] "aaPosition"
+## [1] 198
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: TAT
+## 1-letter AAString object
+## seq: Y
+## [1] "MUTcodon"
+## $V648
+## [1] "T"
+## 
+## $V649
+## [1] "A"
+## 
+## $V650
+## [1] "C"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: TAC
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: Y
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 23
+## [1] "j="
+## [1] 6
+## [1] "mutation_locations[i,j]="
+## 51_T7 Biotec_CGN 
+##              679 
+## [1] "mutation_location_x="
+## [1] 679
+## [1] "mutation_location_remove_dash="
+## [1] 679
+## [1] "aaPosition"
+## [1] 227
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: AAG
+## 1-letter AAString object
+## seq: K
+## [1] "MUTcodon"
+## $V735
+## [1] "G"
+## 
+## $V736
+## [1] "A"
+## 
+## $V737
+## [1] "G"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GAG
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: E
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 25
+## [1] "j="
+## [1] 1
+## [1] "mutation_locations[i,j]="
+## 53_T7 Biotec_CGN 
+##               29 
+## [1] "mutation_location_x="
+## [1] 29
+## [1] "mutation_location_remove_dash="
+## [1] 29
+## [1] "aaPosition"
+## [1] 10
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: CCG
+## 1-letter AAString object
+## seq: P
+## [1] "MUTcodon"
+## $V84
+## [1] "C"
+## 
+## $V85
+## [1] "T"
+## 
+## $V86
+## [1] "G"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: CTG
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: M
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 25
+## [1] "j="
+## [1] 2
+## [1] "mutation_locations[i,j]="
+## 53_T7 Biotec_CGN 
+##              456 
+## [1] "mutation_location_x="
+## [1] 456
+## [1] "mutation_location_remove_dash="
+## [1] 456
+## [1] "aaPosition"
+## [1] 152
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: CCC
+## 1-letter AAString object
+## seq: P
+## [1] "MUTcodon"
+## $V510
+## [1] "C"
+## 
+## $V511
+## [1] "C"
+## 
+## $V512
+## [1] "T"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: CCT
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: P
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 25
+## [1] "j="
+## [1] 3
+## [1] "mutation_locations[i,j]="
+## 53_T7 Biotec_CGN 
+##              460 
+## [1] "mutation_location_x="
+## [1] 460
+## [1] "mutation_location_remove_dash="
+## [1] 460
+## [1] "aaPosition"
+## [1] 154
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: TAC
+## 1-letter AAString object
+## seq: Y
+## [1] "MUTcodon"
+## $V516
+## [1] "C"
+## 
+## $V517
+## [1] "A"
+## 
+## $V518
+## [1] "C"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: CAC
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: H
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 25
+## [1] "j="
+## [1] 4
+## [1] "mutation_locations[i,j]="
+## 53_T7 Biotec_CGN 
+##              579 
+## [1] "mutation_location_x="
+## [1] 579
+## [1] "mutation_location_remove_dash="
+## [1] 579
+## [1] "aaPosition"
+## [1] 193
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: GAA
+## 1-letter AAString object
+## seq: E
+## [1] "MUTcodon"
+## $V633
+## [1] "G"
+## 
+## $V634
+## [1] "A"
+## 
+## $V635
+## [1] "G"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GAG
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: E
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 26
+## [1] "j="
+## [1] 1
+## [1] "mutation_locations[i,j]="
+## 54_T7 Biotec_CGN 
+##              177 
+## [1] "mutation_location_x="
+## [1] 177
+## [1] "mutation_location_remove_dash="
+## [1] 177
+## [1] "aaPosition"
+## [1] 59
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: CCA
+## 1-letter AAString object
+## seq: P
+## [1] "MUTcodon"
+## $V231
+## [1] "C"
+## 
+## $V232
+## [1] "C"
+## 
+## $V233
+## [1] "G"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: CCG
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: P
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 26
+## [1] "j="
+## [1] 2
+## [1] "mutation_locations[i,j]="
+## 54_T7 Biotec_CGN 
+##              326 
+## [1] "mutation_location_x="
+## [1] 326
+## [1] "mutation_location_remove_dash="
+## [1] 326
+## [1] "aaPosition"
+## [1] 109
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: GTT
+## 1-letter AAString object
+## seq: V
+## [1] "MUTcodon"
+## $V381
+## [1] "G"
+## 
+## $V382
+## [1] "C"
+## 
+## $V383
+## [1] "T"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GCT
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: A
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 26
+## [1] "j="
+## [1] 3
+## [1] "mutation_locations[i,j]="
+## 54_T7 Biotec_CGN 
+##              603 
+## [1] "mutation_location_x="
+## [1] 603
+## [1] "mutation_location_remove_dash="
+## [1] 603
+## [1] "aaPosition"
+## [1] 201
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: GGT
+## 1-letter AAString object
+## seq: G
+## [1] "MUTcodon"
+## $V657
+## [1] "G"
+## 
+## $V658
+## [1] "G"
+## 
+## $V659
+## [1] "C"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GGC
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: G
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 27
+## [1] "j="
+## [1] 1
+## [1] "mutation_locations[i,j]="
+## 55_T7 Biotec_CGN 
+##              229 
+## [1] "mutation_location_x="
+## [1] 229
+## [1] "mutation_location_remove_dash="
+## [1] 229
+## [1] "aaPosition"
+## [1] 77
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: TTC
+## 1-letter AAString object
+## seq: F
+## [1] "MUTcodon"
+## $V285
+## [1] "C"
+## 
+## $V286
+## [1] "T"
+## 
+## $V287
+## [1] "C"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: CTC
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: L
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 27
+## [1] "j="
+## [1] 2
+## [1] "mutation_locations[i,j]="
+## 55_T7 Biotec_CGN 
+##              327 
+## [1] "mutation_location_x="
+## [1] 327
+## [1] "mutation_location_remove_dash="
+## [1] 327
+## [1] "aaPosition"
+## [1] 109
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: GTT
+## 1-letter AAString object
+## seq: V
+## [1] "MUTcodon"
+## $V381
+## [1] "G"
+## 
+## $V382
+## [1] "T"
+## 
+## $V383
+## [1] "C"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GTC
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: V
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 28
+## [1] "j="
+## [1] 1
+## [1] "mutation_locations[i,j]="
+## 56_T7 Biotec_CGN 
+##              229 
+## [1] "mutation_location_x="
+## [1] 229
+## [1] "mutation_location_remove_dash="
+## [1] 229
+## [1] "aaPosition"
+## [1] 77
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: TTC
+## 1-letter AAString object
+## seq: F
+## [1] "MUTcodon"
+## $V285
+## [1] "C"
+## 
+## $V286
+## [1] "T"
+## 
+## $V287
+## [1] "C"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: CTC
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: L
+## [1] "-----END-----"
+## [1] "-----start------"
+## [1] "i="
+## [1] 28
+## [1] "j="
+## [1] 2
+## [1] "mutation_locations[i,j]="
+## 56_T7 Biotec_CGN 
+##              327 
+## [1] "mutation_location_x="
+## [1] 327
+## [1] "mutation_location_remove_dash="
+## [1] 327
+## [1] "aaPosition"
+## [1] 109
+## [1] "WTcodon and aa"
+## 3-letter DNAString object
+## seq: GTT
+## 1-letter AAString object
+## seq: V
+## [1] "MUTcodon"
+## $V381
+## [1] "G"
+## 
+## $V382
+## [1] "T"
+## 
+## $V383
+## [1] "C"
+## 
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GTC
+## [1] "translation!MUTaa"
+## 1-letter AAString object
+## seq: V
+## [1] "-----END-----"
+\end{verbatim}
+
+show results: AAmutations\_df
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{AAmutations\_df}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                  [,1]    [,2]    [,3]    [,4]                  [,5]    [,6]   
+## ClyF             NA      NA      NA      NA                    NA      NA     
+## 11_T7 Biotec_CGN "N61D"  NA      NA      NA                    NA      NA     
+## 12_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
+## 13_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
+## 14_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
+## 15_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
+## 21_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
+## 22_T7 Biotec_CGN "N247N" NA      NA      NA                    NA      NA     
+## 23_T7 Biotec_CGN "A91A"  NA      NA      NA                    NA      NA     
+## 24_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
+## 25_T7 Biotec_CGN "Y198F" NA      NA      NA                    NA      NA     
+## 31_T7 Biotec_CGN "D35G"  "I210V" NA      NA                    NA      NA     
+## 32_T7 Biotec_CGN "K57E"  "A62A"  "P85S"  "D122G"               NA      NA     
+## 33_T7 Biotec_CGN "H5H"   NA      NA      NA                    NA      NA     
+## 34_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
+## 35_T7 Biotec_CGN "F50S"  NA      NA      NA                    NA      NA     
+## 41_T7 Biotec_CGN "P10M"  NA      NA      NA                    NA      NA     
+## 42_T7 Biotec_CGN "S30S"  "R167R" "A181A" NA                    NA      NA     
+## 43_T7 Biotec_CGN "G36G"  NA      NA      NA                    NA      NA     
+## 44_T7 Biotec_CGN "G39G"  "C42C"  "V84E"  NA                    NA      NA     
+## 45_T7 Biotec_CGN "K18R"  "G104R" NA      NA                    NA      NA     
+## 46_T7 Biotec_CGN "R40H"  "K57E"  "S128S" NA                    NA      NA     
+## 51_T7 Biotec_CGN "C42S"  "A62T"  "S81G"  "I108frame_shift_del" "Y198Y" "K227E"
+## 52_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
+## 53_T7 Biotec_CGN "P10M"  "P152P" "Y154H" "E193E"               NA      NA     
+## 54_T7 Biotec_CGN "P59P"  "V109A" "G201G" NA                    NA      NA     
+## 55_T7 Biotec_CGN "F77L"  "V109V" NA      NA                    NA      NA     
+## 56_T7 Biotec_CGN "F77L"  "V109V" NA      NA                    NA      NA
+\end{verbatim}
+
+Show results: DNA mutation location (alignment location)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mutation\_locations}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                  [,1] [,2] [,3] [,4] [,5] [,6]
+## ClyF               NA   NA   NA   NA   NA   NA
+## 11_T7 Biotec_CGN  181   NA   NA   NA   NA   NA
+## 12_T7 Biotec_CGN   NA   NA   NA   NA   NA   NA
+## 13_T7 Biotec_CGN   NA   NA   NA   NA   NA   NA
+## 14_T7 Biotec_CGN   NA   NA   NA   NA   NA   NA
+## 15_T7 Biotec_CGN   NA   NA   NA   NA   NA   NA
+## 21_T7 Biotec_CGN   NA   NA   NA   NA   NA   NA
+## 22_T7 Biotec_CGN  741   NA   NA   NA   NA   NA
+## 23_T7 Biotec_CGN  273   NA   NA   NA   NA   NA
+## 24_T7 Biotec_CGN   NA   NA   NA   NA   NA   NA
+## 25_T7 Biotec_CGN  593   NA   NA   NA   NA   NA
+## 31_T7 Biotec_CGN  104  628   NA   NA   NA   NA
+## 32_T7 Biotec_CGN  169  186  253  365   NA   NA
+## 33_T7 Biotec_CGN   15   NA   NA   NA   NA   NA
+## 34_T7 Biotec_CGN   NA   NA   NA   NA   NA   NA
+## 35_T7 Biotec_CGN  149   NA   NA   NA   NA   NA
+## 41_T7 Biotec_CGN   29   NA   NA   NA   NA   NA
+## 42_T7 Biotec_CGN   90  501  543   NA   NA   NA
+## 43_T7 Biotec_CGN  108   NA   NA   NA   NA   NA
+## 44_T7 Biotec_CGN  117  126  251   NA   NA   NA
+## 45_T7 Biotec_CGN   53  310   NA   NA   NA   NA
+## 46_T7 Biotec_CGN  119  169  384   NA   NA   NA
+## 51_T7 Biotec_CGN  124  184  241  322  594  679
+## 52_T7 Biotec_CGN   NA   NA   NA   NA   NA   NA
+## 53_T7 Biotec_CGN   29  456  460  579   NA   NA
+## 54_T7 Biotec_CGN  177  326  603   NA   NA   NA
+## 55_T7 Biotec_CGN  229  327   NA   NA   NA   NA
+## 56_T7 Biotec_CGN  229  327   NA   NA   NA   NA
+\end{verbatim}
+
+Show results: DNA mutation counts. -: no mutation AG: A to G GA: G to A
+Del: Deletion Ins: Insertion ?: Not recognized nucleotide
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mutation\_count\_row}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                    - AG GA AT TA AC CA GC CG GT TG CT TC Del Ins ?
+## ClyF             754  0  0  0  0  0  0  0  0  0  0  0  0   0   0 0
+## 11_T7 Biotec_CGN 753  1  0  0  0  0  0  0  0  0  0  0  0   0   0 0
+## 12_T7 Biotec_CGN 754  0  0  0  0  0  0  0  0  0  0  0  0   0   0 0
+## 13_T7 Biotec_CGN 754  0  0  0  0  0  0  0  0  0  0  0  0   0   0 0
+## 14_T7 Biotec_CGN 754  0  0  0  0  0  0  0  0  0  0  0  0   0   0 0
+## 15_T7 Biotec_CGN 754  0  0  0  0  0  0  0  0  0  0  0  0   0   0 0
+## 21_T7 Biotec_CGN 754  0  0  0  0  0  0  0  0  0  0  0  0   0   0 0
+## 22_T7 Biotec_CGN 753  0  0  0  0  0  0  0  0  0  0  0  0   0   1 0
+## 23_T7 Biotec_CGN 753  1  0  0  0  0  0  0  0  0  0  0  0   0   0 0
+## 24_T7 Biotec_CGN 754  0  0  0  0  0  0  0  0  0  0  0  0   0   0 0
+## 25_T7 Biotec_CGN 753  0  0  1  0  0  0  0  0  0  0  0  0   0   0 0
+## 31_T7 Biotec_CGN 752  2  0  0  0  0  0  0  0  0  0  0  0   0   0 0
+## 32_T7 Biotec_CGN 750  2  0  0  0  0  0  0  0  0  0  1  1   0   0 0
+## 33_T7 Biotec_CGN 753  0  0  0  0  0  0  0  0  0  0  0  1   0   0 0
+## 34_T7 Biotec_CGN 754  0  0  0  0  0  0  0  0  0  0  0  0   0   0 0
+## 35_T7 Biotec_CGN 753  0  0  0  0  0  0  0  0  0  0  0  1   0   0 0
+## 41_T7 Biotec_CGN 753  0  0  0  0  0  0  0  0  0  0  1  0   0   0 0
+## 42_T7 Biotec_CGN 751  0  1  0  0  0  0  0  0  0  0  1  1   0   0 0
+## 43_T7 Biotec_CGN 753  1  0  0  0  0  0  0  0  0  0  0  0   0   0 0
+## 44_T7 Biotec_CGN 751  0  0  0  1  0  0  0  0  0  0  0  2   0   0 0
+## 45_T7 Biotec_CGN 752  1  1  0  0  0  0  0  0  0  0  0  0   0   0 0
+## 46_T7 Biotec_CGN 751  1  1  0  0  0  0  0  0  0  0  0  1   0   0 0
+## 51_T7 Biotec_CGN 748  2  1  0  1  0  0  0  0  0  0  0  1   1   0 0
+## 52_T7 Biotec_CGN 754  0  0  0  0  0  0  0  0  0  0  0  0   0   0 0
+## 53_T7 Biotec_CGN 750  1  0  0  0  0  0  0  0  0  0  2  1   0   0 0
+## 54_T7 Biotec_CGN 751  1  0  0  0  0  0  0  0  0  0  0  2   0   0 0
+## 55_T7 Biotec_CGN 752  0  0  0  0  0  0  0  0  0  0  0  2   0   0 0
+## 56_T7 Biotec_CGN 752  0  0  0  0  0  0  0  0  0  0  0  2   0   0 0
+\end{verbatim}
+
+export the result tables as csv
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\#turn "NA" to nothing for output csv}
+\NormalTok{AAmutations\_removeNA }\OtherTok{\textless{}{-}}\NormalTok{ AAmutations\_df}
+\NormalTok{AAmutations\_removeNA[}\FunctionTok{is.na}\NormalTok{(AAmutations\_removeNA)] }\OtherTok{\textless{}{-}} \StringTok{""}
+\NormalTok{mutation\_locations\_removeNA }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_locations}
+\NormalTok{mutation\_locations\_removeNA[}\FunctionTok{is.na}\NormalTok{(mutation\_locations\_removeNA)] }\OtherTok{\textless{}{-}} \StringTok{""}
+\DocumentationTok{\#\#create a new folder in the current working directory }
+\FunctionTok{dir.create}\NormalTok{(}\StringTok{"mutation\_analysis\_results"}\NormalTok{, }\AttributeTok{recursive =}\NormalTok{ T)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in dir.create("mutation_analysis_results", recursive = T):
+## 'mutation_analysis_results' already exists
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\#Save the dataframes }
+\FunctionTok{write.csv}\NormalTok{(mutation\_count\_row,}\StringTok{"mutation\_analysis\_results/DNAmutation\_counts.csv"}\NormalTok{, }\AttributeTok{row.names =} \ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{write.csv}\NormalTok{(mutation\_locations\_removeNA,}\StringTok{"mutation\_analysis\_results/DNAmutation\_locations.csv"}\NormalTok{, }\AttributeTok{row.names =} \ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{write.csv}\NormalTok{(AAmutations\_removeNA,}\StringTok{"mutation\_analysis\_results/AAmutations.csv"}\NormalTok{, }\AttributeTok{row.names =} \ConstantTok{TRUE}\NormalTok{)}
+
+\FunctionTok{list.files}\NormalTok{(}\StringTok{\textquotesingle{}mutation\_analysis\_results\textquotesingle{}}\NormalTok{,}\AttributeTok{full.names =}\NormalTok{ T)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "mutation_analysis_results/AAmutations.csv"          
+## [2] "mutation_analysis_results/DNAmutation_counts.csv"   
+## [3] "mutation_analysis_results/DNAmutation_locations.csv"
+\end{verbatim}
+
+\end{document}
