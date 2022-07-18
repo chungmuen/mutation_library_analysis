@@ -1,7 +1,7 @@
 # Mutation Library Analysis Tool
 
 ## Introduction
-Analyses DNA sequences of a given library and then generates following summaries for each variant:
+This tool analyses DNA sequences of a given library and then generates following summaries for each variant:
 1. DNA mutation counts of each mutation type (e.g., A->G, T->C) 
 2. The location of the mutations on the reference DNA sequence
 3. The corresponding amino acid residue exchanges 
