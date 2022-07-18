@@ -368,7 +368,7 @@ run your alignment
 \begin{Shaded}
 \begin{Highlighting}[]
 \DocumentationTok{\#\#run my alignment}
-\NormalTok{file\_path }\OtherTok{\textless{}{-}} \FunctionTok{list.files}\NormalTok{(}\AttributeTok{path =}\NormalTok{ seq\_file\_path,}\AttributeTok{pattern =} \StringTok{\textquotesingle{}fasta\textquotesingle{}}\NormalTok{)}
+\NormalTok{file\_path }\OtherTok{\textless{}{-}} \FunctionTok{list.files}\NormalTok{(}\AttributeTok{path =}\NormalTok{ seq\_file\_path,}\AttributeTok{pattern =} \StringTok{\textquotesingle{}fasta\textquotesingle{}}\NormalTok{,}\AttributeTok{full.names =}\NormalTok{ T)}
 \NormalTok{seq\_result }\OtherTok{\textless{}{-}} \FunctionTok{readDNAStringSet}\NormalTok{(file\_path)}
 \NormalTok{myDNA\_Alignment }\OtherTok{\textless{}{-}} \FunctionTok{msa}\NormalTok{(seq\_result)}
 \end{Highlighting}
@@ -1376,6 +1376,7 @@ acid level
 
 \NormalTok{modulo\_mut\_loc\_df }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_locations }
 \NormalTok{AAmutations\_df }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_locations}
+\NormalTok{i }\OtherTok{\textless{}{-}} \DecValTok{8}
 \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(mutation\_locations))}
 \NormalTok{\{}
 \NormalTok{  mutation\_location\_location }\OtherTok{\textless{}{-}} \FunctionTok{which}\NormalTok{(mutation\_locations[i,] }\SpecialCharTok{!=} \StringTok{"NA"}\NormalTok{)}
@@ -1393,36 +1394,80 @@ acid level
 \NormalTok{      mutation\_location\_x }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(mutation\_locations[i,j]) }
       \FunctionTok{print}\NormalTok{(}\StringTok{"mutation\_location\_x="}\NormalTok{)}
       \FunctionTok{print}\NormalTok{(mutation\_location\_x)}
-\NormalTok{      mutation\_location\_remove\_dash }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_x }\SpecialCharTok{{-}} \FunctionTok{sum}\NormalTok{(trim\_alignment[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\SpecialCharTok{:}\NormalTok{(mutation\_location\_x}\DecValTok{{-}1}\NormalTok{)] }\SpecialCharTok{==} \StringTok{"{-}"}\NormalTok{)}
+\NormalTok{      mutation\_location\_remove\_dash }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_x }\SpecialCharTok{{-}} 
+        \FunctionTok{sum}\NormalTok{(trim\_alignment[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\SpecialCharTok{:}\NormalTok{(mutation\_location\_x}\DecValTok{{-}1}\NormalTok{)] }\SpecialCharTok{==} \StringTok{"{-}"}\NormalTok{)}
       \FunctionTok{print}\NormalTok{(}\StringTok{"mutation\_location\_remove\_dash="}\NormalTok{)}
       \FunctionTok{print}\NormalTok{(mutation\_location\_remove\_dash)}
-\NormalTok{      modulo\_mut\_loc }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash }\SpecialCharTok{\%\%} \DecValTok{3}
-\NormalTok{      modulo\_mut\_loc\_df[i,j] }\OtherTok{\textless{}{-}}\NormalTok{ modulo\_mut\_loc}
       
       \ControlFlowTok{if}\NormalTok{(trim\_alignment[}\DecValTok{1}\NormalTok{,mutation\_location\_x] }\SpecialCharTok{==} \StringTok{"{-}"}\NormalTok{)}
 \NormalTok{      \{}
-        \CommentTok{\#print("plop")}
-\NormalTok{        AAmutations\_df[i,j] }\OtherTok{\textless{}{-}} \StringTok{"frame\_shift\_ins"}
-        \CommentTok{\#print(AAmutations\_df[i,j])}
-\NormalTok{      \}   }
-      
-      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (modulo\_mut\_loc }\SpecialCharTok{==} \DecValTok{0}\NormalTok{)}
-\NormalTok{      \{}
-\NormalTok{        codon\_start }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}\DecValTok{{-}2}
-\NormalTok{        codon\_end }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}
+        \CommentTok{\# decide the insertion location in AA seq}
+\NormalTok{        modulo\_mut\_loc }\OtherTok{\textless{}{-}}\NormalTok{ (mutation\_location\_remove\_dash}\DecValTok{{-}1}\NormalTok{) }\SpecialCharTok{\%\%} \DecValTok{3}
+\NormalTok{        modulo\_mut\_loc\_df[i,j] }\OtherTok{\textless{}{-}}\NormalTok{ modulo\_mut\_loc}
+        \CommentTok{\# if the insertion happen in between two codons, the mutation is counted to sit in the later codon.  }
+        \ControlFlowTok{if}\NormalTok{ (modulo\_mut\_loc }\SpecialCharTok{==} \DecValTok{0}\NormalTok{)\{}
+\NormalTok{          codon\_start }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}
+\NormalTok{          codon\_end }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}\SpecialCharTok{+}\DecValTok{2}
+\NormalTok{          MUTcodon }\OtherTok{\textless{}{-}}\NormalTok{ trim\_alignment[i,mutation\_location\_x}\SpecialCharTok{:}\NormalTok{mutation\_location\_x}\SpecialCharTok{+}\DecValTok{3}\NormalTok{]}
+\NormalTok{          aa\_position }\OtherTok{\textless{}{-}}\NormalTok{ (mutation\_location\_remove\_dash}\DecValTok{{-}1}\NormalTok{)}\SpecialCharTok{/}\DecValTok{3}\SpecialCharTok{+}\DecValTok{1}
+\NormalTok{        \}}
+        \ControlFlowTok{if}\NormalTok{ (modulo\_mut\_loc }\SpecialCharTok{==} \DecValTok{1}\NormalTok{)\{}
+\NormalTok{          codon\_start }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}\DecValTok{{-}1}
+\NormalTok{          codon\_end }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}\SpecialCharTok{+}\DecValTok{1}
+\NormalTok{          MUTcodon }\OtherTok{\textless{}{-}}\NormalTok{ trim\_alignment[i,(mutation\_location\_x}\DecValTok{{-}1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(mutation\_location\_x}\SpecialCharTok{+}\DecValTok{2}\NormalTok{)]}
+\NormalTok{          aa\_position }\OtherTok{\textless{}{-}} \FunctionTok{ceiling}\NormalTok{((mutation\_location\_remove\_dash}\DecValTok{{-}1}\NormalTok{)}\SpecialCharTok{/}\DecValTok{3}\NormalTok{)}
+\NormalTok{        \}}
+        \ControlFlowTok{if}\NormalTok{ (modulo\_mut\_loc }\SpecialCharTok{==} \DecValTok{2}\NormalTok{)\{}
+\NormalTok{          codon\_start }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}\DecValTok{{-}2}
+\NormalTok{          codon\_end }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}
+\NormalTok{          MUTcodon }\OtherTok{\textless{}{-}}\NormalTok{ trim\_alignment[i,(mutation\_location\_x}\DecValTok{{-}2}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(mutation\_location\_x}\SpecialCharTok{+}\DecValTok{1}\NormalTok{)]}
+\NormalTok{          aa\_position }\OtherTok{\textless{}{-}} \FunctionTok{ceiling}\NormalTok{((mutation\_location\_remove\_dash}\DecValTok{{-}1}\NormalTok{)}\SpecialCharTok{/}\DecValTok{3}\NormalTok{)}
+\NormalTok{        \}}
+        
+        \FunctionTok{print}\NormalTok{(}\StringTok{"frame\_shift\_ins"}\NormalTok{)}
+\NormalTok{        MUTaa }\OtherTok{\textless{}{-}} \StringTok{"frame\_shift\_ins"}
+
+\NormalTok{      \}}\ControlFlowTok{else}\NormalTok{\{}
+\NormalTok{        modulo\_mut\_loc }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash }\SpecialCharTok{\%\%} \DecValTok{3}
+\NormalTok{        modulo\_mut\_loc\_df[i,j] }\OtherTok{\textless{}{-}}\NormalTok{ modulo\_mut\_loc}
+        
+        \ControlFlowTok{if}\NormalTok{ (modulo\_mut\_loc }\SpecialCharTok{==} \DecValTok{0}\NormalTok{)\{}
+\NormalTok{          codon\_start }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}\DecValTok{{-}2}
+\NormalTok{          codon\_end }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}
+\NormalTok{        \}}
+        \ControlFlowTok{if}\NormalTok{ (modulo\_mut\_loc }\SpecialCharTok{==} \DecValTok{1}\NormalTok{)\{}
+\NormalTok{          codon\_start }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}
+\NormalTok{          codon\_end }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}\SpecialCharTok{+}\DecValTok{2}
+\NormalTok{        \}}
+        \ControlFlowTok{if}\NormalTok{ (modulo\_mut\_loc }\SpecialCharTok{==} \DecValTok{2}\NormalTok{)\{}
+\NormalTok{          codon\_start }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}\DecValTok{{-}1}
+\NormalTok{          codon\_end }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}\SpecialCharTok{+}\DecValTok{1}
+\NormalTok{        \}}
+\NormalTok{        aa\_position }\OtherTok{\textless{}{-}} \FunctionTok{ceiling}\NormalTok{(mutation\_location\_remove\_dash}\SpecialCharTok{/}\DecValTok{3}\NormalTok{)}
+\NormalTok{        MUTcodon }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(trim\_dash[i,codon\_start}\SpecialCharTok{:}\NormalTok{codon\_end])}
+        
+        \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{sum}\NormalTok{(MUTcodon[]}\SpecialCharTok{==} \StringTok{"{-}"}\NormalTok{) }\SpecialCharTok{!=} \DecValTok{0}\NormalTok{)}
+\NormalTok{        \{}
+\NormalTok{          MUTaa }\OtherTok{\textless{}{-}} \StringTok{"frame\_shift\_del"}
+          \FunctionTok{print}\NormalTok{(}\StringTok{"frame\_shift\_del"}\NormalTok{)}
+\NormalTok{        \}}
+        
+        \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{sum}\NormalTok{(MUTcodon[] }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{,}\StringTok{"T"}\NormalTok{,}\StringTok{"C"}\NormalTok{,}\StringTok{"G"}\NormalTok{)) }\SpecialCharTok{==} \DecValTok{3}\NormalTok{)}
+\NormalTok{        \{}
+\NormalTok{          MUTcodon\_DNAstr }\OtherTok{\textless{}{-}} \FunctionTok{DNAString}\NormalTok{(}\FunctionTok{paste}\NormalTok{(MUTcodon, }\AttributeTok{collapse =} \StringTok{""}\NormalTok{))}
+          \FunctionTok{print}\NormalTok{(}\StringTok{"MUTcodon\_DNAstr"}\NormalTok{)}
+          \FunctionTok{print}\NormalTok{(MUTcodon\_DNAstr)}
+\NormalTok{          MUTaa }\OtherTok{\textless{}{-}} \FunctionTok{translate}\NormalTok{(MUTcodon\_DNAstr)}
+          \FunctionTok{print}\NormalTok{(}\StringTok{"translation!MUTaa"}\NormalTok{)}
+          
+\NormalTok{        \}}
+        
+        \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{sum}\NormalTok{(MUTcodon[] }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{,}\StringTok{"T"}\NormalTok{,}\StringTok{"C"}\NormalTok{,}\StringTok{"G"}\NormalTok{,}\StringTok{"{-}"}\NormalTok{)) }\SpecialCharTok{!=} \DecValTok{3}\NormalTok{)}
+\NormalTok{        \{}
+\NormalTok{          MUTaa }\OtherTok{\textless{}{-}} \StringTok{"unidentifiable base"}
+          \FunctionTok{print}\NormalTok{(}\StringTok{"unidentifiable base :("}\NormalTok{)}
+\NormalTok{        \}}
 \NormalTok{      \}}
-      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (modulo\_mut\_loc }\SpecialCharTok{==} \DecValTok{1}\NormalTok{)}
-\NormalTok{      \{}
-\NormalTok{        codon\_start }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}
-\NormalTok{        codon\_end }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}\SpecialCharTok{+}\DecValTok{2}
-\NormalTok{      \}}
-      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (modulo\_mut\_loc }\SpecialCharTok{==} \DecValTok{2}\NormalTok{)}
-\NormalTok{      \{}
-\NormalTok{        codon\_start }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}\DecValTok{{-}1}
-\NormalTok{        codon\_end }\OtherTok{\textless{}{-}}\NormalTok{ mutation\_location\_remove\_dash}\SpecialCharTok{+}\DecValTok{1}
-\NormalTok{      \}}
-      
-\NormalTok{      aa\_position }\OtherTok{\textless{}{-}} \FunctionTok{ceiling}\NormalTok{(mutation\_location\_remove\_dash}\SpecialCharTok{/}\DecValTok{3}\NormalTok{)}
       \FunctionTok{print}\NormalTok{(}\StringTok{"aaPosition"}\NormalTok{)}
       \FunctionTok{print}\NormalTok{(aa\_position)}
       
@@ -1432,33 +1477,9 @@ acid level
       \FunctionTok{print}\NormalTok{(}\StringTok{"WTcodon and aa"}\NormalTok{)}
       \FunctionTok{print}\NormalTok{(WTcodon\_DNAstr)}
       \FunctionTok{print}\NormalTok{(WTaa)}
-      
-\NormalTok{      MUTcodon }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(trim\_dash[i,codon\_start}\SpecialCharTok{:}\NormalTok{codon\_end])}
-      \FunctionTok{print}\NormalTok{(}\StringTok{"MUTcodon"}\NormalTok{)}
+      \FunctionTok{print}\NormalTok{(}\StringTok{"MUTcodon and aa"}\NormalTok{)}
       \FunctionTok{print}\NormalTok{(MUTcodon)}
-      
-      \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{sum}\NormalTok{(MUTcodon[]}\SpecialCharTok{==} \StringTok{"{-}"}\NormalTok{) }\SpecialCharTok{!=} \DecValTok{0}\NormalTok{)}
-\NormalTok{      \{}
-\NormalTok{        MUTaa }\OtherTok{\textless{}{-}} \StringTok{"frame\_shift\_del"}
-        \FunctionTok{print}\NormalTok{(}\StringTok{"frame\_shift\_del"}\NormalTok{)}
-\NormalTok{      \}}
-      
-      
-      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{sum}\NormalTok{(MUTcodon[] }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{,}\StringTok{"T"}\NormalTok{,}\StringTok{"C"}\NormalTok{,}\StringTok{"G"}\NormalTok{)) }\SpecialCharTok{==} \DecValTok{3}\NormalTok{)}
-\NormalTok{      \{}
-\NormalTok{        MUTcodon\_DNAstr }\OtherTok{\textless{}{-}} \FunctionTok{DNAString}\NormalTok{(}\FunctionTok{paste}\NormalTok{(MUTcodon, }\AttributeTok{collapse =} \StringTok{""}\NormalTok{))}
-        \FunctionTok{print}\NormalTok{(}\StringTok{"MUTcodon\_DNAstr"}\NormalTok{)}
-        \FunctionTok{print}\NormalTok{(MUTcodon\_DNAstr)}
-\NormalTok{        MUTaa }\OtherTok{\textless{}{-}} \FunctionTok{translate}\NormalTok{(MUTcodon\_DNAstr)}
-        \FunctionTok{print}\NormalTok{(}\StringTok{"translation!MUTaa"}\NormalTok{)}
-        \FunctionTok{print}\NormalTok{(MUTaa)}
-\NormalTok{      \}}
-      
-      \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{sum}\NormalTok{(MUTcodon[] }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{,}\StringTok{"T"}\NormalTok{,}\StringTok{"C"}\NormalTok{,}\StringTok{"G"}\NormalTok{,}\StringTok{"{-}"}\NormalTok{)) }\SpecialCharTok{!=} \DecValTok{3}\NormalTok{)}
-\NormalTok{      \{}
-\NormalTok{        MUTaa }\OtherTok{\textless{}{-}} \StringTok{"unidentifiable base"}
-        \FunctionTok{print}\NormalTok{(}\StringTok{"unidentifiable base :("}\NormalTok{)}
-\NormalTok{      \}}
+      \FunctionTok{print}\NormalTok{(MUTaa)}
       
 \NormalTok{      WTaa\_cha }\OtherTok{\textless{}{-}} \FunctionTok{as.character}\NormalTok{(WTaa)}
 \NormalTok{      MUTaa\_cha }\OtherTok{\textless{}{-}} \FunctionTok{as.character}\NormalTok{(MUTaa)}
@@ -1485,6 +1506,10 @@ acid level
 ## [1] 181
 ## [1] "mutation_location_remove_dash="
 ## [1] 181
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GAT
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 61
 ## [1] "WTcodon and aa"
@@ -1492,7 +1517,7 @@ acid level
 ## seq: AAT
 ## 1-letter AAString object
 ## seq: N
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V237
 ## [1] "G"
 ## 
@@ -1502,10 +1527,6 @@ acid level
 ## $V239
 ## [1] "T"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: GAT
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: D
 ## [1] "-----END-----"
@@ -1521,29 +1542,18 @@ acid level
 ## [1] 741
 ## [1] "mutation_location_remove_dash="
 ## [1] 741
+## [1] "frame_shift_ins"
 ## [1] "aaPosition"
 ## [1] 247
 ## [1] "WTcodon and aa"
 ## 3-letter DNAString object
-## seq: AAT
+## seq: GGT
 ## 1-letter AAString object
-## seq: N
-## [1] "MUTcodon"
-## $V237
-## [1] "A"
-## 
-## $V238
-## [1] "A"
-## 
-## $V239
-## [1] "T"
-## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: AAT
-## [1] "translation!MUTaa"
-## 1-letter AAString object
-## seq: N
+## seq: G
+## [1] "MUTcodon and aa"
+##                  V795 V796 V797 V798
+## 22_T7 Biotec_CGN    G    G    G    T
+## [1] "frame_shift_ins"
 ## [1] "-----END-----"
 ## [1] "-----start------"
 ## [1] "i="
@@ -1557,6 +1567,10 @@ acid level
 ## [1] 273
 ## [1] "mutation_location_remove_dash="
 ## [1] 273
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GCG
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 91
 ## [1] "WTcodon and aa"
@@ -1564,7 +1578,7 @@ acid level
 ## seq: GCA
 ## 1-letter AAString object
 ## seq: A
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V327
 ## [1] "G"
 ## 
@@ -1574,10 +1588,6 @@ acid level
 ## $V329
 ## [1] "G"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: GCG
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: A
 ## [1] "-----END-----"
@@ -1593,6 +1603,10 @@ acid level
 ## [1] 593
 ## [1] "mutation_location_remove_dash="
 ## [1] 593
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: TTT
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 198
 ## [1] "WTcodon and aa"
@@ -1600,7 +1614,7 @@ acid level
 ## seq: TAT
 ## 1-letter AAString object
 ## seq: Y
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V648
 ## [1] "T"
 ## 
@@ -1610,10 +1624,6 @@ acid level
 ## $V650
 ## [1] "T"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: TTT
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: F
 ## [1] "-----END-----"
@@ -1629,6 +1639,10 @@ acid level
 ## [1] 104
 ## [1] "mutation_location_remove_dash="
 ## [1] 104
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GGC
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 35
 ## [1] "WTcodon and aa"
@@ -1636,7 +1650,7 @@ acid level
 ## seq: GAC
 ## 1-letter AAString object
 ## seq: D
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V159
 ## [1] "G"
 ## 
@@ -1646,10 +1660,6 @@ acid level
 ## $V161
 ## [1] "C"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: GGC
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: G
 ## [1] "-----END-----"
@@ -1665,6 +1675,10 @@ acid level
 ## [1] 628
 ## [1] "mutation_location_remove_dash="
 ## [1] 628
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GTC
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 210
 ## [1] "WTcodon and aa"
@@ -1672,7 +1686,7 @@ acid level
 ## seq: ATC
 ## 1-letter AAString object
 ## seq: I
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V684
 ## [1] "G"
 ## 
@@ -1682,10 +1696,6 @@ acid level
 ## $V686
 ## [1] "C"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: GTC
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: V
 ## [1] "-----END-----"
@@ -1701,6 +1711,10 @@ acid level
 ## [1] 169
 ## [1] "mutation_location_remove_dash="
 ## [1] 169
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GAG
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 57
 ## [1] "WTcodon and aa"
@@ -1708,7 +1722,7 @@ acid level
 ## seq: AAG
 ## 1-letter AAString object
 ## seq: K
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V225
 ## [1] "G"
 ## 
@@ -1718,10 +1732,6 @@ acid level
 ## $V227
 ## [1] "G"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: GAG
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: E
 ## [1] "-----END-----"
@@ -1737,6 +1747,10 @@ acid level
 ## [1] 186
 ## [1] "mutation_location_remove_dash="
 ## [1] 186
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GCC
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 62
 ## [1] "WTcodon and aa"
@@ -1744,7 +1758,7 @@ acid level
 ## seq: GCT
 ## 1-letter AAString object
 ## seq: A
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V240
 ## [1] "G"
 ## 
@@ -1754,10 +1768,6 @@ acid level
 ## $V242
 ## [1] "C"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: GCC
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: A
 ## [1] "-----END-----"
@@ -1773,6 +1783,10 @@ acid level
 ## [1] 253
 ## [1] "mutation_location_remove_dash="
 ## [1] 253
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: TCA
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 85
 ## [1] "WTcodon and aa"
@@ -1780,7 +1794,7 @@ acid level
 ## seq: CCA
 ## 1-letter AAString object
 ## seq: P
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V309
 ## [1] "T"
 ## 
@@ -1790,10 +1804,6 @@ acid level
 ## $V311
 ## [1] "A"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: TCA
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: S
 ## [1] "-----END-----"
@@ -1809,6 +1819,10 @@ acid level
 ## [1] 365
 ## [1] "mutation_location_remove_dash="
 ## [1] 365
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GGC
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 122
 ## [1] "WTcodon and aa"
@@ -1816,7 +1830,7 @@ acid level
 ## seq: GAC
 ## 1-letter AAString object
 ## seq: D
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V420
 ## [1] "G"
 ## 
@@ -1826,10 +1840,6 @@ acid level
 ## $V422
 ## [1] "C"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: GGC
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: G
 ## [1] "-----END-----"
@@ -1845,6 +1855,10 @@ acid level
 ## [1] 15
 ## [1] "mutation_location_remove_dash="
 ## [1] 15
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: CAC
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 5
 ## [1] "WTcodon and aa"
@@ -1852,7 +1866,7 @@ acid level
 ## seq: CAT
 ## 1-letter AAString object
 ## seq: H
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V69
 ## [1] "C"
 ## 
@@ -1862,10 +1876,6 @@ acid level
 ## $V71
 ## [1] "C"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: CAC
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: H
 ## [1] "-----END-----"
@@ -1881,6 +1891,10 @@ acid level
 ## [1] 149
 ## [1] "mutation_location_remove_dash="
 ## [1] 149
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: TCT
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 50
 ## [1] "WTcodon and aa"
@@ -1888,7 +1902,7 @@ acid level
 ## seq: TTT
 ## 1-letter AAString object
 ## seq: F
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V204
 ## [1] "T"
 ## 
@@ -1898,10 +1912,6 @@ acid level
 ## $V206
 ## [1] "T"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: TCT
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: S
 ## [1] "-----END-----"
@@ -1917,6 +1927,10 @@ acid level
 ## [1] 29
 ## [1] "mutation_location_remove_dash="
 ## [1] 29
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: CTG
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 10
 ## [1] "WTcodon and aa"
@@ -1924,7 +1938,7 @@ acid level
 ## seq: CCG
 ## 1-letter AAString object
 ## seq: P
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V84
 ## [1] "C"
 ## 
@@ -1934,10 +1948,6 @@ acid level
 ## $V86
 ## [1] "G"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: CTG
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: M
 ## [1] "-----END-----"
@@ -1953,6 +1963,10 @@ acid level
 ## [1] 90
 ## [1] "mutation_location_remove_dash="
 ## [1] 90
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: TCT
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 30
 ## [1] "WTcodon and aa"
@@ -1960,7 +1974,7 @@ acid level
 ## seq: TCC
 ## 1-letter AAString object
 ## seq: S
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V144
 ## [1] "T"
 ## 
@@ -1970,10 +1984,6 @@ acid level
 ## $V146
 ## [1] "T"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: TCT
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: S
 ## [1] "-----END-----"
@@ -1989,6 +1999,10 @@ acid level
 ## [1] 501
 ## [1] "mutation_location_remove_dash="
 ## [1] 501
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: CGC
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 167
 ## [1] "WTcodon and aa"
@@ -1996,7 +2010,7 @@ acid level
 ## seq: CGT
 ## 1-letter AAString object
 ## seq: R
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V555
 ## [1] "C"
 ## 
@@ -2006,10 +2020,6 @@ acid level
 ## $V557
 ## [1] "C"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: CGC
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: R
 ## [1] "-----END-----"
@@ -2025,6 +2035,10 @@ acid level
 ## [1] 543
 ## [1] "mutation_location_remove_dash="
 ## [1] 543
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GCA
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 181
 ## [1] "WTcodon and aa"
@@ -2032,7 +2046,7 @@ acid level
 ## seq: GCG
 ## 1-letter AAString object
 ## seq: A
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V597
 ## [1] "G"
 ## 
@@ -2042,10 +2056,6 @@ acid level
 ## $V599
 ## [1] "A"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: GCA
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: A
 ## [1] "-----END-----"
@@ -2061,6 +2071,10 @@ acid level
 ## [1] 108
 ## [1] "mutation_location_remove_dash="
 ## [1] 108
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GGG
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 36
 ## [1] "WTcodon and aa"
@@ -2068,7 +2082,7 @@ acid level
 ## seq: GGA
 ## 1-letter AAString object
 ## seq: G
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V162
 ## [1] "G"
 ## 
@@ -2078,10 +2092,6 @@ acid level
 ## $V164
 ## [1] "G"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: GGG
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: G
 ## [1] "-----END-----"
@@ -2097,6 +2107,10 @@ acid level
 ## [1] 117
 ## [1] "mutation_location_remove_dash="
 ## [1] 117
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GGC
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 39
 ## [1] "WTcodon and aa"
@@ -2104,7 +2118,7 @@ acid level
 ## seq: GGT
 ## 1-letter AAString object
 ## seq: G
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V171
 ## [1] "G"
 ## 
@@ -2114,10 +2128,6 @@ acid level
 ## $V173
 ## [1] "C"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: GGC
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: G
 ## [1] "-----END-----"
@@ -2133,6 +2143,10 @@ acid level
 ## [1] 126
 ## [1] "mutation_location_remove_dash="
 ## [1] 126
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: TGC
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 42
 ## [1] "WTcodon and aa"
@@ -2140,7 +2154,7 @@ acid level
 ## seq: TGT
 ## 1-letter AAString object
 ## seq: C
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V180
 ## [1] "T"
 ## 
@@ -2150,10 +2164,6 @@ acid level
 ## $V182
 ## [1] "C"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: TGC
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: C
 ## [1] "-----END-----"
@@ -2169,6 +2179,10 @@ acid level
 ## [1] 251
 ## [1] "mutation_location_remove_dash="
 ## [1] 251
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GAA
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 84
 ## [1] "WTcodon and aa"
@@ -2176,7 +2190,7 @@ acid level
 ## seq: GTA
 ## 1-letter AAString object
 ## seq: V
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V306
 ## [1] "G"
 ## 
@@ -2186,10 +2200,6 @@ acid level
 ## $V308
 ## [1] "A"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: GAA
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: E
 ## [1] "-----END-----"
@@ -2205,6 +2215,10 @@ acid level
 ## [1] 53
 ## [1] "mutation_location_remove_dash="
 ## [1] 53
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: AGG
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 18
 ## [1] "WTcodon and aa"
@@ -2212,7 +2226,7 @@ acid level
 ## seq: AAG
 ## 1-letter AAString object
 ## seq: K
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V108
 ## [1] "A"
 ## 
@@ -2222,10 +2236,6 @@ acid level
 ## $V110
 ## [1] "G"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: AGG
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: R
 ## [1] "-----END-----"
@@ -2241,6 +2251,10 @@ acid level
 ## [1] 310
 ## [1] "mutation_location_remove_dash="
 ## [1] 310
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: AGG
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 104
 ## [1] "WTcodon and aa"
@@ -2248,7 +2262,7 @@ acid level
 ## seq: GGG
 ## 1-letter AAString object
 ## seq: G
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V366
 ## [1] "A"
 ## 
@@ -2258,10 +2272,6 @@ acid level
 ## $V368
 ## [1] "G"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: AGG
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: R
 ## [1] "-----END-----"
@@ -2277,6 +2287,10 @@ acid level
 ## [1] 119
 ## [1] "mutation_location_remove_dash="
 ## [1] 119
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: CAT
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 40
 ## [1] "WTcodon and aa"
@@ -2284,7 +2298,7 @@ acid level
 ## seq: CGT
 ## 1-letter AAString object
 ## seq: R
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V174
 ## [1] "C"
 ## 
@@ -2294,10 +2308,6 @@ acid level
 ## $V176
 ## [1] "T"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: CAT
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: H
 ## [1] "-----END-----"
@@ -2313,6 +2323,10 @@ acid level
 ## [1] 169
 ## [1] "mutation_location_remove_dash="
 ## [1] 169
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GAG
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 57
 ## [1] "WTcodon and aa"
@@ -2320,7 +2334,7 @@ acid level
 ## seq: AAG
 ## 1-letter AAString object
 ## seq: K
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V225
 ## [1] "G"
 ## 
@@ -2330,10 +2344,6 @@ acid level
 ## $V227
 ## [1] "G"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: GAG
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: E
 ## [1] "-----END-----"
@@ -2349,6 +2359,10 @@ acid level
 ## [1] 384
 ## [1] "mutation_location_remove_dash="
 ## [1] 384
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: AGC
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 128
 ## [1] "WTcodon and aa"
@@ -2356,7 +2370,7 @@ acid level
 ## seq: AGT
 ## 1-letter AAString object
 ## seq: S
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V438
 ## [1] "A"
 ## 
@@ -2366,10 +2380,6 @@ acid level
 ## $V440
 ## [1] "C"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: AGC
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: S
 ## [1] "-----END-----"
@@ -2385,6 +2395,10 @@ acid level
 ## [1] 124
 ## [1] "mutation_location_remove_dash="
 ## [1] 124
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: AGT
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 42
 ## [1] "WTcodon and aa"
@@ -2392,7 +2406,7 @@ acid level
 ## seq: TGT
 ## 1-letter AAString object
 ## seq: C
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V180
 ## [1] "A"
 ## 
@@ -2402,10 +2416,6 @@ acid level
 ## $V182
 ## [1] "T"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: AGT
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: S
 ## [1] "-----END-----"
@@ -2421,6 +2431,10 @@ acid level
 ## [1] 184
 ## [1] "mutation_location_remove_dash="
 ## [1] 184
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: ACT
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 62
 ## [1] "WTcodon and aa"
@@ -2428,7 +2442,7 @@ acid level
 ## seq: GCT
 ## 1-letter AAString object
 ## seq: A
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V240
 ## [1] "A"
 ## 
@@ -2438,10 +2452,6 @@ acid level
 ## $V242
 ## [1] "T"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: ACT
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: T
 ## [1] "-----END-----"
@@ -2457,6 +2467,10 @@ acid level
 ## [1] 241
 ## [1] "mutation_location_remove_dash="
 ## [1] 241
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GGC
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 81
 ## [1] "WTcodon and aa"
@@ -2464,7 +2478,7 @@ acid level
 ## seq: AGC
 ## 1-letter AAString object
 ## seq: S
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V297
 ## [1] "G"
 ## 
@@ -2474,10 +2488,6 @@ acid level
 ## $V299
 ## [1] "C"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: GGC
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: G
 ## [1] "-----END-----"
@@ -2493,6 +2503,7 @@ acid level
 ## [1] 322
 ## [1] "mutation_location_remove_dash="
 ## [1] 322
+## [1] "frame_shift_del"
 ## [1] "aaPosition"
 ## [1] 108
 ## [1] "WTcodon and aa"
@@ -2500,7 +2511,7 @@ acid level
 ## seq: ATC
 ## 1-letter AAString object
 ## seq: I
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V378
 ## [1] "-"
 ## 
@@ -2524,6 +2535,10 @@ acid level
 ## [1] 594
 ## [1] "mutation_location_remove_dash="
 ## [1] 594
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: TAC
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 198
 ## [1] "WTcodon and aa"
@@ -2531,7 +2546,7 @@ acid level
 ## seq: TAT
 ## 1-letter AAString object
 ## seq: Y
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V648
 ## [1] "T"
 ## 
@@ -2541,10 +2556,6 @@ acid level
 ## $V650
 ## [1] "C"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: TAC
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: Y
 ## [1] "-----END-----"
@@ -2560,6 +2571,10 @@ acid level
 ## [1] 679
 ## [1] "mutation_location_remove_dash="
 ## [1] 679
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GAG
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 227
 ## [1] "WTcodon and aa"
@@ -2567,7 +2582,7 @@ acid level
 ## seq: AAG
 ## 1-letter AAString object
 ## seq: K
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V735
 ## [1] "G"
 ## 
@@ -2577,10 +2592,6 @@ acid level
 ## $V737
 ## [1] "G"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: GAG
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: E
 ## [1] "-----END-----"
@@ -2596,6 +2607,10 @@ acid level
 ## [1] 29
 ## [1] "mutation_location_remove_dash="
 ## [1] 29
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: CTG
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 10
 ## [1] "WTcodon and aa"
@@ -2603,7 +2618,7 @@ acid level
 ## seq: CCG
 ## 1-letter AAString object
 ## seq: P
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V84
 ## [1] "C"
 ## 
@@ -2613,10 +2628,6 @@ acid level
 ## $V86
 ## [1] "G"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: CTG
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: M
 ## [1] "-----END-----"
@@ -2632,6 +2643,10 @@ acid level
 ## [1] 456
 ## [1] "mutation_location_remove_dash="
 ## [1] 456
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: CCT
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 152
 ## [1] "WTcodon and aa"
@@ -2639,7 +2654,7 @@ acid level
 ## seq: CCC
 ## 1-letter AAString object
 ## seq: P
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V510
 ## [1] "C"
 ## 
@@ -2649,10 +2664,6 @@ acid level
 ## $V512
 ## [1] "T"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: CCT
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: P
 ## [1] "-----END-----"
@@ -2668,6 +2679,10 @@ acid level
 ## [1] 460
 ## [1] "mutation_location_remove_dash="
 ## [1] 460
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: CAC
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 154
 ## [1] "WTcodon and aa"
@@ -2675,7 +2690,7 @@ acid level
 ## seq: TAC
 ## 1-letter AAString object
 ## seq: Y
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V516
 ## [1] "C"
 ## 
@@ -2685,10 +2700,6 @@ acid level
 ## $V518
 ## [1] "C"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: CAC
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: H
 ## [1] "-----END-----"
@@ -2704,6 +2715,10 @@ acid level
 ## [1] 579
 ## [1] "mutation_location_remove_dash="
 ## [1] 579
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GAG
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 193
 ## [1] "WTcodon and aa"
@@ -2711,7 +2726,7 @@ acid level
 ## seq: GAA
 ## 1-letter AAString object
 ## seq: E
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V633
 ## [1] "G"
 ## 
@@ -2721,10 +2736,6 @@ acid level
 ## $V635
 ## [1] "G"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: GAG
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: E
 ## [1] "-----END-----"
@@ -2740,6 +2751,10 @@ acid level
 ## [1] 177
 ## [1] "mutation_location_remove_dash="
 ## [1] 177
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: CCG
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 59
 ## [1] "WTcodon and aa"
@@ -2747,7 +2762,7 @@ acid level
 ## seq: CCA
 ## 1-letter AAString object
 ## seq: P
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V231
 ## [1] "C"
 ## 
@@ -2757,10 +2772,6 @@ acid level
 ## $V233
 ## [1] "G"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: CCG
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: P
 ## [1] "-----END-----"
@@ -2776,6 +2787,10 @@ acid level
 ## [1] 326
 ## [1] "mutation_location_remove_dash="
 ## [1] 326
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GCT
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 109
 ## [1] "WTcodon and aa"
@@ -2783,7 +2798,7 @@ acid level
 ## seq: GTT
 ## 1-letter AAString object
 ## seq: V
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V381
 ## [1] "G"
 ## 
@@ -2793,10 +2808,6 @@ acid level
 ## $V383
 ## [1] "T"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: GCT
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: A
 ## [1] "-----END-----"
@@ -2812,6 +2823,10 @@ acid level
 ## [1] 603
 ## [1] "mutation_location_remove_dash="
 ## [1] 603
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GGC
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 201
 ## [1] "WTcodon and aa"
@@ -2819,7 +2834,7 @@ acid level
 ## seq: GGT
 ## 1-letter AAString object
 ## seq: G
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V657
 ## [1] "G"
 ## 
@@ -2829,10 +2844,6 @@ acid level
 ## $V659
 ## [1] "C"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: GGC
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: G
 ## [1] "-----END-----"
@@ -2848,6 +2859,10 @@ acid level
 ## [1] 229
 ## [1] "mutation_location_remove_dash="
 ## [1] 229
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: CTC
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 77
 ## [1] "WTcodon and aa"
@@ -2855,7 +2870,7 @@ acid level
 ## seq: TTC
 ## 1-letter AAString object
 ## seq: F
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V285
 ## [1] "C"
 ## 
@@ -2865,10 +2880,6 @@ acid level
 ## $V287
 ## [1] "C"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: CTC
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: L
 ## [1] "-----END-----"
@@ -2884,6 +2895,10 @@ acid level
 ## [1] 327
 ## [1] "mutation_location_remove_dash="
 ## [1] 327
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GTC
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 109
 ## [1] "WTcodon and aa"
@@ -2891,7 +2906,7 @@ acid level
 ## seq: GTT
 ## 1-letter AAString object
 ## seq: V
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V381
 ## [1] "G"
 ## 
@@ -2901,10 +2916,6 @@ acid level
 ## $V383
 ## [1] "C"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: GTC
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: V
 ## [1] "-----END-----"
@@ -2920,6 +2931,10 @@ acid level
 ## [1] 229
 ## [1] "mutation_location_remove_dash="
 ## [1] 229
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: CTC
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 77
 ## [1] "WTcodon and aa"
@@ -2927,7 +2942,7 @@ acid level
 ## seq: TTC
 ## 1-letter AAString object
 ## seq: F
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V285
 ## [1] "C"
 ## 
@@ -2937,10 +2952,6 @@ acid level
 ## $V287
 ## [1] "C"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: CTC
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: L
 ## [1] "-----END-----"
@@ -2956,6 +2967,10 @@ acid level
 ## [1] 327
 ## [1] "mutation_location_remove_dash="
 ## [1] 327
+## [1] "MUTcodon_DNAstr"
+## 3-letter DNAString object
+## seq: GTC
+## [1] "translation!MUTaa"
 ## [1] "aaPosition"
 ## [1] 109
 ## [1] "WTcodon and aa"
@@ -2963,7 +2978,7 @@ acid level
 ## seq: GTT
 ## 1-letter AAString object
 ## seq: V
-## [1] "MUTcodon"
+## [1] "MUTcodon and aa"
 ## $V381
 ## [1] "G"
 ## 
@@ -2973,10 +2988,6 @@ acid level
 ## $V383
 ## [1] "C"
 ## 
-## [1] "MUTcodon_DNAstr"
-## 3-letter DNAString object
-## seq: GTC
-## [1] "translation!MUTaa"
 ## 1-letter AAString object
 ## seq: V
 ## [1] "-----END-----"
@@ -2991,35 +3002,64 @@ show results: AAmutations\_df
 \end{Shaded}
 
 \begin{verbatim}
-##                  [,1]    [,2]    [,3]    [,4]                  [,5]    [,6]   
-## ClyF             NA      NA      NA      NA                    NA      NA     
-## 11_T7 Biotec_CGN "N61D"  NA      NA      NA                    NA      NA     
-## 12_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
-## 13_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
-## 14_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
-## 15_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
-## 21_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
-## 22_T7 Biotec_CGN "N247N" NA      NA      NA                    NA      NA     
-## 23_T7 Biotec_CGN "A91A"  NA      NA      NA                    NA      NA     
-## 24_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
-## 25_T7 Biotec_CGN "Y198F" NA      NA      NA                    NA      NA     
-## 31_T7 Biotec_CGN "D35G"  "I210V" NA      NA                    NA      NA     
-## 32_T7 Biotec_CGN "K57E"  "A62A"  "P85S"  "D122G"               NA      NA     
-## 33_T7 Biotec_CGN "H5H"   NA      NA      NA                    NA      NA     
-## 34_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
-## 35_T7 Biotec_CGN "F50S"  NA      NA      NA                    NA      NA     
-## 41_T7 Biotec_CGN "P10M"  NA      NA      NA                    NA      NA     
-## 42_T7 Biotec_CGN "S30S"  "R167R" "A181A" NA                    NA      NA     
-## 43_T7 Biotec_CGN "G36G"  NA      NA      NA                    NA      NA     
-## 44_T7 Biotec_CGN "G39G"  "C42C"  "V84E"  NA                    NA      NA     
-## 45_T7 Biotec_CGN "K18R"  "G104R" NA      NA                    NA      NA     
-## 46_T7 Biotec_CGN "R40H"  "K57E"  "S128S" NA                    NA      NA     
-## 51_T7 Biotec_CGN "C42S"  "A62T"  "S81G"  "I108frame_shift_del" "Y198Y" "K227E"
-## 52_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
-## 53_T7 Biotec_CGN "P10M"  "P152P" "Y154H" "E193E"               NA      NA     
-## 54_T7 Biotec_CGN "P59P"  "V109A" "G201G" NA                    NA      NA     
-## 55_T7 Biotec_CGN "F77L"  "V109V" NA      NA                    NA      NA     
-## 56_T7 Biotec_CGN "F77L"  "V109V" NA      NA                    NA      NA
+##                  [,1]                  [,2]    [,3]    [,4]                 
+## ClyF             NA                    NA      NA      NA                   
+## 11_T7 Biotec_CGN "N61D"                NA      NA      NA                   
+## 12_T7 Biotec_CGN NA                    NA      NA      NA                   
+## 13_T7 Biotec_CGN NA                    NA      NA      NA                   
+## 14_T7 Biotec_CGN NA                    NA      NA      NA                   
+## 15_T7 Biotec_CGN NA                    NA      NA      NA                   
+## 21_T7 Biotec_CGN NA                    NA      NA      NA                   
+## 22_T7 Biotec_CGN "G247frame_shift_ins" NA      NA      NA                   
+## 23_T7 Biotec_CGN "A91A"                NA      NA      NA                   
+## 24_T7 Biotec_CGN NA                    NA      NA      NA                   
+## 25_T7 Biotec_CGN "Y198F"               NA      NA      NA                   
+## 31_T7 Biotec_CGN "D35G"                "I210V" NA      NA                   
+## 32_T7 Biotec_CGN "K57E"                "A62A"  "P85S"  "D122G"              
+## 33_T7 Biotec_CGN "H5H"                 NA      NA      NA                   
+## 34_T7 Biotec_CGN NA                    NA      NA      NA                   
+## 35_T7 Biotec_CGN "F50S"                NA      NA      NA                   
+## 41_T7 Biotec_CGN "P10M"                NA      NA      NA                   
+## 42_T7 Biotec_CGN "S30S"                "R167R" "A181A" NA                   
+## 43_T7 Biotec_CGN "G36G"                NA      NA      NA                   
+## 44_T7 Biotec_CGN "G39G"                "C42C"  "V84E"  NA                   
+## 45_T7 Biotec_CGN "K18R"                "G104R" NA      NA                   
+## 46_T7 Biotec_CGN "R40H"                "K57E"  "S128S" NA                   
+## 51_T7 Biotec_CGN "C42S"                "A62T"  "S81G"  "I108frame_shift_del"
+## 52_T7 Biotec_CGN NA                    NA      NA      NA                   
+## 53_T7 Biotec_CGN "P10M"                "P152P" "Y154H" "E193E"              
+## 54_T7 Biotec_CGN "P59P"                "V109A" "G201G" NA                   
+## 55_T7 Biotec_CGN "F77L"                "V109V" NA      NA                   
+## 56_T7 Biotec_CGN "F77L"                "V109V" NA      NA                   
+##                  [,5]    [,6]   
+## ClyF             NA      NA     
+## 11_T7 Biotec_CGN NA      NA     
+## 12_T7 Biotec_CGN NA      NA     
+## 13_T7 Biotec_CGN NA      NA     
+## 14_T7 Biotec_CGN NA      NA     
+## 15_T7 Biotec_CGN NA      NA     
+## 21_T7 Biotec_CGN NA      NA     
+## 22_T7 Biotec_CGN NA      NA     
+## 23_T7 Biotec_CGN NA      NA     
+## 24_T7 Biotec_CGN NA      NA     
+## 25_T7 Biotec_CGN NA      NA     
+## 31_T7 Biotec_CGN NA      NA     
+## 32_T7 Biotec_CGN NA      NA     
+## 33_T7 Biotec_CGN NA      NA     
+## 34_T7 Biotec_CGN NA      NA     
+## 35_T7 Biotec_CGN NA      NA     
+## 41_T7 Biotec_CGN NA      NA     
+## 42_T7 Biotec_CGN NA      NA     
+## 43_T7 Biotec_CGN NA      NA     
+## 44_T7 Biotec_CGN NA      NA     
+## 45_T7 Biotec_CGN NA      NA     
+## 46_T7 Biotec_CGN NA      NA     
+## 51_T7 Biotec_CGN "Y198Y" "K227E"
+## 52_T7 Biotec_CGN NA      NA     
+## 53_T7 Biotec_CGN NA      NA     
+## 54_T7 Biotec_CGN NA      NA     
+## 55_T7 Biotec_CGN NA      NA     
+## 56_T7 Biotec_CGN NA      NA
 \end{verbatim}
 
 Show results: DNA mutation location (alignment location)

@@ -2,11 +2,11 @@
 title: "Mutation_library_analysis"
 author: "Mu-En Chung"
 date: "07/07/2022"
-output: md_document
-# output:
-#   word_document: default
-#   html_document: default
-#   pdf_document: default
+# output: md_document
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
 ---
 
 [Introduction]                                                               

@@ -291,7 +291,7 @@ print(&quot;example DNA seq&quot;)</code></pre>
 ## Con --------------------------...------------------------- Consensus</code></pre>
 <p>run your alignment</p>
 <pre class="r"><code>##run my alignment
-file_path &lt;- list.files(path = seq_file_path,pattern = &#39;fasta&#39;)
+file_path &lt;- list.files(path = seq_file_path,pattern = &#39;fasta&#39;,full.names = T)
 seq_result &lt;- readDNAStringSet(file_path)
 myDNA_Alignment &lt;- msa(seq_result)</code></pre>
 <pre><code>## use default substitution matrix</code></pre>
@@ -1241,6 +1241,7 @@ if(sum(trim_alignment[1,]==&quot;-&quot;)!= 0)
 
 modulo_mut_loc_df &lt;- mutation_locations 
 AAmutations_df &lt;- mutation_locations
+i &lt;- 8
 for(i in 1:nrow(mutation_locations))
 {
   mutation_location_location &lt;- which(mutation_locations[i,] != &quot;NA&quot;)
@@ -1258,36 +1259,80 @@ for(i in 1:nrow(mutation_locations))
       mutation_location_x &lt;- as.numeric(mutation_locations[i,j]) 
       print(&quot;mutation_location_x=&quot;)
       print(mutation_location_x)
-      mutation_location_remove_dash &lt;- mutation_location_x - sum(trim_alignment[1,1:(mutation_location_x-1)] == &quot;-&quot;)
+      mutation_location_remove_dash &lt;- mutation_location_x - 
+        sum(trim_alignment[1,1:(mutation_location_x-1)] == &quot;-&quot;)
       print(&quot;mutation_location_remove_dash=&quot;)
       print(mutation_location_remove_dash)
-      modulo_mut_loc &lt;- mutation_location_remove_dash %% 3
-      modulo_mut_loc_df[i,j] &lt;- modulo_mut_loc
       
       if(trim_alignment[1,mutation_location_x] == &quot;-&quot;)
       {
-        #print(&quot;plop&quot;)
-        AAmutations_df[i,j] &lt;- &quot;frame_shift_ins&quot;
-        #print(AAmutations_df[i,j])
-      }   
-      
-      else if (modulo_mut_loc == 0)
-      {
-        codon_start &lt;- mutation_location_remove_dash-2
-        codon_end &lt;- mutation_location_remove_dash
+        # decide the insertion location in AA seq
+        modulo_mut_loc &lt;- (mutation_location_remove_dash-1) %% 3
+        modulo_mut_loc_df[i,j] &lt;- modulo_mut_loc
+        # if the insertion happen in between two codons, the mutation is counted to sit in the later codon.  
+        if (modulo_mut_loc == 0){
+          codon_start &lt;- mutation_location_remove_dash
+          codon_end &lt;- mutation_location_remove_dash+2
+          MUTcodon &lt;- trim_alignment[i,mutation_location_x:mutation_location_x+3]
+          aa_position &lt;- (mutation_location_remove_dash-1)/3+1
+        }
+        if (modulo_mut_loc == 1){
+          codon_start &lt;- mutation_location_remove_dash-1
+          codon_end &lt;- mutation_location_remove_dash+1
+          MUTcodon &lt;- trim_alignment[i,(mutation_location_x-1):(mutation_location_x+2)]
+          aa_position &lt;- ceiling((mutation_location_remove_dash-1)/3)
+        }
+        if (modulo_mut_loc == 2){
+          codon_start &lt;- mutation_location_remove_dash-2
+          codon_end &lt;- mutation_location_remove_dash
+          MUTcodon &lt;- trim_alignment[i,(mutation_location_x-2):(mutation_location_x+1)]
+          aa_position &lt;- ceiling((mutation_location_remove_dash-1)/3)
+        }
+        
+        print(&quot;frame_shift_ins&quot;)
+        MUTaa &lt;- &quot;frame_shift_ins&quot;
+
+      }else{
+        modulo_mut_loc &lt;- mutation_location_remove_dash %% 3
+        modulo_mut_loc_df[i,j] &lt;- modulo_mut_loc
+        
+        if (modulo_mut_loc == 0){
+          codon_start &lt;- mutation_location_remove_dash-2
+          codon_end &lt;- mutation_location_remove_dash
+        }
+        if (modulo_mut_loc == 1){
+          codon_start &lt;- mutation_location_remove_dash
+          codon_end &lt;- mutation_location_remove_dash+2
+        }
+        if (modulo_mut_loc == 2){
+          codon_start &lt;- mutation_location_remove_dash-1
+          codon_end &lt;- mutation_location_remove_dash+1
+        }
+        aa_position &lt;- ceiling(mutation_location_remove_dash/3)
+        MUTcodon &lt;- c(trim_dash[i,codon_start:codon_end])
+        
+        if (sum(MUTcodon[]== &quot;-&quot;) != 0)
+        {
+          MUTaa &lt;- &quot;frame_shift_del&quot;
+          print(&quot;frame_shift_del&quot;)
+        }
+        
+        else if (sum(MUTcodon[] %in% c(&quot;A&quot;,&quot;T&quot;,&quot;C&quot;,&quot;G&quot;)) == 3)
+        {
+          MUTcodon_DNAstr &lt;- DNAString(paste(MUTcodon, collapse = &quot;&quot;))
+          print(&quot;MUTcodon_DNAstr&quot;)
+          print(MUTcodon_DNAstr)
+          MUTaa &lt;- translate(MUTcodon_DNAstr)
+          print(&quot;translation!MUTaa&quot;)
+          
+        }
+        
+        else if (sum(MUTcodon[] %in% c(&quot;A&quot;,&quot;T&quot;,&quot;C&quot;,&quot;G&quot;,&quot;-&quot;)) != 3)
+        {
+          MUTaa &lt;- &quot;unidentifiable base&quot;
+          print(&quot;unidentifiable base :(&quot;)
+        }
       }
-      else if (modulo_mut_loc == 1)
-      {
-        codon_start &lt;- mutation_location_remove_dash
-        codon_end &lt;- mutation_location_remove_dash+2
-      }
-      else if (modulo_mut_loc == 2)
-      {
-        codon_start &lt;- mutation_location_remove_dash-1
-        codon_end &lt;- mutation_location_remove_dash+1
-      }
-      
-      aa_position &lt;- ceiling(mutation_location_remove_dash/3)
       print(&quot;aaPosition&quot;)
       print(aa_position)
       
@@ -1297,33 +1342,9 @@ for(i in 1:nrow(mutation_locations))
       print(&quot;WTcodon and aa&quot;)
       print(WTcodon_DNAstr)
       print(WTaa)
-      
-      MUTcodon &lt;- c(trim_dash[i,codon_start:codon_end])
-      print(&quot;MUTcodon&quot;)
+      print(&quot;MUTcodon and aa&quot;)
       print(MUTcodon)
-      
-      if (sum(MUTcodon[]== &quot;-&quot;) != 0)
-      {
-        MUTaa &lt;- &quot;frame_shift_del&quot;
-        print(&quot;frame_shift_del&quot;)
-      }
-      
-      
-      else if (sum(MUTcodon[] %in% c(&quot;A&quot;,&quot;T&quot;,&quot;C&quot;,&quot;G&quot;)) == 3)
-      {
-        MUTcodon_DNAstr &lt;- DNAString(paste(MUTcodon, collapse = &quot;&quot;))
-        print(&quot;MUTcodon_DNAstr&quot;)
-        print(MUTcodon_DNAstr)
-        MUTaa &lt;- translate(MUTcodon_DNAstr)
-        print(&quot;translation!MUTaa&quot;)
-        print(MUTaa)
-      }
-      
-      else if (sum(MUTcodon[] %in% c(&quot;A&quot;,&quot;T&quot;,&quot;C&quot;,&quot;G&quot;,&quot;-&quot;)) != 3)
-      {
-        MUTaa &lt;- &quot;unidentifiable base&quot;
-        print(&quot;unidentifiable base :(&quot;)
-      }
+      print(MUTaa)
       
       WTaa_cha &lt;- as.character(WTaa)
       MUTaa_cha &lt;- as.character(MUTaa)
@@ -1346,6 +1367,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 181
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 181
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: GAT
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 61
 ## [1] &quot;WTcodon and aa&quot;
@@ -1353,7 +1378,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: AAT
 ## 1-letter AAString object
 ## seq: N
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V237
 ## [1] &quot;G&quot;
 ## 
@@ -1363,10 +1388,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V239
 ## [1] &quot;T&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: GAT
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: D
 ## [1] &quot;-----END-----&quot;
@@ -1382,29 +1403,18 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 741
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 741
+## [1] &quot;frame_shift_ins&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 247
 ## [1] &quot;WTcodon and aa&quot;
 ## 3-letter DNAString object
-## seq: AAT
+## seq: GGT
 ## 1-letter AAString object
-## seq: N
-## [1] &quot;MUTcodon&quot;
-## $V237
-## [1] &quot;A&quot;
-## 
-## $V238
-## [1] &quot;A&quot;
-## 
-## $V239
-## [1] &quot;T&quot;
-## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: AAT
-## [1] &quot;translation!MUTaa&quot;
-## 1-letter AAString object
-## seq: N
+## seq: G
+## [1] &quot;MUTcodon and aa&quot;
+##                  V795 V796 V797 V798
+## 22_T7 Biotec_CGN    G    G    G    T
+## [1] &quot;frame_shift_ins&quot;
 ## [1] &quot;-----END-----&quot;
 ## [1] &quot;-----start------&quot;
 ## [1] &quot;i=&quot;
@@ -1418,6 +1428,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 273
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 273
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: GCG
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 91
 ## [1] &quot;WTcodon and aa&quot;
@@ -1425,7 +1439,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: GCA
 ## 1-letter AAString object
 ## seq: A
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V327
 ## [1] &quot;G&quot;
 ## 
@@ -1435,10 +1449,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V329
 ## [1] &quot;G&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: GCG
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: A
 ## [1] &quot;-----END-----&quot;
@@ -1454,6 +1464,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 593
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 593
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: TTT
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 198
 ## [1] &quot;WTcodon and aa&quot;
@@ -1461,7 +1475,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: TAT
 ## 1-letter AAString object
 ## seq: Y
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V648
 ## [1] &quot;T&quot;
 ## 
@@ -1471,10 +1485,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V650
 ## [1] &quot;T&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: TTT
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: F
 ## [1] &quot;-----END-----&quot;
@@ -1490,6 +1500,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 104
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 104
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: GGC
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 35
 ## [1] &quot;WTcodon and aa&quot;
@@ -1497,7 +1511,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: GAC
 ## 1-letter AAString object
 ## seq: D
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V159
 ## [1] &quot;G&quot;
 ## 
@@ -1507,10 +1521,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V161
 ## [1] &quot;C&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: GGC
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: G
 ## [1] &quot;-----END-----&quot;
@@ -1526,6 +1536,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 628
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 628
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: GTC
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 210
 ## [1] &quot;WTcodon and aa&quot;
@@ -1533,7 +1547,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: ATC
 ## 1-letter AAString object
 ## seq: I
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V684
 ## [1] &quot;G&quot;
 ## 
@@ -1543,10 +1557,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V686
 ## [1] &quot;C&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: GTC
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: V
 ## [1] &quot;-----END-----&quot;
@@ -1562,6 +1572,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 169
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 169
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: GAG
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 57
 ## [1] &quot;WTcodon and aa&quot;
@@ -1569,7 +1583,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: AAG
 ## 1-letter AAString object
 ## seq: K
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V225
 ## [1] &quot;G&quot;
 ## 
@@ -1579,10 +1593,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V227
 ## [1] &quot;G&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: GAG
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: E
 ## [1] &quot;-----END-----&quot;
@@ -1598,6 +1608,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 186
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 186
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: GCC
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 62
 ## [1] &quot;WTcodon and aa&quot;
@@ -1605,7 +1619,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: GCT
 ## 1-letter AAString object
 ## seq: A
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V240
 ## [1] &quot;G&quot;
 ## 
@@ -1615,10 +1629,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V242
 ## [1] &quot;C&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: GCC
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: A
 ## [1] &quot;-----END-----&quot;
@@ -1634,6 +1644,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 253
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 253
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: TCA
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 85
 ## [1] &quot;WTcodon and aa&quot;
@@ -1641,7 +1655,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: CCA
 ## 1-letter AAString object
 ## seq: P
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V309
 ## [1] &quot;T&quot;
 ## 
@@ -1651,10 +1665,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V311
 ## [1] &quot;A&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: TCA
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: S
 ## [1] &quot;-----END-----&quot;
@@ -1670,6 +1680,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 365
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 365
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: GGC
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 122
 ## [1] &quot;WTcodon and aa&quot;
@@ -1677,7 +1691,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: GAC
 ## 1-letter AAString object
 ## seq: D
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V420
 ## [1] &quot;G&quot;
 ## 
@@ -1687,10 +1701,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V422
 ## [1] &quot;C&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: GGC
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: G
 ## [1] &quot;-----END-----&quot;
@@ -1706,6 +1716,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 15
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 15
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: CAC
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 5
 ## [1] &quot;WTcodon and aa&quot;
@@ -1713,7 +1727,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: CAT
 ## 1-letter AAString object
 ## seq: H
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V69
 ## [1] &quot;C&quot;
 ## 
@@ -1723,10 +1737,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V71
 ## [1] &quot;C&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: CAC
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: H
 ## [1] &quot;-----END-----&quot;
@@ -1742,6 +1752,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 149
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 149
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: TCT
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 50
 ## [1] &quot;WTcodon and aa&quot;
@@ -1749,7 +1763,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: TTT
 ## 1-letter AAString object
 ## seq: F
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V204
 ## [1] &quot;T&quot;
 ## 
@@ -1759,10 +1773,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V206
 ## [1] &quot;T&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: TCT
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: S
 ## [1] &quot;-----END-----&quot;
@@ -1778,6 +1788,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 29
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 29
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: CTG
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 10
 ## [1] &quot;WTcodon and aa&quot;
@@ -1785,7 +1799,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: CCG
 ## 1-letter AAString object
 ## seq: P
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V84
 ## [1] &quot;C&quot;
 ## 
@@ -1795,10 +1809,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V86
 ## [1] &quot;G&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: CTG
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: M
 ## [1] &quot;-----END-----&quot;
@@ -1814,6 +1824,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 90
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 90
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: TCT
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 30
 ## [1] &quot;WTcodon and aa&quot;
@@ -1821,7 +1835,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: TCC
 ## 1-letter AAString object
 ## seq: S
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V144
 ## [1] &quot;T&quot;
 ## 
@@ -1831,10 +1845,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V146
 ## [1] &quot;T&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: TCT
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: S
 ## [1] &quot;-----END-----&quot;
@@ -1850,6 +1860,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 501
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 501
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: CGC
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 167
 ## [1] &quot;WTcodon and aa&quot;
@@ -1857,7 +1871,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: CGT
 ## 1-letter AAString object
 ## seq: R
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V555
 ## [1] &quot;C&quot;
 ## 
@@ -1867,10 +1881,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V557
 ## [1] &quot;C&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: CGC
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: R
 ## [1] &quot;-----END-----&quot;
@@ -1886,6 +1896,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 543
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 543
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: GCA
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 181
 ## [1] &quot;WTcodon and aa&quot;
@@ -1893,7 +1907,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: GCG
 ## 1-letter AAString object
 ## seq: A
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V597
 ## [1] &quot;G&quot;
 ## 
@@ -1903,10 +1917,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V599
 ## [1] &quot;A&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: GCA
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: A
 ## [1] &quot;-----END-----&quot;
@@ -1922,6 +1932,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 108
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 108
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: GGG
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 36
 ## [1] &quot;WTcodon and aa&quot;
@@ -1929,7 +1943,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: GGA
 ## 1-letter AAString object
 ## seq: G
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V162
 ## [1] &quot;G&quot;
 ## 
@@ -1939,10 +1953,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V164
 ## [1] &quot;G&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: GGG
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: G
 ## [1] &quot;-----END-----&quot;
@@ -1958,6 +1968,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 117
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 117
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: GGC
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 39
 ## [1] &quot;WTcodon and aa&quot;
@@ -1965,7 +1979,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: GGT
 ## 1-letter AAString object
 ## seq: G
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V171
 ## [1] &quot;G&quot;
 ## 
@@ -1975,10 +1989,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V173
 ## [1] &quot;C&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: GGC
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: G
 ## [1] &quot;-----END-----&quot;
@@ -1994,6 +2004,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 126
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 126
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: TGC
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 42
 ## [1] &quot;WTcodon and aa&quot;
@@ -2001,7 +2015,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: TGT
 ## 1-letter AAString object
 ## seq: C
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V180
 ## [1] &quot;T&quot;
 ## 
@@ -2011,10 +2025,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V182
 ## [1] &quot;C&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: TGC
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: C
 ## [1] &quot;-----END-----&quot;
@@ -2030,6 +2040,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 251
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 251
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: GAA
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 84
 ## [1] &quot;WTcodon and aa&quot;
@@ -2037,7 +2051,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: GTA
 ## 1-letter AAString object
 ## seq: V
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V306
 ## [1] &quot;G&quot;
 ## 
@@ -2047,10 +2061,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V308
 ## [1] &quot;A&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: GAA
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: E
 ## [1] &quot;-----END-----&quot;
@@ -2066,6 +2076,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 53
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 53
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: AGG
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 18
 ## [1] &quot;WTcodon and aa&quot;
@@ -2073,7 +2087,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: AAG
 ## 1-letter AAString object
 ## seq: K
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V108
 ## [1] &quot;A&quot;
 ## 
@@ -2083,10 +2097,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V110
 ## [1] &quot;G&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: AGG
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: R
 ## [1] &quot;-----END-----&quot;
@@ -2102,6 +2112,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 310
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 310
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: AGG
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 104
 ## [1] &quot;WTcodon and aa&quot;
@@ -2109,7 +2123,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: GGG
 ## 1-letter AAString object
 ## seq: G
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V366
 ## [1] &quot;A&quot;
 ## 
@@ -2119,10 +2133,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V368
 ## [1] &quot;G&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: AGG
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: R
 ## [1] &quot;-----END-----&quot;
@@ -2138,6 +2148,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 119
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 119
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: CAT
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 40
 ## [1] &quot;WTcodon and aa&quot;
@@ -2145,7 +2159,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: CGT
 ## 1-letter AAString object
 ## seq: R
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V174
 ## [1] &quot;C&quot;
 ## 
@@ -2155,10 +2169,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V176
 ## [1] &quot;T&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: CAT
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: H
 ## [1] &quot;-----END-----&quot;
@@ -2174,6 +2184,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 169
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 169
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: GAG
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 57
 ## [1] &quot;WTcodon and aa&quot;
@@ -2181,7 +2195,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: AAG
 ## 1-letter AAString object
 ## seq: K
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V225
 ## [1] &quot;G&quot;
 ## 
@@ -2191,10 +2205,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V227
 ## [1] &quot;G&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: GAG
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: E
 ## [1] &quot;-----END-----&quot;
@@ -2210,6 +2220,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 384
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 384
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: AGC
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 128
 ## [1] &quot;WTcodon and aa&quot;
@@ -2217,7 +2231,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: AGT
 ## 1-letter AAString object
 ## seq: S
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V438
 ## [1] &quot;A&quot;
 ## 
@@ -2227,10 +2241,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V440
 ## [1] &quot;C&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: AGC
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: S
 ## [1] &quot;-----END-----&quot;
@@ -2246,6 +2256,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 124
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 124
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: AGT
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 42
 ## [1] &quot;WTcodon and aa&quot;
@@ -2253,7 +2267,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: TGT
 ## 1-letter AAString object
 ## seq: C
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V180
 ## [1] &quot;A&quot;
 ## 
@@ -2263,10 +2277,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V182
 ## [1] &quot;T&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: AGT
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: S
 ## [1] &quot;-----END-----&quot;
@@ -2282,6 +2292,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 184
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 184
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: ACT
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 62
 ## [1] &quot;WTcodon and aa&quot;
@@ -2289,7 +2303,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: GCT
 ## 1-letter AAString object
 ## seq: A
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V240
 ## [1] &quot;A&quot;
 ## 
@@ -2299,10 +2313,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V242
 ## [1] &quot;T&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: ACT
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: T
 ## [1] &quot;-----END-----&quot;
@@ -2318,6 +2328,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 241
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 241
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: GGC
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 81
 ## [1] &quot;WTcodon and aa&quot;
@@ -2325,7 +2339,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: AGC
 ## 1-letter AAString object
 ## seq: S
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V297
 ## [1] &quot;G&quot;
 ## 
@@ -2335,10 +2349,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V299
 ## [1] &quot;C&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: GGC
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: G
 ## [1] &quot;-----END-----&quot;
@@ -2354,6 +2364,7 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 322
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 322
+## [1] &quot;frame_shift_del&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 108
 ## [1] &quot;WTcodon and aa&quot;
@@ -2361,7 +2372,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: ATC
 ## 1-letter AAString object
 ## seq: I
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V378
 ## [1] &quot;-&quot;
 ## 
@@ -2385,6 +2396,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 594
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 594
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: TAC
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 198
 ## [1] &quot;WTcodon and aa&quot;
@@ -2392,7 +2407,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: TAT
 ## 1-letter AAString object
 ## seq: Y
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V648
 ## [1] &quot;T&quot;
 ## 
@@ -2402,10 +2417,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V650
 ## [1] &quot;C&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: TAC
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: Y
 ## [1] &quot;-----END-----&quot;
@@ -2421,6 +2432,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 679
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 679
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: GAG
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 227
 ## [1] &quot;WTcodon and aa&quot;
@@ -2428,7 +2443,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: AAG
 ## 1-letter AAString object
 ## seq: K
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V735
 ## [1] &quot;G&quot;
 ## 
@@ -2438,10 +2453,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V737
 ## [1] &quot;G&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: GAG
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: E
 ## [1] &quot;-----END-----&quot;
@@ -2457,6 +2468,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 29
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 29
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: CTG
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 10
 ## [1] &quot;WTcodon and aa&quot;
@@ -2464,7 +2479,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: CCG
 ## 1-letter AAString object
 ## seq: P
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V84
 ## [1] &quot;C&quot;
 ## 
@@ -2474,10 +2489,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V86
 ## [1] &quot;G&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: CTG
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: M
 ## [1] &quot;-----END-----&quot;
@@ -2493,6 +2504,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 456
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 456
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: CCT
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 152
 ## [1] &quot;WTcodon and aa&quot;
@@ -2500,7 +2515,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: CCC
 ## 1-letter AAString object
 ## seq: P
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V510
 ## [1] &quot;C&quot;
 ## 
@@ -2510,10 +2525,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V512
 ## [1] &quot;T&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: CCT
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: P
 ## [1] &quot;-----END-----&quot;
@@ -2529,6 +2540,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 460
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 460
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: CAC
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 154
 ## [1] &quot;WTcodon and aa&quot;
@@ -2536,7 +2551,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: TAC
 ## 1-letter AAString object
 ## seq: Y
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V516
 ## [1] &quot;C&quot;
 ## 
@@ -2546,10 +2561,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V518
 ## [1] &quot;C&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: CAC
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: H
 ## [1] &quot;-----END-----&quot;
@@ -2565,6 +2576,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 579
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 579
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: GAG
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 193
 ## [1] &quot;WTcodon and aa&quot;
@@ -2572,7 +2587,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: GAA
 ## 1-letter AAString object
 ## seq: E
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V633
 ## [1] &quot;G&quot;
 ## 
@@ -2582,10 +2597,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V635
 ## [1] &quot;G&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: GAG
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: E
 ## [1] &quot;-----END-----&quot;
@@ -2601,6 +2612,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 177
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 177
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: CCG
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 59
 ## [1] &quot;WTcodon and aa&quot;
@@ -2608,7 +2623,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: CCA
 ## 1-letter AAString object
 ## seq: P
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V231
 ## [1] &quot;C&quot;
 ## 
@@ -2618,10 +2633,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V233
 ## [1] &quot;G&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: CCG
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: P
 ## [1] &quot;-----END-----&quot;
@@ -2637,6 +2648,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 326
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 326
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: GCT
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 109
 ## [1] &quot;WTcodon and aa&quot;
@@ -2644,7 +2659,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: GTT
 ## 1-letter AAString object
 ## seq: V
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V381
 ## [1] &quot;G&quot;
 ## 
@@ -2654,10 +2669,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V383
 ## [1] &quot;T&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: GCT
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: A
 ## [1] &quot;-----END-----&quot;
@@ -2673,6 +2684,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 603
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 603
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: GGC
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 201
 ## [1] &quot;WTcodon and aa&quot;
@@ -2680,7 +2695,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: GGT
 ## 1-letter AAString object
 ## seq: G
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V657
 ## [1] &quot;G&quot;
 ## 
@@ -2690,10 +2705,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V659
 ## [1] &quot;C&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: GGC
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: G
 ## [1] &quot;-----END-----&quot;
@@ -2709,6 +2720,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 229
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 229
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: CTC
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 77
 ## [1] &quot;WTcodon and aa&quot;
@@ -2716,7 +2731,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: TTC
 ## 1-letter AAString object
 ## seq: F
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V285
 ## [1] &quot;C&quot;
 ## 
@@ -2726,10 +2741,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V287
 ## [1] &quot;C&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: CTC
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: L
 ## [1] &quot;-----END-----&quot;
@@ -2745,6 +2756,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 327
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 327
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: GTC
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 109
 ## [1] &quot;WTcodon and aa&quot;
@@ -2752,7 +2767,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: GTT
 ## 1-letter AAString object
 ## seq: V
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V381
 ## [1] &quot;G&quot;
 ## 
@@ -2762,10 +2777,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V383
 ## [1] &quot;C&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: GTC
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: V
 ## [1] &quot;-----END-----&quot;
@@ -2781,6 +2792,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 229
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 229
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: CTC
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 77
 ## [1] &quot;WTcodon and aa&quot;
@@ -2788,7 +2803,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: TTC
 ## 1-letter AAString object
 ## seq: F
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V285
 ## [1] &quot;C&quot;
 ## 
@@ -2798,10 +2813,6 @@ for(i in 1:nrow(mutation_locations))
 ## $V287
 ## [1] &quot;C&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: CTC
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: L
 ## [1] &quot;-----END-----&quot;
@@ -2817,6 +2828,10 @@ for(i in 1:nrow(mutation_locations))
 ## [1] 327
 ## [1] &quot;mutation_location_remove_dash=&quot;
 ## [1] 327
+## [1] &quot;MUTcodon_DNAstr&quot;
+## 3-letter DNAString object
+## seq: GTC
+## [1] &quot;translation!MUTaa&quot;
 ## [1] &quot;aaPosition&quot;
 ## [1] 109
 ## [1] &quot;WTcodon and aa&quot;
@@ -2824,7 +2839,7 @@ for(i in 1:nrow(mutation_locations))
 ## seq: GTT
 ## 1-letter AAString object
 ## seq: V
-## [1] &quot;MUTcodon&quot;
+## [1] &quot;MUTcodon and aa&quot;
 ## $V381
 ## [1] &quot;G&quot;
 ## 
@@ -2834,44 +2849,69 @@ for(i in 1:nrow(mutation_locations))
 ## $V383
 ## [1] &quot;C&quot;
 ## 
-## [1] &quot;MUTcodon_DNAstr&quot;
-## 3-letter DNAString object
-## seq: GTC
-## [1] &quot;translation!MUTaa&quot;
 ## 1-letter AAString object
 ## seq: V
 ## [1] &quot;-----END-----&quot;</code></pre>
 <p>show results: AAmutations_df</p>
 <pre class="r"><code>AAmutations_df</code></pre>
-<pre><code>##                  [,1]    [,2]    [,3]    [,4]                  [,5]    [,6]   
-## ClyF             NA      NA      NA      NA                    NA      NA     
-## 11_T7 Biotec_CGN &quot;N61D&quot;  NA      NA      NA                    NA      NA     
-## 12_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
-## 13_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
-## 14_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
-## 15_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
-## 21_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
-## 22_T7 Biotec_CGN &quot;N247N&quot; NA      NA      NA                    NA      NA     
-## 23_T7 Biotec_CGN &quot;A91A&quot;  NA      NA      NA                    NA      NA     
-## 24_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
-## 25_T7 Biotec_CGN &quot;Y198F&quot; NA      NA      NA                    NA      NA     
-## 31_T7 Biotec_CGN &quot;D35G&quot;  &quot;I210V&quot; NA      NA                    NA      NA     
-## 32_T7 Biotec_CGN &quot;K57E&quot;  &quot;A62A&quot;  &quot;P85S&quot;  &quot;D122G&quot;               NA      NA     
-## 33_T7 Biotec_CGN &quot;H5H&quot;   NA      NA      NA                    NA      NA     
-## 34_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
-## 35_T7 Biotec_CGN &quot;F50S&quot;  NA      NA      NA                    NA      NA     
-## 41_T7 Biotec_CGN &quot;P10M&quot;  NA      NA      NA                    NA      NA     
-## 42_T7 Biotec_CGN &quot;S30S&quot;  &quot;R167R&quot; &quot;A181A&quot; NA                    NA      NA     
-## 43_T7 Biotec_CGN &quot;G36G&quot;  NA      NA      NA                    NA      NA     
-## 44_T7 Biotec_CGN &quot;G39G&quot;  &quot;C42C&quot;  &quot;V84E&quot;  NA                    NA      NA     
-## 45_T7 Biotec_CGN &quot;K18R&quot;  &quot;G104R&quot; NA      NA                    NA      NA     
-## 46_T7 Biotec_CGN &quot;R40H&quot;  &quot;K57E&quot;  &quot;S128S&quot; NA                    NA      NA     
-## 51_T7 Biotec_CGN &quot;C42S&quot;  &quot;A62T&quot;  &quot;S81G&quot;  &quot;I108frame_shift_del&quot; &quot;Y198Y&quot; &quot;K227E&quot;
-## 52_T7 Biotec_CGN NA      NA      NA      NA                    NA      NA     
-## 53_T7 Biotec_CGN &quot;P10M&quot;  &quot;P152P&quot; &quot;Y154H&quot; &quot;E193E&quot;               NA      NA     
-## 54_T7 Biotec_CGN &quot;P59P&quot;  &quot;V109A&quot; &quot;G201G&quot; NA                    NA      NA     
-## 55_T7 Biotec_CGN &quot;F77L&quot;  &quot;V109V&quot; NA      NA                    NA      NA     
-## 56_T7 Biotec_CGN &quot;F77L&quot;  &quot;V109V&quot; NA      NA                    NA      NA</code></pre>
+<pre><code>##                  [,1]                  [,2]    [,3]    [,4]                 
+## ClyF             NA                    NA      NA      NA                   
+## 11_T7 Biotec_CGN &quot;N61D&quot;                NA      NA      NA                   
+## 12_T7 Biotec_CGN NA                    NA      NA      NA                   
+## 13_T7 Biotec_CGN NA                    NA      NA      NA                   
+## 14_T7 Biotec_CGN NA                    NA      NA      NA                   
+## 15_T7 Biotec_CGN NA                    NA      NA      NA                   
+## 21_T7 Biotec_CGN NA                    NA      NA      NA                   
+## 22_T7 Biotec_CGN &quot;G247frame_shift_ins&quot; NA      NA      NA                   
+## 23_T7 Biotec_CGN &quot;A91A&quot;                NA      NA      NA                   
+## 24_T7 Biotec_CGN NA                    NA      NA      NA                   
+## 25_T7 Biotec_CGN &quot;Y198F&quot;               NA      NA      NA                   
+## 31_T7 Biotec_CGN &quot;D35G&quot;                &quot;I210V&quot; NA      NA                   
+## 32_T7 Biotec_CGN &quot;K57E&quot;                &quot;A62A&quot;  &quot;P85S&quot;  &quot;D122G&quot;              
+## 33_T7 Biotec_CGN &quot;H5H&quot;                 NA      NA      NA                   
+## 34_T7 Biotec_CGN NA                    NA      NA      NA                   
+## 35_T7 Biotec_CGN &quot;F50S&quot;                NA      NA      NA                   
+## 41_T7 Biotec_CGN &quot;P10M&quot;                NA      NA      NA                   
+## 42_T7 Biotec_CGN &quot;S30S&quot;                &quot;R167R&quot; &quot;A181A&quot; NA                   
+## 43_T7 Biotec_CGN &quot;G36G&quot;                NA      NA      NA                   
+## 44_T7 Biotec_CGN &quot;G39G&quot;                &quot;C42C&quot;  &quot;V84E&quot;  NA                   
+## 45_T7 Biotec_CGN &quot;K18R&quot;                &quot;G104R&quot; NA      NA                   
+## 46_T7 Biotec_CGN &quot;R40H&quot;                &quot;K57E&quot;  &quot;S128S&quot; NA                   
+## 51_T7 Biotec_CGN &quot;C42S&quot;                &quot;A62T&quot;  &quot;S81G&quot;  &quot;I108frame_shift_del&quot;
+## 52_T7 Biotec_CGN NA                    NA      NA      NA                   
+## 53_T7 Biotec_CGN &quot;P10M&quot;                &quot;P152P&quot; &quot;Y154H&quot; &quot;E193E&quot;              
+## 54_T7 Biotec_CGN &quot;P59P&quot;                &quot;V109A&quot; &quot;G201G&quot; NA                   
+## 55_T7 Biotec_CGN &quot;F77L&quot;                &quot;V109V&quot; NA      NA                   
+## 56_T7 Biotec_CGN &quot;F77L&quot;                &quot;V109V&quot; NA      NA                   
+##                  [,5]    [,6]   
+## ClyF             NA      NA     
+## 11_T7 Biotec_CGN NA      NA     
+## 12_T7 Biotec_CGN NA      NA     
+## 13_T7 Biotec_CGN NA      NA     
+## 14_T7 Biotec_CGN NA      NA     
+## 15_T7 Biotec_CGN NA      NA     
+## 21_T7 Biotec_CGN NA      NA     
+## 22_T7 Biotec_CGN NA      NA     
+## 23_T7 Biotec_CGN NA      NA     
+## 24_T7 Biotec_CGN NA      NA     
+## 25_T7 Biotec_CGN NA      NA     
+## 31_T7 Biotec_CGN NA      NA     
+## 32_T7 Biotec_CGN NA      NA     
+## 33_T7 Biotec_CGN NA      NA     
+## 34_T7 Biotec_CGN NA      NA     
+## 35_T7 Biotec_CGN NA      NA     
+## 41_T7 Biotec_CGN NA      NA     
+## 42_T7 Biotec_CGN NA      NA     
+## 43_T7 Biotec_CGN NA      NA     
+## 44_T7 Biotec_CGN NA      NA     
+## 45_T7 Biotec_CGN NA      NA     
+## 46_T7 Biotec_CGN NA      NA     
+## 51_T7 Biotec_CGN &quot;Y198Y&quot; &quot;K227E&quot;
+## 52_T7 Biotec_CGN NA      NA     
+## 53_T7 Biotec_CGN NA      NA     
+## 54_T7 Biotec_CGN NA      NA     
+## 55_T7 Biotec_CGN NA      NA     
+## 56_T7 Biotec_CGN NA      NA</code></pre>
 <p>Show results: DNA mutation location (alignment location)</p>
 <pre class="r"><code>mutation_locations</code></pre>
 <pre><code>##                  [,1] [,2] [,3] [,4] [,5] [,6]
