@@ -18,7 +18,7 @@ Three csv files:
 ## Please note                                                                                     
 1. The tool assumes that the first nucleotide of the provided reference sequence is the starting point for DNA translation, so please make sure your reference sequence is in frame. 
 
-## Vignette
+## Tutorial/Vignette
 https://chungmuen.github.io/mutation_library_analysis/
 
 ## Contact
