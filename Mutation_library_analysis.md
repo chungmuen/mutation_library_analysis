@@ -1,6 +1,7 @@
 \[Introduction\]  
 This tool aligns a set of sample DNA sequences to a reference
-sequence, finds the mutations in each sample sequences, and then export a csv file
+sequence,  
+finds the mutations in each sample sequences, and then export a csv file
 with each row being each sample sequence and their amino acid
 substitutions.  
 Author: Dr. Mu-En Chung Email: <chungmuen@gmail.com>

@@ -2,10 +2,11 @@
 title: "Mutation_library_analysis"
 author: "Mu-En Chung"
 date: "07/07/2022"
-output:
-  word_document: default
-  html_document: default
-  pdf_document: default
+output: md_document
+# output:
+#   word_document: default
+#   html_document: default
+#   pdf_document: default
 ---
 
 [Introduction]                                                               
@@ -62,7 +63,7 @@ exDNA_Alignment
 run your alignment
 ```{r run your alignment}
 ##run my alignment
-file_path <- list.files(path = seq_file_path,pattern = 'fasta')
+file_path <- list.files(path = seq_file_path,pattern = 'fasta',full.names = T)
 seq_result <- readDNAStringSet(file_path)
 myDNA_Alignment <- msa(seq_result)
 
@@ -375,6 +376,7 @@ if(sum(trim_alignment[1,]=="-")!= 0)
 
 modulo_mut_loc_df <- mutation_locations 
 AAmutations_df <- mutation_locations
+i <- 8
 for(i in 1:nrow(mutation_locations))
 {
   mutation_location_location <- which(mutation_locations[i,] != "NA")
@@ -392,36 +394,80 @@ for(i in 1:nrow(mutation_locations))
       mutation_location_x <- as.numeric(mutation_locations[i,j]) 
       print("mutation_location_x=")
       print(mutation_location_x)
-      mutation_location_remove_dash <- mutation_location_x - sum(trim_alignment[1,1:(mutation_location_x-1)] == "-")
+      mutation_location_remove_dash <- mutation_location_x - 
+        sum(trim_alignment[1,1:(mutation_location_x-1)] == "-")
       print("mutation_location_remove_dash=")
       print(mutation_location_remove_dash)
-      modulo_mut_loc <- mutation_location_remove_dash %% 3
-      modulo_mut_loc_df[i,j] <- modulo_mut_loc
       
       if(trim_alignment[1,mutation_location_x] == "-")
       {
-        #print("plop")
-        AAmutations_df[i,j] <- "frame_shift_ins"
-        #print(AAmutations_df[i,j])
-      }   
-      
-      else if (modulo_mut_loc == 0)
-      {
-        codon_start <- mutation_location_remove_dash-2
-        codon_end <- mutation_location_remove_dash
+        # decide the insertion location in AA seq
+        modulo_mut_loc <- (mutation_location_remove_dash-1) %% 3
+        modulo_mut_loc_df[i,j] <- modulo_mut_loc
+        # if the insertion happen in between two codons, the mutation is counted to sit in the later codon.  
+        if (modulo_mut_loc == 0){
+          codon_start <- mutation_location_remove_dash
+          codon_end <- mutation_location_remove_dash+2
+          MUTcodon <- trim_alignment[i,mutation_location_x:mutation_location_x+3]
+          aa_position <- (mutation_location_remove_dash-1)/3+1
+        }
+        if (modulo_mut_loc == 1){
+          codon_start <- mutation_location_remove_dash-1
+          codon_end <- mutation_location_remove_dash+1
+          MUTcodon <- trim_alignment[i,(mutation_location_x-1):(mutation_location_x+2)]
+          aa_position <- ceiling((mutation_location_remove_dash-1)/3)
+        }
+        if (modulo_mut_loc == 2){
+          codon_start <- mutation_location_remove_dash-2
+          codon_end <- mutation_location_remove_dash
+          MUTcodon <- trim_alignment[i,(mutation_location_x-2):(mutation_location_x+1)]
+          aa_position <- ceiling((mutation_location_remove_dash-1)/3)
+        }
+        
+        print("frame_shift_ins")
+        MUTaa <- "frame_shift_ins"
+
+      }else{
+        modulo_mut_loc <- mutation_location_remove_dash %% 3
+        modulo_mut_loc_df[i,j] <- modulo_mut_loc
+        
+        if (modulo_mut_loc == 0){
+          codon_start <- mutation_location_remove_dash-2
+          codon_end <- mutation_location_remove_dash
+        }
+        if (modulo_mut_loc == 1){
+          codon_start <- mutation_location_remove_dash
+          codon_end <- mutation_location_remove_dash+2
+        }
+        if (modulo_mut_loc == 2){
+          codon_start <- mutation_location_remove_dash-1
+          codon_end <- mutation_location_remove_dash+1
+        }
+        aa_position <- ceiling(mutation_location_remove_dash/3)
+        MUTcodon <- c(trim_dash[i,codon_start:codon_end])
+        
+        if (sum(MUTcodon[]== "-") != 0)
+        {
+          MUTaa <- "frame_shift_del"
+          print("frame_shift_del")
+        }
+        
+        else if (sum(MUTcodon[] %in% c("A","T","C","G")) == 3)
+        {
+          MUTcodon_DNAstr <- DNAString(paste(MUTcodon, collapse = ""))
+          print("MUTcodon_DNAstr")
+          print(MUTcodon_DNAstr)
+          MUTaa <- translate(MUTcodon_DNAstr)
+          print("translation!MUTaa")
+          
+        }
+        
+        else if (sum(MUTcodon[] %in% c("A","T","C","G","-")) != 3)
+        {
+          MUTaa <- "unidentifiable base"
+          print("unidentifiable base :(")
+        }
       }
-      else if (modulo_mut_loc == 1)
-      {
-        codon_start <- mutation_location_remove_dash
-        codon_end <- mutation_location_remove_dash+2
-      }
-      else if (modulo_mut_loc == 2)
-      {
-        codon_start <- mutation_location_remove_dash-1
-        codon_end <- mutation_location_remove_dash+1
-      }
-      
-      aa_position <- ceiling(mutation_location_remove_dash/3)
       print("aaPosition")
       print(aa_position)
       
@@ -431,33 +477,9 @@ for(i in 1:nrow(mutation_locations))
       print("WTcodon and aa")
       print(WTcodon_DNAstr)
       print(WTaa)
-      
-      MUTcodon <- c(trim_dash[i,codon_start:codon_end])
-      print("MUTcodon")
+      print("MUTcodon and aa")
       print(MUTcodon)
-      
-      if (sum(MUTcodon[]== "-") != 0)
-      {
-        MUTaa <- "frame_shift_del"
-        print("frame_shift_del")
-      }
-      
-      
-      else if (sum(MUTcodon[] %in% c("A","T","C","G")) == 3)
-      {
-        MUTcodon_DNAstr <- DNAString(paste(MUTcodon, collapse = ""))
-        print("MUTcodon_DNAstr")
-        print(MUTcodon_DNAstr)
-        MUTaa <- translate(MUTcodon_DNAstr)
-        print("translation!MUTaa")
-        print(MUTaa)
-      }
-      
-      else if (sum(MUTcodon[] %in% c("A","T","C","G","-")) != 3)
-      {
-        MUTaa <- "unidentifiable base"
-        print("unidentifiable base :(")
-      }
+      print(MUTaa)
       
       WTaa_cha <- as.character(WTaa)
       MUTaa_cha <- as.character(MUTaa)
